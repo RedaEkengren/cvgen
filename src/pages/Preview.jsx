@@ -21,216 +21,162 @@ export default function Preview() {
   }
 
   const ModernTemplate = () => (
-    <div className="bg-white shadow-lg max-w-4xl mx-auto border border-gray-200" style={{ minHeight: '297mm', width: '210mm' }}>
-      {/* Header Section */}
-      <div className="p-8 pb-6">
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            {state.personalInfo.firstName} {state.personalInfo.lastName}
-          </h1>
-          <h2 className="text-xl text-blue-700 font-medium mb-4">
-            IT-Student & Utvecklare
-          </h2>
-        </div>
-        
-        {/* Contact Information - Horizontal Layout */}
-        <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600 mb-6">
-          {state.personalInfo.email && (
-            <div className="flex items-center">
-              <Mail className="h-4 w-4 mr-2 text-gray-500" />
-              <span>{state.personalInfo.email}</span>
-            </div>
-          )}
-          {state.personalInfo.phone && (
-            <div className="flex items-center">
-              <Phone className="h-4 w-4 mr-2 text-gray-500" />
-              <span>{state.personalInfo.phone}</span>
-            </div>
-          )}
-          {state.personalInfo.city && (
-            <div className="flex items-center">
-              <MapPin className="h-4 w-4 mr-2 text-gray-500" />
-              <span>{state.personalInfo.city}</span>
-            </div>
-          )}
-          {state.personalInfo.linkedIn && (
-            <div className="flex items-center">
-              <Linkedin className="h-4 w-4 mr-2 text-gray-500" />
-              <span className="break-all">{state.personalInfo.linkedIn.replace('https://', '').replace('http://', '')}</span>
-            </div>
-          )}
-          {state.personalInfo.github && (
-            <div className="flex items-center">
-              <Github className="h-4 w-4 mr-2 text-gray-500" />
-              <span className="break-all">{state.personalInfo.github.replace('https://', '').replace('http://', '')}</span>
-            </div>
-          )}
-          {state.personalInfo.website && (
-            <div className="flex items-center">
-              <Globe className="h-4 w-4 mr-2 text-gray-500" />
-              <span className="break-all">{state.personalInfo.website.replace('https://', '').replace('http://', '')}</span>
-            </div>
+    <div className="max-w-3xl mx-auto p-10 bg-white text-gray-900 font-sans leading-relaxed" style={{ minHeight: '297mm' }}>
+      {/* Header */}
+      <header className="text-center mb-8">
+        <h1 className="text-4xl font-bold">
+          {state.personalInfo.firstName} {state.personalInfo.lastName}
+        </h1>
+        <p className="text-lg text-gray-600 mt-1">IT-Student & Utvecklare</p>
+        <div className="text-sm mt-2 text-gray-500">
+          <p>
+            {[
+              state.personalInfo.email,
+              state.personalInfo.phone,
+              state.personalInfo.city
+            ].filter(Boolean).join(' • ')}
+          </p>
+          {(state.personalInfo.linkedIn || state.personalInfo.github) && (
+            <p className="mt-1">
+              {[
+                state.personalInfo.linkedIn && state.personalInfo.linkedIn.replace('https://', '').replace('http://', ''),
+                state.personalInfo.github && state.personalInfo.github.replace('https://', '').replace('http://', '')
+              ].filter(Boolean).join(' • ')}
+            </p>
           )}
         </div>
-        
-        {/* Professional Summary */}
-        {state.personalInfo.summary && (
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3 pb-1 border-b-2 border-blue-700">
-              Profil
-            </h3>
-            <p className="text-gray-700 leading-relaxed">{state.personalInfo.summary}</p>
-          </div>
-        )}
-      </div>
+      </header>
 
-      {/* Main Content Area */}
-      <div className="px-8 pb-8">
-        <div className="space-y-8">
-          
-          {/* Experience Section */}
-          {state.experience.length > 0 && (
-            <section>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-1 border-b-2 border-blue-700">
-                Arbetslivserfarenhet
-              </h3>
-              <div className="space-y-4">
-                {state.experience.map((exp, index) => (
-                  <div key={index} className="mb-4">
-                    <div className="flex justify-between items-start mb-1">
-                      <h4 className="text-base font-semibold text-gray-900">{exp.position}</h4>
-                      <span className="text-sm text-gray-600 font-medium">
-                        {exp.startDate} - {exp.current ? 'Pågående' : exp.endDate}
-                      </span>
-                    </div>
-                    <p className="text-blue-700 font-medium text-sm mb-2">{exp.company}</p>
-                    {exp.description && (
-                      <p className="text-gray-700 text-sm leading-relaxed">{exp.description}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+      {/* Profil */}
+      {state.personalInfo.summary && (
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Profil</h2>
+          <p>{state.personalInfo.summary}</p>
+        </section>
+      )}
 
-          {/* Education Section */}
-          {state.education.length > 0 && (
-            <section>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-1 border-b-2 border-blue-700">
-                Utbildning
-              </h3>
-              <div className="space-y-4">
-                {state.education.map((edu, index) => (
-                  <div key={index} className="mb-4">
-                    <div className="flex justify-between items-start mb-1">
-                      <h4 className="text-base font-semibold text-gray-900">{edu.degree}</h4>
-                      <span className="text-sm text-gray-600 font-medium">
-                        {edu.startDate} - {edu.endDate}
-                      </span>
-                    </div>
-                    <p className="text-blue-700 font-medium text-sm mb-2">{edu.school}</p>
-                    {edu.field && (
-                      <p className="text-gray-600 text-sm mb-2">Inriktning: {edu.field}</p>
-                    )}
-                    {edu.description && (
-                      <p className="text-gray-700 text-sm leading-relaxed">{edu.description}</p>
-                    )}
-                  </div>
-                ))}
+      {/* Erfarenhet */}
+      {state.experience.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Arbetslivserfarenhet</h2>
+          {state.experience.map((exp, index) => (
+            <div key={index} className="mb-4">
+              <div className="flex justify-between text-sm text-gray-500">
+                <p className="font-medium text-gray-800">
+                  {exp.position} – {exp.company}
+                </p>
+                <p>{exp.startDate}–{exp.current ? 'Pågående' : exp.endDate}</p>
               </div>
-            </section>
-          )}
-
-          {/* Skills Section */}
-          {state.skills.length > 0 && (
-            <section>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-1 border-b-2 border-blue-700">
-                Färdigheter
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-2">Programmeringsspråk</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {state.skills.filter(skill => skill.category === 'languages').map((skill, index) => (
-                      <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-medium">
-                        {skill.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-2">Ramverk & Verktyg</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map((skill, index) => (
-                      <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded font-medium">
-                        {skill.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              {/* Fallback for old skill format */}
-              {state.skills.some(skill => typeof skill === 'string') && (
-                <div className="flex flex-wrap gap-2">
-                  {state.skills.filter(skill => typeof skill === 'string').map((skill, index) => (
-                    <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-medium">
-                      {skill}
-                    </span>
+              {exp.description && (
+                <ul className="list-disc list-inside mt-1 text-sm">
+                  {exp.description.split('\n').filter(line => line.trim()).map((line, i) => (
+                    <li key={i}>{line.trim()}</li>
                   ))}
-                </div>
+                </ul>
               )}
-            </section>
-          )}
+            </div>
+          ))}
+        </section>
+      )}
 
-          {/* Projects Section */}
-          {(state.projects.length > 0 || state.githubProjects.length > 0) && (
-            <section>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-1 border-b-2 border-blue-700">
-                Projekt
-              </h3>
-              <div className="space-y-4">
-                {/* Manual projects */}
-                {state.projects.map((project, index) => (
-                  <div key={`manual-${index}`} className="mb-4">
-                    <h4 className="text-base font-semibold text-gray-900 mb-1">{project.name}</h4>
-                    <p className="text-gray-700 text-sm leading-relaxed mb-2">{project.description}</p>
-                    {project.technologies && (
-                      <p className="text-blue-700 text-sm font-medium mb-1">
-                        Teknologier: {project.technologies}
-                      </p>
-                    )}
-                    {(project.link || project.github) && (
-                      <div className="flex space-x-4 text-xs">
-                        {project.link && (
-                          <span className="text-gray-600">🔗 {project.link.replace('https://', '').replace('http://', '')}</span>
-                        )}
-                        {project.github && (
-                          <span className="text-gray-600">📱 {project.github.replace('https://', '').replace('http://', '')}</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                
-                {/* GitHub projects */}
-                {state.githubProjects.map((project, index) => (
-                  <div key={`github-${index}`} className="mb-4">
-                    <h4 className="text-base font-semibold text-gray-900 mb-1">{project.name}</h4>
-                    <p className="text-gray-700 text-sm leading-relaxed mb-2">{project.description}</p>
-                    <div className="flex items-center space-x-4 text-sm">
-                      <span className="text-blue-700 font-medium">
-                        Språk: {project.technologies}
-                      </span>
-                      <span className="text-gray-600">⭐ {project.stars}</span>
-                      <span className="text-gray-600">📱 GitHub</span>
-                    </div>
-                  </div>
-                ))}
+      {/* Utbildning */}
+      {state.education.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Utbildning</h2>
+          {state.education.map((edu, index) => (
+            <div key={index} className="mb-2">
+              <div className="flex justify-between text-sm text-gray-500">
+                <p className="font-medium text-gray-800">
+                  {edu.degree} – {edu.school}
+                </p>
+                <p>{edu.startDate}–{edu.endDate}</p>
               </div>
-            </section>
-          )}
-        </div>
-      </div>
+              {(edu.field || edu.description) && (
+                <p className="text-sm mt-1">
+                  {[edu.field && `Inriktning: ${edu.field}`, edu.description]
+                    .filter(Boolean)
+                    .join('. ')}
+                </p>
+              )}
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Projekt */}
+      {(state.projects.length > 0 || state.githubProjects.length > 0) && (
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Projekt</h2>
+          {/* Manual projects */}
+          {state.projects.map((project, index) => (
+            <div key={`manual-${index}`} className="mb-3">
+              <p className="font-medium text-gray-800">{project.name}</p>
+              <p className="text-sm mt-1">{project.description}</p>
+              {project.technologies && (
+                <p className="text-sm text-gray-600 mt-1">Teknologier: {project.technologies}</p>
+              )}
+            </div>
+          ))}
+          {/* GitHub projects */}
+          {state.githubProjects.map((project, index) => (
+            <div key={`github-${index}`} className="mb-3">
+              <p className="font-medium text-gray-800">{project.name}</p>
+              <p className="text-sm mt-1">{project.description}</p>
+              <p className="text-sm text-gray-600 mt-1">Språk: {project.technologies} • ⭐ {project.stars}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {/* Färdigheter */}
+      {state.skills.length > 0 && (
+        <section>
+          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Färdigheter</h2>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {/* Programmeringsspråk */}
+            {state.skills.some(skill => skill.category === 'languages') && (
+              <div>
+                <p className="font-medium text-gray-800">Programmering</p>
+                <ul className="list-disc list-inside">
+                  {state.skills
+                    .filter(skill => skill.category === 'languages')
+                    .map((skill, index) => (
+                      <li key={index}>{skill.name}</li>
+                    ))}
+                </ul>
+              </div>
+            )}
+            
+            {/* Ramverk & Verktyg */}
+            {state.skills.some(skill => skill.category === 'frameworks' || skill.category === 'tools') && (
+              <div>
+                <p className="font-medium text-gray-800">Ramverk & Verktyg</p>
+                <ul className="list-disc list-inside">
+                  {state.skills
+                    .filter(skill => skill.category === 'frameworks' || skill.category === 'tools')
+                    .map((skill, index) => (
+                      <li key={index}>{skill.name}</li>
+                    ))}
+                </ul>
+              </div>
+            )}
+            
+            {/* Fallback för gamla skill-format */}
+            {state.skills.some(skill => typeof skill === 'string') && (
+              <div className="col-span-2">
+                <p className="font-medium text-gray-800">Färdigheter</p>
+                <ul className="list-disc list-inside">
+                  {state.skills
+                    .filter(skill => typeof skill === 'string')
+                    .map((skill, index) => (
+                      <li key={index}>{skill}</li>
+                    ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   )
 
