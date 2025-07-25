@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, User, Eye, Crown } from 'lucide-react'
+import { FileText, User, Eye } from 'lucide-react'
 import { useCV } from '../context/CVContext'
-import PremiumModal from './PremiumModal'
+// import PremiumModal from './PremiumModal' // Temporarily disabled
 
 export default function Header() {
   const location = useLocation()
   const { state } = useCV()
-  const [showPremiumModal, setShowPremiumModal] = useState(false)
+  // const [showPremiumModal, setShowPremiumModal] = useState(false) // Temporarily disabled
 
   const isActive = (path) => location.pathname === path
 
@@ -59,6 +59,7 @@ export default function Header() {
                 <span>Förhandsgranska</span>
               </Link>
 
+              {/* Premium features temporarily disabled - ready for future activation
               {state.isPremium ? (
                 <div className="flex items-center space-x-1 px-3 py-2 bg-yellow-50 text-yellow-700 rounded-md text-sm font-medium">
                   <Crown className="h-4 w-4" />
@@ -73,15 +74,18 @@ export default function Header() {
                   <span>Få Premium</span>
                 </button>
               )}
+              */}
             </nav>
           </div>
         </div>
       </header>
 
+      {/* Premium modal temporarily disabled - ready for future activation
       <PremiumModal 
         isOpen={showPremiumModal} 
         onClose={() => setShowPremiumModal(false)} 
       />
+      */}
     </>
   )
 }

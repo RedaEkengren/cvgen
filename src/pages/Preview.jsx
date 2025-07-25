@@ -206,7 +206,7 @@ export default function Preview() {
                       key={index}
                       className="px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm font-medium"
                     >
-                      {skill}
+                      {skill.name || skill}
                     </span>
                   ))}
                 </div>
@@ -240,6 +240,41 @@ export default function Preview() {
               Ladda ner PDF
             </button>
           )}
+        </div>
+
+        {/* Template Selector */}
+        <div className="mb-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Välj CV-mall</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="border-2 border-primary-500 rounded-lg p-4 bg-primary-50">
+                <div className="text-center">
+                  <div className="w-16 h-20 bg-white border border-gray-200 rounded mx-auto mb-3"></div>
+                  <h4 className="font-medium text-gray-900">Modern</h4>
+                  <p className="text-sm text-gray-600 mt-1">Aktuell mall</p>
+                </div>
+              </div>
+              
+              <div className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50 opacity-60">
+                <div className="text-center">
+                  <div className="w-16 h-20 bg-white border border-gray-200 rounded mx-auto mb-3"></div>
+                  <h4 className="font-medium text-gray-500">Klassisk</h4>
+                  <p className="text-sm text-gray-400 mt-1">Kommer snart...</p>
+                </div>
+              </div>
+              
+              <div className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50 opacity-60">
+                <div className="text-center">
+                  <div className="w-16 h-20 bg-white border border-gray-200 rounded mx-auto mb-3"></div>
+                  <h4 className="font-medium text-gray-500">Kreativ</h4>
+                  <p className="text-sm text-gray-400 mt-1">Kommer snart...</p>
+                </div>
+              </div>
+            </div>
+            <p className="text-center text-sm text-gray-500 mt-4">
+              🎨 Fler mallar kommer snart...
+            </p>
+          </div>
         </div>
 
         {!hasContent ? (

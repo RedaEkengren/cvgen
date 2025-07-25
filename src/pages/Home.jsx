@@ -103,9 +103,9 @@ export default function Home() {
               <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Crown className="h-8 w-8 text-yellow-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Premium-funktioner</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Fler funktioner</h3>
               <p className="text-gray-600">
-                Lås upp extra mallar och funktioner med en enkel aktiveringskod
+                Fler mallar och funktioner kommer snart – håll utkik!
               </p>
             </div>
           </div>

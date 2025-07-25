@@ -282,10 +282,358 @@ export default function CVBuilder() {
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
-                  {/* Education form fields would go here */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Skola/Universitet</label>
+                      <input
+                        type="text"
+                        value={edu.school}
+                        onChange={(e) => dispatch({ type: 'UPDATE_EDUCATION', index, field: 'school', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. KTH, Stockholms Universitet"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Examen/Program</label>
+                      <input
+                        type="text"
+                        value={edu.degree}
+                        onChange={(e) => dispatch({ type: 'UPDATE_EDUCATION', index, field: 'degree', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. Kandidat, Master, Yrkeshögskola"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Inriktning</label>
+                      <input
+                        type="text"
+                        value={edu.field}
+                        onChange={(e) => dispatch({ type: 'UPDATE_EDUCATION', index, field: 'field', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. Datateknik, Systemvetenskap"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Startdatum</label>
+                        <input
+                          type="date"
+                          value={edu.startDate}
+                          onChange={(e) => dispatch({ type: 'UPDATE_EDUCATION', index, field: 'startDate', value: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Slutdatum</label>
+                        <input
+                          type="date"
+                          value={edu.endDate}
+                          onChange={(e) => dispatch({ type: 'UPDATE_EDUCATION', index, field: 'endDate', value: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Beskrivning (valfritt)</label>
+                    <textarea
+                      value={edu.description}
+                      onChange={(e) => dispatch({ type: 'UPDATE_EDUCATION', index, field: 'description', value: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="Beskriv relevanta kurser, projekt eller prestationer..."
+                    />
+                  </div>
                 </div>
               ))
             )}
+          </div>
+        )
+      case 'experience':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium text-gray-900">Arbetslivserfarenhet</h3>
+              <button
+                onClick={addExperience}
+                className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Lägg till
+              </button>
+            </div>
+            {state.experience.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">Ingen arbetslivserfarenhet tillagd än. Klicka på "Lägg till" för att börja.</p>
+            ) : (
+              state.experience.map((exp, index) => (
+                <div key={index} className="p-6 border border-gray-200 rounded-lg space-y-4">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-lg font-medium text-gray-900">Arbetslivserfarenhet {index + 1}</h4>
+                    <button
+                      onClick={() => dispatch({ type: 'REMOVE_EXPERIENCE', index })}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Företag</label>
+                      <input
+                        type="text"
+                        value={exp.company}
+                        onChange={(e) => dispatch({ type: 'UPDATE_EXPERIENCE', index, field: 'company', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. Tech AB, Startup Inc"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                      <input
+                        type="text"
+                        value={exp.position}
+                        onChange={(e) => dispatch({ type: 'UPDATE_EXPERIENCE', index, field: 'position', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. Frontend Developer, Praktikant"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Startdatum</label>
+                        <input
+                          type="date"
+                          value={exp.startDate}
+                          onChange={(e) => dispatch({ type: 'UPDATE_EXPERIENCE', index, field: 'startDate', value: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Slutdatum</label>
+                        <input
+                          type="date"
+                          value={exp.endDate}
+                          onChange={(e) => dispatch({ type: 'UPDATE_EXPERIENCE', index, field: 'endDate', value: e.target.value })}
+                          disabled={exp.current}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100"
+                        />
+                      </div>
+                    </div>
+                    <div className="md:col-span-2">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`current-${index}`}
+                          checked={exp.current}
+                          onChange={(e) => dispatch({ type: 'UPDATE_EXPERIENCE', index, field: 'current', value: e.target.checked })}
+                          className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                        />
+                        <label htmlFor={`current-${index}`} className="ml-2 block text-sm text-gray-700">
+                          Jag arbetar här fortfarande
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Beskrivning</label>
+                    <textarea
+                      value={exp.description}
+                      onChange={(e) => dispatch({ type: 'UPDATE_EXPERIENCE', index, field: 'description', value: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="Beskriv dina huvudsakliga arbetsuppgifter och prestationer..."
+                    />
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )
+      case 'projects':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium text-gray-900">Projekt</h3>
+              <button
+                onClick={addProject}
+                className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Lägg till
+              </button>
+            </div>
+            {state.projects.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">Inga projekt tillagda än. Klicka på "Lägg till" för att börja.</p>
+            ) : (
+              state.projects.map((project, index) => (
+                <div key={index} className="p-6 border border-gray-200 rounded-lg space-y-4">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-lg font-medium text-gray-900">Projekt {index + 1}</h4>
+                    <button
+                      onClick={() => dispatch({ type: 'REMOVE_PROJECT', index })}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Projektnamn</label>
+                      <input
+                        type="text"
+                        value={project.name}
+                        onChange={(e) => dispatch({ type: 'UPDATE_PROJECT', index, field: 'name', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. E-handelsapp, Portfolio-webbplats"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Teknologier</label>
+                      <input
+                        type="text"
+                        value={project.technologies}
+                        onChange={(e) => dispatch({ type: 'UPDATE_PROJECT', index, field: 'technologies', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. React, Node.js, MongoDB"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Projektlänk</label>
+                      <input
+                        type="url"
+                        value={project.link}
+                        onChange={(e) => dispatch({ type: 'UPDATE_PROJECT', index, field: 'link', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="https://mittprojekt.se"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">GitHub-länk</label>
+                      <input
+                        type="url"
+                        value={project.github}
+                        onChange={(e) => dispatch({ type: 'UPDATE_PROJECT', index, field: 'github', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="https://github.com/användarnamn/projekt"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Beskrivning</label>
+                    <textarea
+                      value={project.description}
+                      onChange={(e) => dispatch({ type: 'UPDATE_PROJECT', index, field: 'description', value: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="Beskriv projektet, vad du lärde dig och vilka utmaningar du löste..."
+                    />
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )
+      case 'skills':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium text-gray-900">Färdigheter</h3>
+              <button
+                onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'languages' } })}
+                className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Lägg till färdighet
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-3">Programmeringsspråk</h4>
+                <div className="space-y-2">
+                  {state.skills.filter(skill => skill.category === 'languages').map((skill, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={skill.name}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index: state.skills.findIndex(s => s === skill), field: 'name', value: e.target.value })}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. JavaScript, Python"
+                      />
+                      <button
+                        onClick={() => dispatch({ type: 'REMOVE_SKILL', index: state.skills.findIndex(s => s === skill) })}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'languages' } })}
+                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
+                  >
+                    <Plus className="h-3 w-3 mr-1" />Lägg till språk
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-3">Ramverk & Bibliotek</h4>
+                <div className="space-y-2">
+                  {state.skills.filter(skill => skill.category === 'frameworks').map((skill, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={skill.name}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index: state.skills.findIndex(s => s === skill), field: 'name', value: e.target.value })}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. React, Django"
+                      />
+                      <button
+                        onClick={() => dispatch({ type: 'REMOVE_SKILL', index: state.skills.findIndex(s => s === skill) })}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'frameworks' } })}
+                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
+                  >
+                    <Plus className="h-3 w-3 mr-1" />Lägg till ramverk
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-3">Verktyg & Övriga</h4>
+                <div className="space-y-2">
+                  {state.skills.filter(skill => skill.category === 'tools').map((skill, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={skill.name}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index: state.skills.findIndex(s => s === skill), field: 'name', value: e.target.value })}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. Git, Docker, AWS"
+                      />
+                      <button
+                        onClick={() => dispatch({ type: 'REMOVE_SKILL', index: state.skills.findIndex(s => s === skill) })}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'tools' } })}
+                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
+                  >
+                    <Plus className="h-3 w-3 mr-1" />Lägg till verktyg
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )
       default:

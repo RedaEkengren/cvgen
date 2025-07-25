@@ -1,6 +1,6 @@
 # CV Generator för IT-studenter
 
-En modern, responsiv CV-generator speciellt designad för svenska IT-studenter. Inget konto behövs - allt körs i webbläsaren med localStorage för datalagring.
+En modern, responsiv CV-generator speciellt designad för svenska IT-studenter. Helt gratis - inget konto behövs, allt körs i webbläsaren med localStorage för datalagring.
 
 ## ✨ Funktioner
 
@@ -62,18 +62,20 @@ npm run preview
 - ✅ PDF-export
 - ✅ Modern CV-mall
 
-### Premium-funktioner:
-- 🔒 Extra CV-mallar
-- 🔒 Färgteman och anpassning
-- 🔒 Avancerade layoutalternativ
-- 🔒 Prioriterad support
+### Kommande funktioner:
+- 🔮 Extra CV-mallar
+- 🔮 Färgteman och anpassning
+- 🔮 Avancerade layoutalternativ
+- 🔮 Import från LinkedIn
 
+<!-- Premium system temporarily disabled - ready for future activation
 ## 🔐 Premium-aktivering
 
 Aktiveringskoder köps via Gumroad. Giltiga koder:
 - `PREMIUM2024`
 - `GUMROAD_PREMIUM` 
 - `STUDENT_PRO`
+-->
 
 ## 📂 Projektstruktur
 

@@ -33,7 +33,7 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         education: state.education.map((item, index) => 
-          index === action.index ? { ...item, ...action.payload } : item
+          index === action.index ? { ...item, [action.field]: action.value } : item
         )
       }
     case 'REMOVE_EDUCATION':
@@ -44,7 +44,7 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         experience: state.experience.map((item, index) => 
-          index === action.index ? { ...item, ...action.payload } : item
+          index === action.index ? { ...item, [action.field]: action.value } : item
         )
       }
     case 'REMOVE_EXPERIENCE':
@@ -55,11 +55,22 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         projects: state.projects.map((item, index) => 
-          index === action.index ? { ...item, ...action.payload } : item
+          index === action.index ? { ...item, [action.field]: action.value } : item
         )
       }
     case 'REMOVE_PROJECT':
       return { ...state, projects: state.projects.filter((_, index) => index !== action.index) }
+    case 'ADD_SKILL':
+      return { ...state, skills: [...state.skills, action.payload] }
+    case 'UPDATE_SKILL':
+      return { 
+        ...state, 
+        skills: state.skills.map((item, index) => 
+          index === action.index ? { ...item, [action.field]: action.value } : item
+        )
+      }
+    case 'REMOVE_SKILL':
+      return { ...state, skills: state.skills.filter((_, index) => index !== action.index) }
     case 'UPDATE_SKILLS':
       return { ...state, skills: action.payload }
     case 'SET_GITHUB_PROJECTS':
