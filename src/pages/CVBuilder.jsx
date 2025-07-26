@@ -180,6 +180,18 @@ export default function CVBuilder() {
       </div>
 
       <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Profilbild</label>
+        <input
+          {...register('photoUrl')}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          placeholder="https://länk-till-din-bild.jpg eller välj fil"
+        />
+        <p className="text-sm text-gray-500 mt-1">
+          Lägg till en URL till din profilbild. Används endast med foto-mallarna.
+        </p>
+      </div>
+
+      <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Sammanfattning</label>
         <textarea
           {...register('summary')}

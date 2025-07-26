@@ -12,7 +12,8 @@ const initialState = {
     linkedIn: '',
     github: '',
     website: '',
-    summary: ''
+    summary: '',
+    photoUrl: ''
   },
   education: [],
   experience: [],
