@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Linkedin, Github, Circle } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github, ChevronRight } from 'lucide-react';
 
 const ModernTemplate = ({ 
   name = "Anna Andersson",
@@ -46,179 +46,369 @@ const ModernTemplate = ({
     tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
   }
 }) => {
+  const styles = {
+    container: {
+      backgroundColor: 'white',
+      padding: '40px',
+      maxWidth: '768px',
+      margin: '0 auto',
+      fontSize: '14px',
+      lineHeight: '1.6',
+      fontFamily: 'Georgia, "Times New Roman", serif'
+    },
+    header: {
+      textAlign: 'center',
+      marginBottom: '40px',
+      paddingBottom: '40px',
+      borderBottom: '4px solid #1e293b'
+    },
+    photo: {
+      width: '144px',
+      height: '144px',
+      margin: '0 auto 24px',
+      objectFit: 'cover',
+      border: '8px solid #f1f5f9'
+    },
+    name: {
+      fontSize: '48px',
+      fontWeight: '300',
+      color: '#0f172a',
+      marginBottom: '8px',
+      letterSpacing: '0.05em'
+    },
+    title: {
+      fontSize: '24px',
+      color: '#64748b',
+      marginBottom: '32px',
+      letterSpacing: '0.15em',
+      textTransform: 'uppercase'
+    },
+    contactRow: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '32px',
+      color: '#64748b',
+      marginBottom: '16px'
+    },
+    contactLink: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      color: '#64748b',
+      textDecoration: 'none',
+      transition: 'color 0.3s'
+    },
+    contactItem: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px'
+    },
+    socialRow: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '24px',
+      marginTop: '16px'
+    },
+    socialLink: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      color: '#64748b',
+      textDecoration: 'none',
+      transition: 'color 0.3s'
+    },
+    sectionTitle: {
+      fontSize: '12px',
+      fontWeight: 'bold',
+      color: '#64748b',
+      textTransform: 'uppercase',
+      letterSpacing: '0.3em',
+      marginBottom: '16px',
+      textAlign: 'center'
+    },
+    profileSection: {
+      marginBottom: '48px',
+      textAlign: 'center'
+    },
+    profileText: {
+      fontSize: '16px',
+      color: '#475569',
+      lineHeight: '1.8',
+      maxWidth: '672px',
+      margin: '0 auto'
+    },
+    experienceSection: {
+      marginBottom: '48px'
+    },
+    experienceItem: {
+      marginBottom: '40px'
+    },
+    experienceGrid: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr',
+      gap: '24px',
+      marginBottom: '16px'
+    },
+    dateColumn: {
+      textAlign: 'right'
+    },
+    date: {
+      color: '#64748b',
+      fontWeight: '500'
+    },
+    jobTitle: {
+      fontSize: '20px',
+      fontWeight: '600',
+      color: '#0f172a',
+      marginBottom: '4px'
+    },
+    company: {
+      fontSize: '18px',
+      color: '#64748b'
+    },
+    bulletPoints: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr',
+      gap: '24px'
+    },
+    bulletList: {
+      listStyle: 'none',
+      margin: 0,
+      padding: 0
+    },
+    bulletItem: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      color: '#475569',
+      marginBottom: '12px'
+    },
+    chevron: {
+      width: '16px',
+      height: '16px',
+      marginTop: '2px',
+      marginRight: '8px',
+      color: '#94a3b8',
+      flexShrink: 0
+    },
+    bottomGrid: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '48px'
+    },
+    educationItem: {
+      marginBottom: '24px'
+    },
+    educationSchool: {
+      fontSize: '16px',
+      fontWeight: '600',
+      color: '#0f172a',
+      marginBottom: '4px'
+    },
+    educationProgram: {
+      color: '#475569',
+      marginBottom: '4px'
+    },
+    educationYear: {
+      fontSize: '14px',
+      color: '#64748b'
+    },
+    educationDesc: {
+      fontSize: '14px',
+      color: '#64748b',
+      marginTop: '8px'
+    },
+    skillsSection: {
+      marginBottom: '24px'
+    },
+    skillCategory: {
+      marginBottom: '24px'
+    },
+    skillSubtitle: {
+      fontSize: '14px',
+      fontWeight: '600',
+      color: '#475569',
+      marginBottom: '12px'
+    },
+    skillContainer: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '8px'
+    },
+    skillBadge: {
+      padding: '4px 12px',
+      backgroundColor: '#f1f5f9',
+      color: '#475569',
+      fontSize: '14px'
+    },
+    footer: {
+      marginTop: '48px',
+      paddingTop: '32px',
+      borderTop: '2px solid #e2e8f0',
+      textAlign: 'center'
+    },
+    footerText: {
+      fontSize: '12px',
+      color: '#94a3b8',
+      letterSpacing: '0.15em',
+      textTransform: 'uppercase'
+    }
+  };
+
   return (
-    <div className="bg-white p-10 max-w-3xl mx-auto text-sm leading-relaxed">
-      {/* Premium Header Design */}
-      <header className="mb-12 relative">
-        <div className="absolute top-0 left-0 w-32 h-32 bg-purple-100 -z-10"></div>
-        <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-100 -z-10"></div>
+    <div style={styles.container}>
+      {/* Executive Header */}
+      <header style={styles.header}>
+        {photoUrl && (
+          <img 
+            src={photoUrl} 
+            alt={name}
+            style={styles.photo}
+          />
+        )}
+        <h1 style={styles.name}>{name}</h1>
+        <h2 style={styles.title}>{title}</h2>
         
-        <div className="relative z-10 pt-8">
-          <div className="flex items-start gap-8">
-            {photoUrl && (
-              <img 
-                src={photoUrl} 
-                alt={name}
-                className="w-32 h-32 object-cover border-4 border-white"
-                style={{ boxShadow: '0 0 0 2px #e5e7eb' }}
-              />
-            )}
-            <div className="flex-1">
-              <h1 className="text-5xl font-bold text-gray-900 mb-3">{name}</h1>
-              <h2 className="text-2xl text-purple-600 font-medium mb-6">{title}</h2>
-              
-              <div className="grid grid-cols-2 gap-3 text-gray-600">
-                <a 
-                  href={email.startsWith('mailto:') ? email : `mailto:${email}`}
-                  className="flex items-center gap-2 hover:text-purple-600 transition-colors"
-                >
-                  <Mail className="w-4 h-4 text-purple-500" />
-                  <span>{email}</span>
-                </a>
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-purple-500" />
-                  <span>{phone}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-purple-500" />
-                  <span>{location}</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  {linkedin && (
-                    <a 
-                      href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 hover:text-purple-600 transition-colors"
-                    >
-                      <Linkedin className="w-4 h-4 text-purple-500" />
-                      <span className="sr-only">LinkedIn</span>
-                    </a>
-                  )}
-                  {github && (
-                    <a 
-                      href={github.startsWith('http') ? github : `https://${github}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 hover:text-purple-600 transition-colors"
-                    >
-                      <Github className="w-4 h-4 text-purple-500" />
-                      <span className="sr-only">GitHub</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+        <div style={styles.contactRow}>
+          <a 
+            href={email.startsWith('mailto:') ? email : `mailto:${email}`}
+            style={styles.contactLink}
+          >
+            <Mail style={{ width: '16px', height: '16px' }} />
+            <span>{email}</span>
+          </a>
+          <div style={styles.contactItem}>
+            <Phone style={{ width: '16px', height: '16px' }} />
+            <span>{phone}</span>
           </div>
+          <div style={styles.contactItem}>
+            <MapPin style={{ width: '16px', height: '16px' }} />
+            <span>{location}</span>
+          </div>
+        </div>
+        
+        <div style={styles.socialRow}>
+          {linkedin && (
+            <a 
+              href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={styles.socialLink}
+            >
+              <Linkedin style={{ width: '20px', height: '20px' }} />
+              <span>LinkedIn</span>
+            </a>
+          )}
+          {github && (
+            <a 
+              href={github.startsWith('http') ? github : `https://${github}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={styles.socialLink}
+            >
+              <Github style={{ width: '20px', height: '20px' }} />
+              <span>GitHub</span>
+            </a>
+          )}
         </div>
       </header>
 
-      {/* Profile Section with Border */}
-      <section className="mb-10 pb-10 border-b-2 border-gray-100">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-1 bg-purple-500"></div>
-          <h3 className="text-xl font-bold text-gray-800 uppercase tracking-wider">Profil</h3>
-        </div>
-        <p className="text-gray-700 text-base leading-relaxed ml-16">
+      {/* Executive Summary */}
+      <section style={styles.profileSection}>
+        <h3 style={styles.sectionTitle}>Executive Summary</h3>
+        <p style={styles.profileText}>
           {profile}
         </p>
       </section>
 
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-3 gap-10">
-        {/* Main Column - 2/3 width */}
-        <div className="col-span-2">
-          {/* Experience */}
-          <section className="mb-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-1 bg-purple-500"></div>
-              <h3 className="text-xl font-bold text-gray-800 uppercase tracking-wider">Erfarenhet</h3>
-            </div>
-            
-            <div className="space-y-8">
-              {experience.map((job, index) => (
-                <div key={index} className="relative pl-8">
-                  <div className="absolute left-0 top-2 w-2 h-2 bg-purple-500"></div>
-                  <div className="absolute left-0.5 top-4 w-0.5 h-full bg-gray-200"></div>
-                  
-                  <div className="mb-4">
-                    <h4 className="text-lg font-bold text-gray-900">{job.title}</h4>
-                    <div className="flex items-center gap-3 text-gray-600 mb-2">
-                      <span className="text-purple-600 font-medium">{job.company}</span>
-                      <span className="text-gray-400">•</span>
-                      <span className="text-gray-500">{job.date}</span>
-                    </div>
-                  </div>
-                  
-                  <ul className="space-y-2">
+      {/* Professional Experience */}
+      <section style={styles.experienceSection}>
+        <h3 style={{ ...styles.sectionTitle, marginBottom: '32px' }}>
+          Professional Experience
+        </h3>
+        
+        <div>
+          {experience.map((job, index) => (
+            <div key={index} style={styles.experienceItem}>
+              <div style={styles.experienceGrid}>
+                <div style={styles.dateColumn}>
+                  <p style={styles.date}>{job.date}</p>
+                </div>
+                <div>
+                  <h4 style={styles.jobTitle}>{job.title}</h4>
+                  <p style={styles.company}>{job.company}</p>
+                </div>
+              </div>
+              
+              <div style={styles.bulletPoints}>
+                <div></div>
+                <div>
+                  <ul style={styles.bulletList}>
                     {job.points.map((point, i) => (
-                      <li key={i} className="flex items-start text-gray-700">
-                        <Circle className="w-1.5 h-1.5 mt-2 mr-3 text-purple-400 fill-current flex-shrink-0" />
-                        <span>{point}</span>
+                      <li key={i} style={styles.bulletItem}>
+                        <ChevronRight style={styles.chevron} />
+                        <span style={{ lineHeight: '1.6' }}>{point}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-              ))}
+              </div>
             </div>
-          </section>
-
-          {/* Education */}
-          <section>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-1 bg-purple-500"></div>
-              <h3 className="text-xl font-bold text-gray-800 uppercase tracking-wider">Utbildning</h3>
-            </div>
-            
-            <div className="space-y-6">
-              {education.map((edu, index) => (
-                <div key={index} className="pl-8">
-                  <h4 className="text-lg font-bold text-gray-900">{edu.school}</h4>
-                  <p className="text-purple-600 font-medium mb-1">{edu.program}</p>
-                  <p className="text-gray-500 text-sm mb-2">{edu.year}</p>
-                  {edu.description && (
-                    <p className="text-gray-600">{edu.description}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
+          ))}
         </div>
+      </section>
 
-        {/* Side Column - 1/3 width */}
-        <div>
-          {/* Skills Section */}
-          <section className="bg-gray-50 p-6 -mr-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-1 bg-purple-500"></div>
-              <h3 className="text-lg font-bold text-gray-800 uppercase tracking-wider">Färdigheter</h3>
-            </div>
-            
-            <div className="mb-6">
-              <h4 className="font-bold text-gray-700 mb-3 text-sm uppercase">Språk & Tekniker</h4>
-              <div className="space-y-2">
+      {/* Education & Skills Grid */}
+      <div style={styles.bottomGrid}>
+        {/* Education */}
+        <section>
+          <h3 style={styles.sectionTitle}>Education</h3>
+          <div>
+            {education.map((edu, index) => (
+              <div key={index} style={styles.educationItem}>
+                <h4 style={styles.educationSchool}>{edu.school}</h4>
+                <p style={styles.educationProgram}>{edu.program}</p>
+                <p style={styles.educationYear}>{edu.year}</p>
+                {edu.description && (
+                  <p style={styles.educationDesc}>{edu.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Skills */}
+        <section>
+          <h3 style={styles.sectionTitle}>Technical Expertise</h3>
+          
+          <div style={styles.skillsSection}>
+            <div style={styles.skillCategory}>
+              <h4 style={styles.skillSubtitle}>Languages & Technologies</h4>
+              <div style={styles.skillContainer}>
                 {skills.languages.map((skill, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-purple-400"></div>
-                    <span className="text-gray-700">{skill}</span>
-                  </div>
+                  <span key={index} style={styles.skillBadge}>
+                    {skill}
+                  </span>
                 ))}
               </div>
             </div>
             
             <div>
-              <h4 className="font-bold text-gray-700 mb-3 text-sm uppercase">Verktyg & Ramverk</h4>
-              <div className="space-y-2">
+              <h4 style={styles.skillSubtitle}>Tools & Frameworks</h4>
+              <div style={styles.skillContainer}>
                 {skills.tools.map((tool, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-indigo-400"></div>
-                    <span className="text-gray-700">{tool}</span>
-                  </div>
+                  <span key={index} style={styles.skillBadge}>
+                    {tool}
+                  </span>
                 ))}
               </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Footer Line */}
+      <div style={styles.footer}>
+        <p style={styles.footerText}>Curriculum Vitae</p>
       </div>
     </div>
   );
