@@ -1,4 +1,5 @@
 import React from 'react';
+import { Linkedin, Github } from 'lucide-react';
 
 const ModernTemplate = ({
   name,
@@ -23,9 +24,35 @@ const ModernTemplate = ({
           {email && <p>Email: <a href={`mailto:${email}`} className="text-blue-600 hover:underline">{email}</a></p>}
           {phone && <p>Telefon: {phone}</p>}
           {location && <p>Plats: {location}</p>}
-          {linkedin && <p>LinkedIn: <a href={`https://${linkedin}`} className="text-blue-600 hover:underline">{linkedin}</a></p>}
-          {github && <p>GitHub: <a href={`https://${github}`} className="text-blue-600 hover:underline">{github}</a></p>}
         </div>
+        
+        {/* Social Links */}
+        {(linkedin || github) && (
+          <div className="mt-3 flex gap-3">
+            {linkedin && (
+              <a 
+                href={`https://${linkedin}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                title="LinkedIn profil"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+            )}
+            {github && (
+              <a 
+                href={`https://${github}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+                title="GitHub profil"
+              >
+                <Github className="w-5 h-5" />
+              </a>
+            )}
+          </div>
+        )}
       </header>
 
       {/* Profile */}
