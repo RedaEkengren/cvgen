@@ -28,10 +28,10 @@ const ModernTemplate = ({
         
         {/* Social Links */}
         {(linkedin || github) && (
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-6">
             {linkedin && (
               <a 
-                href={`https://${linkedin}`} 
+                href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-blue-600 transition-colors"
@@ -42,7 +42,7 @@ const ModernTemplate = ({
             )}
             {github && (
               <a 
-                href={`https://${github}`} 
+                href={github.startsWith('http') ? github : `https://${github}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 transition-colors"
