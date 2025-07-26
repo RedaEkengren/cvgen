@@ -10,10 +10,21 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : true,
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname, 'dist')));
+
+// Only serve static files if not in API-only mode
+if (!process.env.API_ONLY) {
+  app.use(express.static(path.join(__dirname, 'dist')));
+}
 
 // PDF generation endpoint
 app.post('/api/generate-pdf', async (req, res) => {
@@ -255,10 +266,12 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
-// Serve React app for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
+// Serve React app for all other routes (only if not in API-only mode)
+if (!process.env.API_ONLY) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

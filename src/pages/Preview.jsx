@@ -23,7 +23,9 @@ export default function Preview() {
       const htmlContent = element.innerHTML
       
       // Send to backend API
-      const apiUrl = window.location.origin + '/api/generate-pdf'
+      const apiUrl = import.meta.env.VITE_API_URL 
+        ? `${import.meta.env.VITE_API_URL}/api/generate-pdf`
+        : `${window.location.origin}/api/generate-pdf`
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {

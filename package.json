@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "start": "node server.js",
+    "start:backend": "API_ONLY=true node server.js",
     "dev:server": "node server.js",
+    "dev:backend": "API_ONLY=true node server.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "postinstall": "node scripts/install-puppeteer-deps.js || echo 'Puppeteer deps script completed'"
