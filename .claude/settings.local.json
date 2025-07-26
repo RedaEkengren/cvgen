@@ -7,7 +7,9 @@
       "Bash(PORT=3001 node server.js)",
       "Bash(curl:*)",
       "Bash(rm:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm start)"
     ],
     "deny": []
   }

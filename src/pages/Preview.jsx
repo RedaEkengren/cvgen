@@ -3,7 +3,6 @@ import { useCV } from '../context/CVContext'
 import { Download } from 'lucide-react'
 import ModernTemplate from './templates/ModernTemplate'
 import SleekTemplate from './templates/SleekTemplate'
-import BoldTemplate from './templates/BoldTemplate'
 import Creative from './templates/Creative'
 import Gradient from './templates/Gradient'
 import Minimal from './templates/Minimal'
@@ -109,17 +108,6 @@ export default function Preview() {
                 <p className="text-sm text-gray-600 mt-1">Elegant centrerad design</p>
               </button>
 
-              <button
-                onClick={() => setSelectedTemplate('bold')}
-                className={`border-2 rounded-lg p-4 text-left transition-colors ${
-                  selectedTemplate === 'bold' 
-                    ? 'border-primary-500 bg-primary-50' 
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <h4 className="font-medium text-gray-900">Bold</h4>
-                <p className="text-sm text-gray-600 mt-1">Stark svart design</p>
-              </button>
 
               <button
                 onClick={() => setSelectedTemplate('creative')}
@@ -240,64 +228,6 @@ export default function Preview() {
                 location={state.personalInfo.city || undefined}
                 linkedin={state.personalInfo.linkedIn || undefined}
                 github={state.personalInfo.github || undefined}
-                profile={state.personalInfo.summary || undefined}
-                experience={state.experience.length > 0 ? state.experience.map(exp => ({
-                  title: exp.position,
-                  company: exp.company,
-                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
-                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
-                })) : undefined}
-                education={state.education.length > 0 ? state.education.map(edu => ({
-                  school: edu.school,
-                  program: edu.degree,
-                  year: `${edu.startDate} - ${edu.endDate}`,
-                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
-                })) : undefined}
-                skills={state.skills.length > 0 ? {
-                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
-                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
-                } : undefined}
-              />
-            )}
-            {selectedTemplate === 'modern-photo' && (
-              <ModernTemplatePhoto
-                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
-                title={state.personalInfo.title || undefined}
-                email={state.personalInfo.email || undefined}
-                phone={state.personalInfo.phone || undefined}
-                location={state.personalInfo.city || undefined}
-                linkedin={state.personalInfo.linkedIn || undefined}
-                github={state.personalInfo.github || undefined}
-                photoUrl={state.personalInfo.photoUrl || undefined}
-                profile={state.personalInfo.summary || undefined}
-                experience={state.experience.length > 0 ? state.experience.map(exp => ({
-                  title: exp.position,
-                  company: exp.company,
-                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
-                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
-                })) : undefined}
-                education={state.education.length > 0 ? state.education.map(edu => ({
-                  school: edu.school,
-                  program: edu.degree,
-                  year: `${edu.startDate} - ${edu.endDate}`,
-                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
-                })) : undefined}
-                skills={state.skills.length > 0 ? {
-                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
-                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
-                } : undefined}
-              />
-            )}
-            {selectedTemplate === 'bold' && (
-              <BoldTemplate
-                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
-                title={state.personalInfo.title || undefined}
-                email={state.personalInfo.email || undefined}
-                phone={state.personalInfo.phone || undefined}
-                location={state.personalInfo.city || undefined}
-                linkedin={state.personalInfo.linkedIn || undefined}
-                github={state.personalInfo.github || undefined}
-                photoUrl={state.personalInfo.photoUrl || undefined}
                 profile={state.personalInfo.summary || undefined}
                 experience={state.experience.length > 0 ? state.experience.map(exp => ({
                   title: exp.position,
