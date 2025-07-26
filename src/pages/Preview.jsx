@@ -4,8 +4,7 @@ import html2pdf from 'html2pdf.js'
 import { Download } from 'lucide-react'
 import ModernTemplate from './templates/ModernTemplate'
 import SleekTemplate from './templates/SleekTemplate'
-import ModernTemplatePhoto from './templates/ModernTemplatePhoto'
-import SleekTemplatePhoto from './templates/SleekTemplatePhoto'
+import BoldTemplate from './templates/BoldTemplate'
 
 export default function Preview() {
   const { state } = useCV()
@@ -57,7 +56,7 @@ export default function Preview() {
         <div className="mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Välj CV-mall</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <button
                 onClick={() => setSelectedTemplate('modern')}
                 className={`border-2 rounded-lg p-4 text-left transition-colors ${
@@ -67,7 +66,7 @@ export default function Preview() {
                 }`}
               >
                 <h4 className="font-medium text-gray-900">Modern</h4>
-                <p className="text-sm text-gray-600 mt-1">Mörk header med accenter</p>
+                <p className="text-sm text-gray-600 mt-1">Lila accenter med tvåkolumns layout</p>
               </button>
               
               <button
@@ -78,32 +77,20 @@ export default function Preview() {
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <h4 className="font-medium text-gray-900">Sleek</h4>
-                <p className="text-sm text-gray-600 mt-1">Clean minimalistisk design</p>
+                <h4 className="font-medium text-gray-900">Executive</h4>
+                <p className="text-sm text-gray-600 mt-1">Elegant centrerad design</p>
               </button>
 
               <button
-                onClick={() => setSelectedTemplate('modern-photo')}
+                onClick={() => setSelectedTemplate('bold')}
                 className={`border-2 rounded-lg p-4 text-left transition-colors ${
-                  selectedTemplate === 'modern-photo' 
+                  selectedTemplate === 'bold' 
                     ? 'border-primary-500 bg-primary-50' 
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <h4 className="font-medium text-gray-900">Modern + Foto</h4>
-                <p className="text-sm text-gray-600 mt-1">Med plats för profilbild</p>
-              </button>
-
-              <button
-                onClick={() => setSelectedTemplate('sleek-photo')}
-                className={`border-2 rounded-lg p-4 text-left transition-colors ${
-                  selectedTemplate === 'sleek-photo' 
-                    ? 'border-primary-500 bg-primary-50' 
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <h4 className="font-medium text-gray-900">Sleek + Foto</h4>
-                <p className="text-sm text-gray-600 mt-1">Clean design med foto</p>
+                <h4 className="font-medium text-gray-900">Bold</h4>
+                <p className="text-sm text-gray-600 mt-1">Stark svart design med inline styles</p>
               </button>
             </div>
           </div>
@@ -213,8 +200,8 @@ export default function Preview() {
                 } : undefined}
               />
             )}
-            {selectedTemplate === 'sleek-photo' && (
-              <SleekTemplatePhoto
+            {selectedTemplate === 'bold' && (
+              <BoldTemplate
                 name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
                 title={state.personalInfo.title || undefined}
                 email={state.personalInfo.email || undefined}
