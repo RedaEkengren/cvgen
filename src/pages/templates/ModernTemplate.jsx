@@ -20,9 +20,9 @@ const ModernTemplate = ({
         <h1 className="text-4xl font-bold text-gray-900">{name}</h1>
         <h2 className="text-xl text-gray-600 mt-1">{title}</h2>
         <div className="mt-4 space-y-1 text-sm text-gray-700">
-          <p>Email: <a href={`mailto:${email}`} className="text-blue-600 hover:underline">{email}</a></p>
-          <p>Telefon: {phone}</p>
-          <p>Plats: {location}</p>
+          {email && <p>Email: <a href={`mailto:${email}`} className="text-blue-600 hover:underline">{email}</a></p>}
+          {phone && <p>Telefon: {phone}</p>}
+          {location && <p>Plats: {location}</p>}
           {linkedin && <p>LinkedIn: <a href={`https://${linkedin}`} className="text-blue-600 hover:underline">{linkedin}</a></p>}
           {github && <p>GitHub: <a href={`https://${github}`} className="text-blue-600 hover:underline">{github}</a></p>}
         </div>

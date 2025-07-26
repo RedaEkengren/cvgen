@@ -11,10 +11,15 @@ export default function Preview() {
   const exportToPDF = () => {
     const element = cvRef.current
     const opt = {
-      margin: 0,
+      margin: [10, 10, 10, 10],
       filename: `CV_${state.personalInfo.firstName}_${state.personalInfo.lastName}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        allowTaint: true,
+        letterRendering: true
+      },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     }
 
@@ -82,7 +87,7 @@ export default function Preview() {
                 school: edu.school,
                 program: edu.degree,
                 year: `${edu.startDate} - ${edu.endDate}`,
-                description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ')
+                description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
               }))}
               skills={{
                 languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
