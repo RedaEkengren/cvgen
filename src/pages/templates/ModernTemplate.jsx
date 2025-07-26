@@ -1,138 +1,192 @@
 import React from 'react';
-import { Linkedin, Github } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 
-const ModernTemplate = ({
-  name,
-  title,
-  email,
-  phone,
-  location,
-  linkedin,
-  github,
-  profile,
-  experience = [],
-  education = [],
-  skills = { languages: [], tools: [] }
+const ModernTemplate = ({ 
+  name = "Anna Andersson",
+  title = "Frontend Developer",
+  email = "anna.andersson@email.com",
+  phone = "+46 70 123 45 67",
+  location = "Stockholm, Sverige",
+  linkedin = "linkedin.com/in/anna-andersson",
+  github = "github.com/anna-andersson",
+  profile = "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.",
+  experience = [
+    {
+      title: "Senior Frontend Developer",
+      company: "Tech Solutions AB",
+      date: "2022 - Nuvarande",
+      points: [
+        "Leder utvecklingen av en ny e-handelsplattform med React och TypeScript",
+        "Implementerade en komponentbibliotek som minskade utvecklingstiden med 40%",
+        "Mentorskap för juniora utvecklare och code reviews"
+      ]
+    },
+    {
+      title: "Frontend Developer",
+      company: "Digital Agency",
+      date: "2019 - 2022",
+      points: [
+        "Utvecklade responsiva webbapplikationer för 20+ kunder",
+        "Optimerade prestanda vilket resulterade i 60% snabbare laddningstider",
+        "Arbetade agilt i tvärfunktionella team"
+      ]
+    }
+  ],
+  education = [
+    {
+      school: "KTH Kungliga Tekniska Högskolan",
+      program: "Civilingenjör Datateknik",
+      year: "2014 - 2019",
+      description: "Inriktning mot mjukvaruutveckling och människa-datorinteraktion"
+    }
+  ],
+  skills = {
+    languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
+    tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
+  }
 }) => {
   return (
-    <div className="bg-white p-10 text-gray-800 leading-relaxed font-sans max-w-3xl mx-auto text-sm">
-      {/* Header */}
-      <header className="border-b border-gray-300 pb-6 mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">{name}</h1>
-        <h2 className="text-xl text-gray-600 mt-1">{title}</h2>
-        <div className="mt-4 space-y-1 text-sm text-gray-700">
-          {email && <p>Email: <a href={`mailto:${email}`} className="text-blue-600 hover:underline">{email}</a></p>}
-          {phone && <p>Telefon: {phone}</p>}
-          {location && <p>Plats: {location}</p>}
-        </div>
-        
-        {/* Social Links */}
-        {(linkedin || github) && (
-          <div className="mt-3 flex gap-6">
-            {linkedin && (
-              <a 
-                href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-600 transition-colors"
-                title="LinkedIn profil"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            )}
-            {github && (
-              <a 
-                href={github.startsWith('http') ? github : `https://${github}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-                title="GitHub profil"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-            )}
+    <div className="bg-white p-10 max-w-3xl mx-auto text-sm leading-relaxed">
+      {/* Header with solid color for PDF compatibility */}
+      <header className="bg-slate-800 text-white p-8 -m-10 mb-8">
+        <h1 className="text-4xl font-bold mb-2">{name}</h1>
+        <h2 className="text-xl text-slate-200 mb-6">{title}</h2>
+        <div className="flex flex-wrap gap-4">
+          <a 
+            href={email.startsWith('mailto:') ? email : `mailto:${email}`}
+            className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors"
+          >
+            <Mail className="w-4 h-4" />
+            <span>{email}</span>
+          </a>
+          <div className="flex items-center gap-2 text-slate-200">
+            <Phone className="w-4 h-4" />
+            <span>{phone}</span>
           </div>
-        )}
+          <div className="flex items-center gap-2 text-slate-200">
+            <MapPin className="w-4 h-4" />
+            <span>{location}</span>
+          </div>
+          {linkedin && (
+            <a 
+              href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors"
+            >
+              <Linkedin className="w-4 h-4" />
+              <span className="sr-only">LinkedIn</span>
+            </a>
+          )}
+          {github && (
+            <a 
+              href={github.startsWith('http') ? github : `https://${github}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors"
+            >
+              <Github className="w-4 h-4" />
+              <span className="sr-only">GitHub</span>
+            </a>
+          )}
+        </div>
       </header>
 
       {/* Profile */}
-      {profile && (
-        <section className="mb-8">
-          <h3 className="uppercase tracking-wide text-gray-900 font-semibold mb-2">Profil</h3>
-          <p>{profile}</p>
-        </section>
-      )}
+      <section className="mb-10">
+        <h3 className="text-lg font-bold text-slate-800 mb-3 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          PROFIL
+        </h3>
+        <p className="text-slate-600 pl-4">
+          {profile}
+        </p>
+      </section>
 
       {/* Experience */}
-      {experience.length > 0 && (
-        <section className="mb-8">
-          <h3 className="uppercase tracking-wide text-gray-900 font-semibold mb-2">Erfarenhet</h3>
-          {experience.map((item, i) => (
-            <div key={i} className="mb-4">
-              <div className="flex justify-between items-start">
+      <section className="mb-10">
+        <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          ERFARENHET
+        </h3>
+        <div className="space-y-6 pl-4">
+          {experience.map((job, index) => (
+            <div key={index}>
+              <div className="flex justify-between items-start mb-3">
                 <div>
-                  <p className="font-semibold">{item.title}</p>
-                  <p className="text-gray-700">{item.company}</p>
+                  <h4 className="text-base font-bold text-slate-800">{job.title}</h4>
+                  <p className="text-indigo-600 font-medium">{job.company}</p>
                 </div>
-                <p className="text-gray-500 text-sm whitespace-nowrap">{item.date}</p>
+                <span className="text-slate-500 bg-slate-100 px-3 py-1">{job.date}</span>
               </div>
-              <ul className="list-disc list-inside mt-2 space-y-1 text-gray-700">
-                {item.points?.map((point, j) => (
-                  <li key={j}>{point}</li>
+              <ul className="space-y-2 text-slate-600">
+                {job.points.map((point, i) => (
+                  <li key={i} className="flex items-start">
+                    <span className="text-indigo-500 mr-2 mt-1">▸</span>
+                    <span>{point}</span>
+                  </li>
                 ))}
               </ul>
             </div>
           ))}
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Education */}
-      {education.length > 0 && (
-        <section className="mb-8">
-          <h3 className="uppercase tracking-wide text-gray-900 font-semibold mb-2">Utbildning</h3>
-          {education.map((edu, i) => (
-            <div key={i} className="mb-4">
-              <div className="flex justify-between items-start">
+      <section className="mb-10">
+        <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          UTBILDNING
+        </h3>
+        <div className="space-y-4 pl-4">
+          {education.map((edu, index) => (
+            <div key={index}>
+              <div className="flex justify-between items-start mb-2">
                 <div>
-                  <p className="font-semibold">{edu.school}</p>
-                  <p className="text-gray-700">{edu.program}</p>
+                  <h4 className="text-base font-bold text-slate-800">{edu.school}</h4>
+                  <p className="text-slate-700">{edu.program}</p>
                 </div>
-                <p className="text-gray-500 text-sm whitespace-nowrap">{edu.year}</p>
+                <span className="text-slate-500 bg-slate-100 px-3 py-1">{edu.year}</span>
               </div>
               {edu.description && (
-                <p className="text-gray-600 mt-1 text-sm">{edu.description}</p>
+                <p className="text-slate-600">{edu.description}</p>
               )}
             </div>
           ))}
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Skills */}
-      {(skills.languages.length > 0 || skills.tools.length > 0) && (
-        <section>
-          <h3 className="uppercase tracking-wide text-gray-900 font-semibold mb-2">Färdigheter</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {skills.languages.length > 0 && (
-              <div>
-                <p className="font-semibold text-sm text-gray-700 uppercase mb-1">Språk & Tekniker</p>
-                <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
-                  {skills.languages.map((lang, i) => <li key={i}>{lang}</li>)}
-                </ul>
-              </div>
-            )}
-            {skills.tools.length > 0 && (
-              <div>
-                <p className="font-semibold text-sm text-gray-700 uppercase mb-1">Verktyg & Ramverk</p>
-                <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
-                  {skills.tools.map((tool, i) => <li key={i}>{tool}</li>)}
-                </ul>
-              </div>
-            )}
+      <section>
+        <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          FÄRDIGHETER
+        </h3>
+        <div className="grid grid-cols-2 gap-8 pl-4">
+          <div>
+            <h4 className="font-bold text-slate-700 mb-3 uppercase tracking-wide">Språk & Tekniker</h4>
+            <div className="flex flex-wrap gap-2">
+              {skills.languages.map((skill, index) => (
+                <span key={index} className="bg-slate-100 text-slate-700 px-3 py-1">
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-        </section>
-      )}
+          <div>
+            <h4 className="font-bold text-slate-700 mb-3 uppercase tracking-wide">Verktyg & Ramverk</h4>
+            <div className="flex flex-wrap gap-2">
+              {skills.tools.map((tool, index) => (
+                <span key={index} className="bg-slate-100 text-slate-700 px-3 py-1">
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  )
-}
+  );
+};
 
 export default ModernTemplate;
