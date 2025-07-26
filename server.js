@@ -3,9 +3,39 @@ import cors from 'cors';
 import puppeteer from 'puppeteer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { JSDOM } from 'jsdom';
+import DOMPurify from 'dompurify';
+import rateLimit from 'express-rate-limit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Setup DOMPurify for server-side HTML sanitization
+const window = new JSDOM('').window;
+const purify = DOMPurify(window);
+
+// Rate limiting configuration
+const pdfGenerationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // Limit each IP to 30 PDF generations per windowMs
+  message: {
+    error: 'Too many PDF generation requests from this IP, please try again later.',
+    retryAfter: 15 * 60 // 15 minutes in seconds
+  },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: {
+    error: 'Too many requests from this IP, please try again later.',
+    retryAfter: 15 * 60
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,14 +50,15 @@ const corsOptions = {
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
+app.use(generalLimiter); // Apply general rate limiting to all requests
 
 // Only serve static files if not in API-only mode
 if (!process.env.API_ONLY) {
   app.use(express.static(path.join(__dirname, 'dist')));
 }
 
-// PDF generation endpoint
-app.post('/api/generate-pdf', async (req, res) => {
+// PDF generation endpoint with specific rate limiting
+app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
   console.log('PDF generation requested');
   let browser = null;
   
@@ -40,6 +71,21 @@ app.post('/api/generate-pdf', async (req, res) => {
     }
     
     console.log('HTML content received, length:', htmlContent.length);
+    
+    // Sanitize HTML content to prevent XSS attacks
+    const sanitizedHtml = purify.sanitize(htmlContent, {
+      ALLOWED_TAGS: [
+        'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'ul', 'ol', 'li', 'br', 'strong', 'em', 'b', 'i', 'u', 's',
+        'section', 'article', 'header', 'footer', 'main', 'aside',
+        'a', 'img', 'table', 'tr', 'td', 'th', 'tbody', 'thead'
+      ],
+      ALLOWED_ATTR: ['class', 'id', 'style', 'href', 'src', 'alt', 'title'],
+      FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'iframe', 'frame', 'frameset'],
+      FORBID_ATTR: ['onclick', 'onload', 'onerror', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit']
+    });
+    
+    console.log('HTML sanitized, original length:', htmlContent.length, 'sanitized length:', sanitizedHtml.length);
 
     // Launch Puppeteer with DigitalOcean-compatible options
     const isProduction = process.env.NODE_ENV === 'production';
@@ -189,7 +235,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     </head>
     <body>
       <div class="cv-container">
-        ${htmlContent}
+        ${sanitizedHtml}
       </div>
     </body>
     </html>`;
