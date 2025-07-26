@@ -1,16 +1,16 @@
-# CV Generator för IT-studenter
+# CV Generator för IT-studenter 🎓
 
-En modern, responsiv CV-generator speciellt designad för svenska IT-studenter. Helt gratis - inget konto behövs, allt körs i webbläsaren med localStorage för datalagring.
+En modern, professionell CV-generator speciellt designad för svenska IT-studenter. Skapa snygga, rekryterarvänliga CV:n med flera mallar att välja mellan. Helt gratis - inget konto behövs!
 
 ## ✨ Funktioner
 
-- **Modern design**: Professionella mallar optimerade för IT-branschen
-- **Live-förhandsgranskning**: Se ditt CV uppdateras i realtid
-- **PDF-export**: Ladda ner som perfekt formaterad PDF
-- **GitHub-integration**: Visa automatiskt dina senaste projekt
-- **Responsiv**: Fungerar perfekt på mobil, tablet och desktop
-- **Inget konto**: All data sparas lokalt i webbläsaren
-- **Premium-funktioner**: Låses upp med aktiveringskod
+- **7 Professionella CV-mallar**: Modern, Executive, Creative, Gradient, Minimal, Neon, Retro
+- **Live-förhandsgranskning**: Se ditt CV uppdateras i realtid medan du fyller i
+- **Högkvalitativ PDF-export**: Puppeteer-driven backend för perfekta PDF:er
+- **GitHub-integration**: Importera automatiskt dina senaste projekt från GitHub
+- **Responsiv design**: Fungerar perfekt på mobil, tablet och desktop
+- **Ingen registrering**: All data sparas lokalt i din webbläsare
+- **Svensk anpassning**: Optimerad för svenska IT-studenters behov
 
 ## 🚀 Kom igång
 
@@ -20,14 +20,17 @@ En modern, responsiv CV-generator speciellt designad för svenska IT-studenter. 
 # Installera dependencies
 npm install
 
-# Starta utvecklingsserver
+# Starta utvecklingsserver (frontend)
 npm run dev
+
+# Starta produktionsserver (frontend + backend)
+npm start
 
 # Bygga för produktion
 npm run build
 
-# Förhandsgranska build
-npm run preview
+# Kör endast backend-server
+npm run dev:server
 ```
 
 ### Deployment till DigitalOcean App Platform
@@ -35,64 +38,70 @@ npm run preview
 1. Pusha koden till GitHub
 2. Skapa ny app på DigitalOcean App Platform
 3. Anslut GitHub-repository
-4. Konfigurera:
+4. Konfigurera Web Service:
    - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
+   - **Run Command**: `npm start`
    - **Node Version**: 18+
+   - **Port**: 3000
 
 ## 🛠️ Teknisk stack
 
-- **Frontend**: React 18 + Vite
-- **Styling**: Tailwind CSS
+- **Frontend**: React 19 + Vite
+- **Backend**: Express.js + Puppeteer
+- **Styling**: Tailwind CSS v4
 - **Routing**: React Router
 - **Formulär**: React Hook Form
 - **Ikoner**: Lucide React
-- **PDF**: html2pdf.js
-- **State**: React Context + useReducer
+- **PDF-generering**: Puppeteer (server-side)
+- **State Management**: React Context + useReducer
+- **Data Storage**: localStorage
 
-## 📱 Sektioner
+## 📱 CV-sektioner
 
-### Gratis funktioner:
-- ✅ Personlig information
-- ✅ Utbildning
-- ✅ Arbetslivserfarenhet
-- ✅ Projekt (manuella + GitHub)
-- ✅ Färdigheter
-- ✅ GitHub-integration
-- ✅ PDF-export
-- ✅ Modern CV-mall
+### Tillgängliga sektioner:
+- ✅ **Personlig information**: Namn, kontaktuppgifter, sammanfattning
+- ✅ **Utbildning**: Skola, program, datum, beskrivning
+- ✅ **Arbetslivserfarenhet**: Företag, position, datum, arbetsuppgifter
+- ✅ **Projekt**: Manuella projekt + automatisk GitHub-import
+- ✅ **Färdigheter**: Kategoriserade (Programmeringsspråk, Ramverk, Verktyg)
 
-### Kommande funktioner:
-- 🔮 Extra CV-mallar
-- 🔮 Färgteman och anpassning
-- 🔮 Avancerade layoutalternativ
-- 🔮 Import från LinkedIn
+## 🎨 CV-mallar
 
-<!-- Premium system temporarily disabled - ready for future activation
-## 🔐 Premium-aktivering
+1. **Modern** - Lila accenter med tvåkolumns layout
+2. **Executive** - Elegant centrerad design för professionellt intryck
+3. **Creative** - Färgglad design med ikoner och lekfulla element
+4. **Gradient** - Modern design med lila/rosa gradienter
+5. **Minimal** - Ultra-minimalistisk för clean presentation
+6. **Neon** - Cyberpunk-inspirerad med neon-färger
+7. **Retro** - 80-tals gaming-inspirerad design
 
-Aktiveringskoder köps via Gumroad. Giltiga koder:
-- `PREMIUM2024`
-- `GUMROAD_PREMIUM` 
-- `STUDENT_PRO`
--->
 
 ## 📂 Projektstruktur
 
 ```
-src/
-├── components/          # Återanvändbara komponenter
-│   ├── Header.jsx
-│   └── PremiumModal.jsx
-├── pages/              # Sidor/views
-│   ├── Home.jsx
-│   ├── CVBuilder.jsx
-│   └── Preview.jsx
-├── context/            # State management
-│   └── CVContext.jsx
-├── utils/              # Utility funktioner
-│   └── storage.js
-└── index.css          # Global styles
+├── server.js               # Express server med Puppeteer PDF-generering
+├── src/
+│   ├── components/         # Återanvändbara komponenter
+│   │   ├── Header.jsx
+│   │   └── PremiumModal.jsx
+│   ├── pages/              # Sidor/views
+│   │   ├── Home.jsx        # Landningssida
+│   │   ├── CVBuilder.jsx   # Formulär för CV-data
+│   │   ├── Preview.jsx     # CV-förhandsgranskning och export
+│   │   └── templates/      # CV-mallar
+│   │       ├── Creative.jsx
+│   │       ├── Gradient.jsx
+│   │       ├── Minimal.jsx
+│   │       ├── ModernTemplate.jsx
+│   │       ├── Neon.jsx
+│   │       ├── Retro.jsx
+│   │       └── SleekTemplate.jsx
+│   ├── context/            # State management
+│   │   └── CVContext.jsx
+│   ├── utils/              # Utility funktioner
+│   │   └── storage.js
+│   └── index.css          # Global styles
+└── dist/                  # Byggd applikation
 ```
 
 ## 🎨 Design-principer
@@ -103,19 +112,43 @@ src/
 - **Snabb**: Optimerad prestanda med Vite
 - **Tillgänglig**: Semantisk HTML och ARIA-labels
 
-## 🚀 Framtida funktioner
+## 🚀 Systemarkitektur
 
-- [ ] Fler CV-mallar
+### Hybrid Frontend + Backend
+- **Frontend**: React SPA för användargränssnitt
+- **Backend**: Express + Puppeteer för PDF-generering
+- **Data**: localStorage (ingen databas behövs)
+- **PDF**: Server-side rendering med Puppeteer för hög kvalitet
+
+### API Endpoints
+- `GET /` - Serverar React-applikationen
+- `POST /api/generate-pdf` - Genererar PDF från HTML
+- `GET /api/health` - Health check för monitoring
+
+## 🔮 Framtida funktioner
+
 - [ ] Import från LinkedIn
 - [ ] Språkstöd (engelska)
 - [ ] Mörkt tema
-- [ ] Export till andra format
-- [ ] CV-analys och tips
+- [ ] Export till Word/DOCX
+- [ ] CV-analys och tips med AI
+- [ ] Delningsfunktion med unik länk
+
+## 🤝 Bidrag
+
+Bidrag är välkomna! Skapa gärna issues eller pull requests på GitHub.
 
 ## 📝 Licens
 
 MIT License - fri att använda för personliga och kommersiella projekt.
 
+## 🙏 Tack till
+
+- React-teamet för ett fantastiskt ramverk
+- Tailwind CSS för smidig styling
+- Puppeteer för högkvalitativ PDF-export
+- Alla open source-projekt som gör detta möjligt
+
 ---
 
-Byggt med ❤️ för svenska IT-studenter
+Byggt med ❤️ för svenska IT-studenter av utvecklare som förstår era behov.

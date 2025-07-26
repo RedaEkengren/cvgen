@@ -9,7 +9,8 @@
     "start": "node server.js",
     "dev:server": "node server.js",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "node -e \"const {execSync} = require('child_process'); try { execSync('chromium --version', {stdio: 'ignore'}); console.log('Chromium already installed'); } catch { console.log('Installing Puppeteer...'); }\""
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",

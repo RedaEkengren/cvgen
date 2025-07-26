@@ -1,6 +1,42 @@
 # Claude Development Log - CV Generator för IT-studenter
 
-## 📅 Session Date: 2025-07-25
+## 📅 Session Dates: 2025-07-25 → 2025-07-26
+
+## 🏗️ Current System Architecture (IMPORTANT - READ THIS FIRST)
+
+### Hybrid Architecture Overview
+**This is NOT a pure backend system - it's a hybrid React + Puppeteer architecture:**
+
+1. **Frontend**: React 19 + Vite
+   - User interface for forms and CV preview
+   - Real-time CV rendering in browser
+   - Template selection and data management
+   - localStorage for persistence
+
+2. **Backend**: Express + Puppeteer
+   - PDF generation endpoint only (`/api/generate-pdf`)
+   - Receives HTML from React frontend
+   - Uses Puppeteer to render high-quality PDFs
+   - No database integration
+
+3. **Templates**: React Components (JSX)
+   - All templates are React components with inline styles
+   - Located in `src/pages/templates/`
+   - 7 templates available: Modern, Executive, Creative, Gradient, Minimal, Neon, Retro
+
+### How It Works
+```
+User fills forms → React updates state → Preview shows template → 
+User clicks "Export PDF" → React sends HTML to backend → 
+Puppeteer renders PDF → User downloads PDF
+```
+
+### Key Files
+- `src/pages/Preview.jsx` - Template selector and PDF export
+- `src/pages/templates/*.jsx` - React template components
+- `server.js` - Express server with Puppeteer PDF generation
+- `src/context/CVContext.jsx` - State management
+- `src/pages/CVBuilder.jsx` - Form interface
 
 ## 🎯 Project Overview
 Utveckling av en modern CV-generator specifikt designad för svenska IT-studenter. Applikationen är byggd som en frontend-only React-applikation med localStorage för datapersistens.

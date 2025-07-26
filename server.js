@@ -27,7 +27,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     }
 
     // Launch Puppeteer with DigitalOcean-compatible options
-    browser = await puppeteer.launch({
+    const puppeteerOptions = {
       headless: 'new',
       args: [
         '--no-sandbox',
@@ -37,9 +37,19 @@ app.post('/api/generate-pdf', async (req, res) => {
         '--no-first-run',
         '--no-zygote',
         '--single-process',
-        '--disable-gpu'
+        '--disable-gpu',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins',
+        '--disable-site-isolation-trials'
       ]
-    });
+    };
+    
+    // Use system Chromium if available (Docker/DigitalOcean)
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      puppeteerOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    }
+    
+    browser = await puppeteer.launch(puppeteerOptions);
 
     const page = await browser.newPage();
     

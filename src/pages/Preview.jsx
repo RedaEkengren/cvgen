@@ -23,7 +23,8 @@ export default function Preview() {
       const htmlContent = element.innerHTML
       
       // Send to backend API
-      const response = await fetch('/api/generate-pdf', {
+      const apiUrl = window.location.origin + '/api/generate-pdf'
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,6 +36,8 @@ export default function Preview() {
       })
       
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('PDF generation error:', errorText)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       
