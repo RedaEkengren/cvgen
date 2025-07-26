@@ -2,17 +2,48 @@ import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 
 const ModernTemplate = ({ 
-  name,
-  title,
-  email,
-  phone,
-  location,
-  linkedin,
-  github,
-  profile,
-  experience = [],
-  education = [],
-  skills = { languages: [], tools: [] }
+  name = "Anna Andersson",
+  title = "Frontend Developer", 
+  email = "anna.andersson@email.com",
+  phone = "+46 70 123 45 67",
+  location = "Stockholm, Sverige",
+  linkedin = "linkedin.com/in/anna-andersson",
+  github = "github.com/anna-andersson",
+  profile = "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.",
+  experience = [
+    {
+      title: "Senior Frontend Developer",
+      company: "Tech Solutions AB", 
+      date: "2022 - Nuvarande",
+      points: [
+        "Leder utvecklingen av en ny e-handelsplattform med React och TypeScript",
+        "Implementerade en komponentbibliotek som minskade utvecklingstiden med 40%",
+        "Mentorskap för juniora utvecklare och code reviews"
+      ]
+    },
+    {
+      title: "Frontend Developer",
+      company: "Digital Agency",
+      date: "2019 - 2022", 
+      points: [
+        "Utvecklade responsiva webbapplikationer för 20+ kunder",
+        "Optimerade prestanda vilket resulterade i 60% snabbare laddningstider",
+        "Arbetade agilt i tvärfunktionella team"
+      ]
+    }
+  ],
+  education = [
+    {
+      school: "KTH Kungliga Tekniska Högskolan",
+      program: "Civilingenjör Datateknik",
+      year: "2014 - 2019",
+      description: "Inriktning mot mjukvaruutveckling och människa-datorinteraktion"
+    }
+  ],
+  skills = {
+    languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
+    tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
+  }
 }) => {
   return (
     <div className="bg-white p-10 max-w-3xl mx-auto text-sm leading-relaxed">
@@ -62,27 +93,24 @@ const ModernTemplate = ({
       </header>
 
       {/* Profile */}
-      {profile && (
-        <section className="mb-10">
-          <h3 className="text-lg font-bold text-slate-800 mb-3 flex items-center">
-            <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
-            PROFIL
-          </h3>
-          <p className="text-slate-600 pl-4">
-            {profile}
-          </p>
-        </section>
-      )}
+      <section className="mb-10">
+        <h3 className="text-lg font-bold text-slate-800 mb-3 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          PROFIL
+        </h3>
+        <p className="text-slate-600 pl-4">
+          {profile}
+        </p>
+      </section>
 
       {/* Experience */}
-      {experience.length > 0 && (
-        <section className="mb-10">
-          <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
-            <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
-            ERFARENHET
-          </h3>
-          <div className="space-y-6 pl-4">
-            {experience.map((job, index) => (
+      <section className="mb-10">
+        <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          ERFARENHET
+        </h3>
+        <div className="space-y-6 pl-4">
+          {experience.map((job, index) => (
             <div key={index}>
               <div className="flex justify-between items-start mb-3">
                 <div>
@@ -103,15 +131,13 @@ const ModernTemplate = ({
           ))}
         </div>
       </section>
-      )}
 
       {/* Education */}
-      {education.length > 0 && (
-        <section className="mb-10">
-          <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
-            <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
-            UTBILDNING
-          </h3>
+      <section className="mb-10">
+        <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
+          <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
+          UTBILDNING
+        </h3>
         <div className="space-y-4 pl-4">
           {education.map((edu, index) => (
             <div key={index}>
@@ -129,11 +155,9 @@ const ModernTemplate = ({
           ))}
         </div>
       </section>
-      )}
 
       {/* Skills */}
-      {(skills.languages.length > 0 || skills.tools.length > 0) && (
-        <section>
+      <section>
         <h3 className="text-lg font-bold text-slate-800 mb-5 flex items-center">
           <span className="w-1 h-6 bg-indigo-500 mr-3"></span>
           FÄRDIGHETER
@@ -161,7 +185,6 @@ const ModernTemplate = ({
           </div>
         </div>
       </section>
-      )}
     </div>
   );
 };

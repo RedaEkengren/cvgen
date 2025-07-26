@@ -10,7 +10,7 @@ import SleekTemplatePhoto from './templates/SleekTemplatePhoto'
 export default function Preview() {
   const { state } = useCV()
   const cvRef = useRef()
-  const [selectedTemplate, setSelectedTemplate] = useState('sleek') // Hårdkodad till SleekTemplate för test
+  const [selectedTemplate, setSelectedTemplate] = useState(state.selectedTemplate || 'sleek')
 
   const exportToPDF = () => {
     const element = cvRef.current
@@ -130,58 +130,58 @@ export default function Preview() {
           <div ref={cvRef} className="cv-container">
             {selectedTemplate === 'modern' && (
               <ModernTemplate
-                name={`${state.personalInfo.firstName} ${state.personalInfo.lastName}`}
-                title="IT-Student & Utvecklare"
-                email={state.personalInfo.email}
-                phone={state.personalInfo.phone}
-                location={state.personalInfo.city}
-                linkedin={state.personalInfo.linkedIn}
-                github={state.personalInfo.github}
-                profile={state.personalInfo.summary}
-                experience={state.experience.map(exp => ({
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
                   title: exp.position,
                   company: exp.company,
                   date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
                   points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
-                }))}
-                education={state.education.map(edu => ({
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
                   school: edu.school,
                   program: edu.degree,
                   year: `${edu.startDate} - ${edu.endDate}`,
                   description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
-                }))}
-                skills={{
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
                   languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
                   tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
-                }}
+                } : undefined}
               />
             )}
             {selectedTemplate === 'sleek' && (
               <SleekTemplate
-                name={`${state.personalInfo.firstName} ${state.personalInfo.lastName}`}
-                title="IT-Student & Utvecklare"
-                email={state.personalInfo.email}
-                phone={state.personalInfo.phone}
-                location={state.personalInfo.city}
-                linkedin={state.personalInfo.linkedIn}
-                github={state.personalInfo.github}
-                profile={state.personalInfo.summary}
-                experience={state.experience.map(exp => ({
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
                   title: exp.position,
                   company: exp.company,
                   date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
                   points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
-                }))}
-                education={state.education.map(edu => ({
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
                   school: edu.school,
                   program: edu.degree,
                   year: `${edu.startDate} - ${edu.endDate}`,
                   description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
-                }))}
-                skills={{
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
                   languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
                   tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
-                }}
+                } : undefined}
               />
             )}
             {selectedTemplate === 'modern-photo' && (
