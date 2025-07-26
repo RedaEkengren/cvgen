@@ -180,6 +180,18 @@ export default function CVBuilder() {
       </div>
 
       <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Yrkestitel</label>
+        <input
+          {...register('title')}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          placeholder="t.ex. Frontend-utvecklare, IT-Student, Yrkeschaufför"
+        />
+        <p className="text-sm text-gray-500 mt-1">
+          Din nuvarande titel eller den titel du söker
+        </p>
+      </div>
+
+      <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Profilbild</label>
         <input
           {...register('photoUrl')}
