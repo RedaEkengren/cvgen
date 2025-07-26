@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useCV } from '../context/CVContext'
 import html2pdf from 'html2pdf.js'
 import { Download } from 'lucide-react'
-import DefaultTemplate from './templates/ModernTemplate'
+import ModernTemplate from './templates/ModernTemplate'
 
 export default function Preview() {
   const { state } = useCV()
@@ -63,7 +63,7 @@ export default function Preview() {
           </div>
         ) : (
           <div ref={cvRef} className="cv-container">
-            <DefaultTemplate
+            <ModernTemplate
               name={`${state.personalInfo.firstName} ${state.personalInfo.lastName}`}
               title="IT-Student & Utvecklare"
               email={state.personalInfo.email}
