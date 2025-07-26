@@ -21,162 +21,190 @@ export default function Preview() {
   }
 
   const ModernTemplate = () => (
-    <div className="max-w-3xl mx-auto p-10 bg-white text-gray-900 font-sans leading-relaxed" style={{ minHeight: '297mm' }}>
-      {/* Header */}
-      <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold">
-          {state.personalInfo.firstName} {state.personalInfo.lastName}
-        </h1>
-        <p className="text-lg text-gray-600 mt-1">IT-Student & Utvecklare</p>
-        <div className="text-sm mt-2 text-gray-500">
-          <p>
-            {[
-              state.personalInfo.email,
-              state.personalInfo.phone,
-              state.personalInfo.city
-            ].filter(Boolean).join(' • ')}
-          </p>
-          {(state.personalInfo.linkedIn || state.personalInfo.github) && (
-            <p className="mt-1">
-              {[
-                state.personalInfo.linkedIn && state.personalInfo.linkedIn.replace('https://', '').replace('http://', ''),
-                state.personalInfo.github && state.personalInfo.github.replace('https://', '').replace('http://', '')
-              ].filter(Boolean).join(' • ')}
-            </p>
-          )}
-        </div>
-      </header>
-
-      {/* Profil */}
-      {state.personalInfo.summary && (
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Profil</h2>
-          <p>{state.personalInfo.summary}</p>
-        </section>
-      )}
-
-      {/* Erfarenhet */}
-      {state.experience.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Arbetslivserfarenhet</h2>
-          {state.experience.map((exp, index) => (
-            <div key={index} className="mb-4">
-              <div className="flex justify-between text-sm text-gray-500">
-                <p className="font-medium text-gray-800">
-                  {exp.position} – {exp.company}
-                </p>
-                <p>{exp.startDate}–{exp.current ? 'Pågående' : exp.endDate}</p>
-              </div>
-              {exp.description && (
-                <ul className="list-disc list-inside mt-1 text-sm">
-                  {exp.description.split('\n').filter(line => line.trim()).map((line, i) => (
-                    <li key={i}>{line.trim()}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
-        </section>
-      )}
-
-      {/* Utbildning */}
-      {state.education.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Utbildning</h2>
-          {state.education.map((edu, index) => (
-            <div key={index} className="mb-2">
-              <div className="flex justify-between text-sm text-gray-500">
-                <p className="font-medium text-gray-800">
-                  {edu.degree} – {edu.school}
-                </p>
-                <p>{edu.startDate}–{edu.endDate}</p>
-              </div>
-              {(edu.field || edu.description) && (
-                <p className="text-sm mt-1">
-                  {[edu.field && `Inriktning: ${edu.field}`, edu.description]
-                    .filter(Boolean)
-                    .join('. ')}
-                </p>
-              )}
-            </div>
-          ))}
-        </section>
-      )}
-
-      {/* Projekt */}
-      {(state.projects.length > 0 || state.githubProjects.length > 0) && (
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Projekt</h2>
-          {/* Manual projects */}
-          {state.projects.map((project, index) => (
-            <div key={`manual-${index}`} className="mb-3">
-              <p className="font-medium text-gray-800">{project.name}</p>
-              <p className="text-sm mt-1">{project.description}</p>
-              {project.technologies && (
-                <p className="text-sm text-gray-600 mt-1">Teknologier: {project.technologies}</p>
-              )}
-            </div>
-          ))}
-          {/* GitHub projects */}
-          {state.githubProjects.map((project, index) => (
-            <div key={`github-${index}`} className="mb-3">
-              <p className="font-medium text-gray-800">{project.name}</p>
-              <p className="text-sm mt-1">{project.description}</p>
-              <p className="text-sm text-gray-600 mt-1">Språk: {project.technologies} • ⭐ {project.stars}</p>
-            </div>
-          ))}
-        </section>
-      )}
-
-      {/* Färdigheter */}
-      {state.skills.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold border-b border-gray-300 pb-1 mb-2">Färdigheter</h2>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            {/* Programmeringsspråk */}
-            {state.skills.some(skill => skill.category === 'languages') && (
-              <div>
-                <p className="font-medium text-gray-800">Programmering</p>
-                <ul className="list-disc list-inside">
-                  {state.skills
-                    .filter(skill => skill.category === 'languages')
-                    .map((skill, index) => (
-                      <li key={index}>{skill.name}</li>
-                    ))}
-                </ul>
-              </div>
+    <div className="min-h-screen bg-white p-8" style={{ minHeight: '297mm' }}>
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <header className="mb-8 pb-6 border-b border-gray-200">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            {state.personalInfo.firstName} {state.personalInfo.lastName}
+          </h1>
+          <h2 className="text-xl text-gray-600 mb-4">IT-Student & Utvecklare</h2>
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+            {state.personalInfo.email && (
+              <a href={`mailto:${state.personalInfo.email}`} className="hover:text-gray-900 transition-colors">
+                {state.personalInfo.email}
+              </a>
             )}
-            
-            {/* Ramverk & Verktyg */}
-            {state.skills.some(skill => skill.category === 'frameworks' || skill.category === 'tools') && (
-              <div>
-                <p className="font-medium text-gray-800">Ramverk & Verktyg</p>
-                <ul className="list-disc list-inside">
-                  {state.skills
-                    .filter(skill => skill.category === 'frameworks' || skill.category === 'tools')
-                    .map((skill, index) => (
-                      <li key={index}>{skill.name}</li>
-                    ))}
-                </ul>
-              </div>
+            {state.personalInfo.phone && <span>{state.personalInfo.phone}</span>}
+            {state.personalInfo.city && <span>{state.personalInfo.city}</span>}
+            {state.personalInfo.linkedIn && (
+              <a href={`https://${state.personalInfo.linkedIn.replace('https://', '').replace('http://', '')}`} className="hover:text-gray-900 transition-colors flex items-center gap-1">
+                <Linkedin className="w-4 h-4" />
+                <span className="sr-only">LinkedIn</span>
+              </a>
             )}
-            
-            {/* Fallback för gamla skill-format */}
-            {state.skills.some(skill => typeof skill === 'string') && (
-              <div className="col-span-2">
-                <p className="font-medium text-gray-800">Färdigheter</p>
-                <ul className="list-disc list-inside">
-                  {state.skills
-                    .filter(skill => typeof skill === 'string')
-                    .map((skill, index) => (
-                      <li key={index}>{skill}</li>
-                    ))}
-                </ul>
-              </div>
+            {state.personalInfo.github && (
+              <a href={`https://${state.personalInfo.github.replace('https://', '').replace('http://', '')}`} className="hover:text-gray-900 transition-colors flex items-center gap-1">
+                <Github className="w-4 h-4" />
+                <span className="sr-only">GitHub</span>
+              </a>
             )}
           </div>
-        </section>
-      )}
+        </header>
+
+        {/* Profile */}
+        {state.personalInfo.summary && (
+          <section className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3 uppercase tracking-wide">
+              Profil
+            </h3>
+            <p className="text-gray-700 leading-relaxed">
+              {state.personalInfo.summary}
+            </p>
+          </section>
+        )}
+
+        {/* Experience */}
+        {state.experience.length > 0 && (
+          <section className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+              Erfarenhet
+            </h3>
+            <div className="space-y-6">
+              {state.experience.map((exp, index) => (
+                <div key={index} className="relative">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="text-base font-semibold text-gray-900">{exp.position}</h4>
+                      <p className="text-gray-600">{exp.company}</p>
+                    </div>
+                    <span className="text-sm text-gray-500 whitespace-nowrap">
+                      {exp.startDate} - {exp.current ? 'Nuvarande' : exp.endDate}
+                    </span>
+                  </div>
+                  {exp.description && (
+                    <ul className="list-disc list-inside space-y-1 text-gray-700 ml-0">
+                      {exp.description.split('\n').filter(line => line.trim()).map((line, i) => (
+                        <li key={i} className="leading-relaxed">{line.trim()}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Education */}
+        {state.education.length > 0 && (
+          <section className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+              Utbildning
+            </h3>
+            <div className="space-y-4">
+              {state.education.map((edu, index) => (
+                <div key={index}>
+                  <div className="flex justify-between items-start mb-1">
+                    <div>
+                      <h4 className="text-base font-semibold text-gray-900">{edu.school}</h4>
+                      <p className="text-gray-700">{edu.degree}</p>
+                    </div>
+                    <span className="text-sm text-gray-500">{edu.startDate} - {edu.endDate}</span>
+                  </div>
+                  {(edu.field || edu.description) && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      {[edu.field && `Inriktning: ${edu.field}`, edu.description]
+                        .filter(Boolean)
+                        .join('. ')}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Projects */}
+        {(state.projects.length > 0 || state.githubProjects.length > 0) && (
+          <section className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+              Projekt
+            </h3>
+            <div className="space-y-4">
+              {/* Manual projects */}
+              {state.projects.map((project, index) => (
+                <div key={`manual-${index}`}>
+                  <h4 className="text-base font-semibold text-gray-900">{project.name}</h4>
+                  <p className="text-gray-700 mt-1">{project.description}</p>
+                  {project.technologies && (
+                    <p className="text-sm text-gray-600 mt-1">Teknologier: {project.technologies}</p>
+                  )}
+                </div>
+              ))}
+              {/* GitHub projects */}
+              {state.githubProjects.map((project, index) => (
+                <div key={`github-${index}`}>
+                  <h4 className="text-base font-semibold text-gray-900">{project.name}</h4>
+                  <p className="text-gray-700 mt-1">{project.description}</p>
+                  <p className="text-sm text-gray-600 mt-1">Språk: {project.technologies} • ⭐ {project.stars}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Skills */}
+        {state.skills.length > 0 && (
+          <section>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+              Färdigheter
+            </h3>
+            <div className="grid grid-cols-2 gap-6">
+              {/* Languages */}
+              {state.skills.some(skill => skill.category === 'languages') && (
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2 uppercase">Språk & Tekniker</h4>
+                  <ul className="space-y-1">
+                    {state.skills
+                      .filter(skill => skill.category === 'languages')
+                      .map((skill, index) => (
+                        <li key={index} className="text-gray-700">{skill.name}</li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+              
+              {/* Tools & Frameworks */}
+              {state.skills.some(skill => skill.category === 'frameworks' || skill.category === 'tools') && (
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2 uppercase">Verktyg & Ramverk</h4>
+                  <ul className="space-y-1">
+                    {state.skills
+                      .filter(skill => skill.category === 'frameworks' || skill.category === 'tools')
+                      .map((skill, index) => (
+                        <li key={index} className="text-gray-700">{skill.name}</li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+              
+              {/* Fallback for old skill format */}
+              {state.skills.some(skill => typeof skill === 'string') && (
+                <div className="col-span-2">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2 uppercase">Färdigheter</h4>
+                  <ul className="space-y-1">
+                    {state.skills
+                      .filter(skill => typeof skill === 'string')
+                      .map((skill, index) => (
+                        <li key={index} className="text-gray-700">{skill}</li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   )
 
