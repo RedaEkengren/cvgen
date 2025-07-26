@@ -5,6 +5,11 @@ import { Download } from 'lucide-react'
 import ModernTemplate from './templates/ModernTemplate'
 import SleekTemplate from './templates/SleekTemplate'
 import BoldTemplate from './templates/BoldTemplate'
+import Creative from './templates/Creative'
+import Gradient from './templates/Gradient'
+import Minimal from './templates/Minimal'
+import Neon from './templates/Neon'
+import Retro from './templates/Retro'
 
 export default function Preview() {
   const { state } = useCV()
@@ -56,7 +61,7 @@ export default function Preview() {
         <div className="mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Välj CV-mall</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button
                 onClick={() => setSelectedTemplate('modern')}
                 className={`border-2 rounded-lg p-4 text-left transition-colors ${
@@ -90,7 +95,67 @@ export default function Preview() {
                 }`}
               >
                 <h4 className="font-medium text-gray-900">Bold</h4>
-                <p className="text-sm text-gray-600 mt-1">Stark svart design med inline styles</p>
+                <p className="text-sm text-gray-600 mt-1">Stark svart design</p>
+              </button>
+
+              <button
+                onClick={() => setSelectedTemplate('creative')}
+                className={`border-2 rounded-lg p-4 text-left transition-colors ${
+                  selectedTemplate === 'creative' 
+                    ? 'border-primary-500 bg-primary-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <h4 className="font-medium text-gray-900">Creative</h4>
+                <p className="text-sm text-gray-600 mt-1">Kreativ design med färgglada accenter</p>
+              </button>
+
+              <button
+                onClick={() => setSelectedTemplate('gradient')}
+                className={`border-2 rounded-lg p-4 text-left transition-colors ${
+                  selectedTemplate === 'gradient' 
+                    ? 'border-primary-500 bg-primary-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <h4 className="font-medium text-gray-900">Gradient</h4>
+                <p className="text-sm text-gray-600 mt-1">Modern design med gradienter</p>
+              </button>
+
+              <button
+                onClick={() => setSelectedTemplate('minimal')}
+                className={`border-2 rounded-lg p-4 text-left transition-colors ${
+                  selectedTemplate === 'minimal' 
+                    ? 'border-primary-500 bg-primary-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <h4 className="font-medium text-gray-900">Minimal</h4>
+                <p className="text-sm text-gray-600 mt-1">Ultra-minimalistisk design</p>
+              </button>
+
+              <button
+                onClick={() => setSelectedTemplate('neon')}
+                className={`border-2 rounded-lg p-4 text-left transition-colors ${
+                  selectedTemplate === 'neon' 
+                    ? 'border-primary-500 bg-primary-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <h4 className="font-medium text-gray-900">Neon</h4>
+                <p className="text-sm text-gray-600 mt-1">Cyberpunk-inspirerad design</p>
+              </button>
+
+              <button
+                onClick={() => setSelectedTemplate('retro')}
+                className={`border-2 rounded-lg p-4 text-left transition-colors ${
+                  selectedTemplate === 'retro' 
+                    ? 'border-primary-500 bg-primary-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <h4 className="font-medium text-gray-900">Retro</h4>
+                <p className="text-sm text-gray-600 mt-1">80-tals inspirerad design</p>
               </button>
             </div>
           </div>
@@ -202,6 +267,151 @@ export default function Preview() {
             )}
             {selectedTemplate === 'bold' && (
               <BoldTemplate
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                photoUrl={state.personalInfo.photoUrl || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
+                  title: exp.position,
+                  company: exp.company,
+                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
+                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
+                  school: edu.school,
+                  program: edu.degree,
+                  year: `${edu.startDate} - ${edu.endDate}`,
+                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
+                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
+                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
+                } : undefined}
+              />
+            )}
+            {selectedTemplate === 'creative' && (
+              <Creative
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                photoUrl={state.personalInfo.photoUrl || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
+                  title: exp.position,
+                  company: exp.company,
+                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
+                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
+                  school: edu.school,
+                  program: edu.degree,
+                  year: `${edu.startDate} - ${edu.endDate}`,
+                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
+                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
+                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
+                } : undefined}
+              />
+            )}
+            {selectedTemplate === 'gradient' && (
+              <Gradient
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                photoUrl={state.personalInfo.photoUrl || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
+                  title: exp.position,
+                  company: exp.company,
+                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
+                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
+                  school: edu.school,
+                  program: edu.degree,
+                  year: `${edu.startDate} - ${edu.endDate}`,
+                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
+                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
+                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
+                } : undefined}
+              />
+            )}
+            {selectedTemplate === 'minimal' && (
+              <Minimal
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                photoUrl={state.personalInfo.photoUrl || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
+                  title: exp.position,
+                  company: exp.company,
+                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
+                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
+                  school: edu.school,
+                  program: edu.degree,
+                  year: `${edu.startDate} - ${edu.endDate}`,
+                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
+                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
+                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
+                } : undefined}
+              />
+            )}
+            {selectedTemplate === 'neon' && (
+              <Neon
+                name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
+                title={state.personalInfo.title || undefined}
+                email={state.personalInfo.email || undefined}
+                phone={state.personalInfo.phone || undefined}
+                location={state.personalInfo.city || undefined}
+                linkedin={state.personalInfo.linkedIn || undefined}
+                github={state.personalInfo.github || undefined}
+                photoUrl={state.personalInfo.photoUrl || undefined}
+                profile={state.personalInfo.summary || undefined}
+                experience={state.experience.length > 0 ? state.experience.map(exp => ({
+                  title: exp.position,
+                  company: exp.company,
+                  date: `${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}`,
+                  points: exp.description ? exp.description.split('\n').filter(line => line.trim()) : []
+                })) : undefined}
+                education={state.education.length > 0 ? state.education.map(edu => ({
+                  school: edu.school,
+                  program: edu.degree,
+                  year: `${edu.startDate} - ${edu.endDate}`,
+                  description: [edu.field && `Inriktning: ${edu.field}`, edu.description].filter(Boolean).join('. ') || null
+                })) : undefined}
+                skills={state.skills.length > 0 ? {
+                  languages: state.skills.filter(skill => skill.category === 'languages' || typeof skill === 'string').map(skill => typeof skill === 'string' ? skill : skill.name),
+                  tools: state.skills.filter(skill => skill.category === 'frameworks' || skill.category === 'tools').map(skill => skill.name)
+                } : undefined}
+              />
+            )}
+            {selectedTemplate === 'retro' && (
+              <Retro
                 name={state.personalInfo.firstName && state.personalInfo.lastName ? `${state.personalInfo.firstName} ${state.personalInfo.lastName}` : undefined}
                 title={state.personalInfo.title || undefined}
                 email={state.personalInfo.email || undefined}
