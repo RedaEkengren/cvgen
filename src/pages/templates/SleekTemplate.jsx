@@ -2,48 +2,17 @@ import React from 'react';
 import { Linkedin, Github } from 'lucide-react';
 
 const SleekTemplate = ({ 
-  name = "Anna Andersson",
-  title = "Frontend Developer",
-  email = "anna.andersson@email.com",
-  phone = "+46 70 123 45 67",
-  location = "Stockholm, Sverige",
-  linkedin = "linkedin.com/in/anna-andersson",
-  github = "github.com/anna-andersson",
-  profile = "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.",
-  experience = [
-    {
-      title: "Senior Frontend Developer",
-      company: "Tech Solutions AB",
-      date: "2022 - Nuvarande",
-      points: [
-        "Leder utvecklingen av en ny e-handelsplattform med React och TypeScript",
-        "Implementerade en komponentbibliotek som minskade utvecklingstiden med 40%",
-        "Mentorskap för juniora utvecklare och code reviews"
-      ]
-    },
-    {
-      title: "Frontend Developer",
-      company: "Digital Agency",
-      date: "2019 - 2022",
-      points: [
-        "Utvecklade responsiva webbapplikationer för 20+ kunder",
-        "Optimerade prestanda vilket resulterade i 60% snabbare laddningstider",
-        "Arbetade agilt i tvärfunktionella team"
-      ]
-    }
-  ],
-  education = [
-    {
-      school: "KTH Kungliga Tekniska Högskolan",
-      program: "Civilingenjör Datateknik",
-      year: "2014 - 2019",
-      description: "Inriktning mot mjukvaruutveckling och människa-datorinteraktion"
-    }
-  ],
-  skills = {
-    languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
-    tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
-  }
+  name,
+  title,
+  email,
+  phone,
+  location,
+  linkedin,
+  github,
+  profile,
+  experience = [],
+  education = [],
+  skills = { languages: [], tools: [] }
 }) => {
   return (
     <div className="bg-white p-10 max-w-3xl mx-auto text-sm leading-relaxed">
@@ -86,22 +55,25 @@ const SleekTemplate = ({
       </header>
 
       {/* Profile */}
-      <section className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3 uppercase tracking-wide">
-          Profil
-        </h3>
-        <p className="text-gray-700">
-          {profile}
-        </p>
-      </section>
+      {profile && (
+        <section className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3 uppercase tracking-wide">
+            Profil
+          </h3>
+          <p className="text-gray-700">
+            {profile}
+          </p>
+        </section>
+      )}
 
       {/* Experience */}
-      <section className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
-          Erfarenhet
-        </h3>
-        <div className="space-y-6">
-          {experience.map((job, index) => (
+      {experience.length > 0 && (
+        <section className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+            Erfarenhet
+          </h3>
+          <div className="space-y-6">
+            {experience.map((job, index) => (
             <div key={index}>
               <div className="flex justify-between items-start mb-2">
                 <div>
@@ -119,9 +91,11 @@ const SleekTemplate = ({
           ))}
         </div>
       </section>
+      )}
 
       {/* Education */}
-      <section className="mb-8">
+      {education.length > 0 && (
+        <section className="mb-8">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
           Utbildning
         </h3>
@@ -142,9 +116,11 @@ const SleekTemplate = ({
           ))}
         </div>
       </section>
+      )}
 
       {/* Skills */}
-      <section>
+      {(skills.languages.length > 0 || skills.tools.length > 0) && (
+        <section>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">
           Färdigheter
         </h3>
@@ -167,6 +143,7 @@ const SleekTemplate = ({
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 };
