@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run build:*)",
+      "Bash(PORT=3001 node server.js)",
+      "Bash(curl:*)",
+      "Bash(rm:*)",
+      "Bash(node:*)"
+    ],
+    "deny": []
+  }
+}

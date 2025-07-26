@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import { useCV } from '../context/CVContext'
-import html2pdf from 'html2pdf.js'
 import { Download } from 'lucide-react'
 import ModernTemplate from './templates/ModernTemplate'
 import SleekTemplate from './templates/SleekTemplate'
@@ -16,22 +15,46 @@ export default function Preview() {
   const cvRef = useRef()
   const [selectedTemplate, setSelectedTemplate] = useState(state.selectedTemplate || 'sleek')
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     const element = cvRef.current
-    const opt = {
-      margin: [10, 10, 10, 10],
-      filename: `CV_${state.personalInfo.firstName}_${state.personalInfo.lastName}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { 
-        scale: 2, 
-        useCORS: true,
-        allowTaint: true,
-        letterRendering: true
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    const filename = `CV_${state.personalInfo.firstName || 'Unknown'}_${state.personalInfo.lastName || 'User'}.pdf`
+    
+    try {
+      // Get the HTML content
+      const htmlContent = element.innerHTML
+      
+      // Send to backend API
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          htmlContent,
+          filename
+        })
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      // Create blob and download
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+      
+    } catch (error) {
+      console.error('PDF export failed:', error)
+      alert('PDF-export misslyckades. Försök igen.')
     }
-
-    html2pdf().set(opt).from(element).save()
   }
 
   const hasContent = state.personalInfo.firstName || state.personalInfo.lastName ||

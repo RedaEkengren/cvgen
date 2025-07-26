@@ -1,0 +1,23 @@
+name: cv-generator
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: <your-repo>
+    branch: main
+    deploy_on_push: true
+  build_command: npm run build
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3000
+  envs:
+  - key: NODE_ENV
+    value: production
+databases:
+- engine: PG
+  name: cv-generator-db
+  num_nodes: 1
+  size: db-s-dev-database
+  version: "12"
