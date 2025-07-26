@@ -17,39 +17,90 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // PDF generation endpoint
 app.post('/api/generate-pdf', async (req, res) => {
+  console.log('PDF generation requested');
   let browser = null;
   
   try {
     const { htmlContent, filename = 'CV.pdf' } = req.body;
     
     if (!htmlContent) {
+      console.error('No HTML content provided');
       return res.status(400).json({ error: 'HTML content is required' });
     }
+    
+    console.log('HTML content received, length:', htmlContent.length);
 
     // Launch Puppeteer with DigitalOcean-compatible options
+    const isProduction = process.env.NODE_ENV === 'production';
     const puppeteerOptions = {
       headless: 'new',
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
+        '--disable-gpu'
+      ]
+    };
+    
+    // Add more args for production/DigitalOcean
+    if (isProduction) {
+      puppeteerOptions.args.push(
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
         '--single-process',
-        '--disable-gpu',
         '--disable-web-security',
         '--disable-features=IsolateOrigins',
         '--disable-site-isolation-trials'
-      ]
-    };
-    
-    // Use system Chromium if available (Docker/DigitalOcean)
-    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-      puppeteerOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+      );
     }
     
-    browser = await puppeteer.launch(puppeteerOptions);
+    // Try to find Chromium executable
+    const possiblePaths = [
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/app/.cache/puppeteer/chrome/linux-*/chrome-linux/chrome'
+    ];
+    
+    if (isProduction) {
+      const { execSync } = await import('child_process');
+      for (const chromePath of possiblePaths) {
+        try {
+          if (chromePath.includes('*')) {
+            // Skip glob patterns for now
+            continue;
+          }
+          execSync(`test -f ${chromePath}`, { stdio: 'ignore' });
+          console.log('Found Chromium at:', chromePath);
+          puppeteerOptions.executablePath = chromePath;
+          break;
+        } catch (e) {
+          // Path doesn't exist, try next
+        }
+      }
+    }
+    
+    console.log('Launching Puppeteer with options:', JSON.stringify(puppeteerOptions, null, 2));
+    try {
+      browser = await puppeteer.launch(puppeteerOptions);
+      console.log('Puppeteer launched successfully');
+    } catch (launchError) {
+      console.error('Failed to launch Puppeteer:', launchError);
+      
+      // Try one more time with minimal options
+      if (isProduction) {
+        console.log('Trying minimal Puppeteer configuration...');
+        const minimalOptions = {
+          headless: 'new',
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
+        };
+        browser = await puppeteer.launch(minimalOptions);
+      } else {
+        throw new Error(`Puppeteer launch failed: ${launchError.message}`);
+      }
+    }
 
     const page = await browser.newPage();
     
@@ -173,8 +224,35 @@ app.post('/api/generate-pdf', async (req, res) => {
 });
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+app.get('/api/health', async (req, res) => {
+  const { execSync } = await import('child_process');
+  const chromiumPaths = [];
+  
+  const testPaths = [
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable'
+  ];
+  
+  for (const path of testPaths) {
+    try {
+      execSync(`test -f ${path}`, { stdio: 'ignore' });
+      chromiumPaths.push(path);
+    } catch (e) {
+      // Path doesn't exist
+    }
+  }
+  
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    nodeVersion: process.version,
+    env: process.env.NODE_ENV,
+    platform: process.platform,
+    puppeteerPath: process.env.PUPPETEER_EXECUTABLE_PATH || 'default',
+    chromiumFound: chromiumPaths
+  });
 });
 
 // Serve React app for all other routes

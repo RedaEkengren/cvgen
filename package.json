@@ -10,7 +10,7 @@
     "dev:server": "node server.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "postinstall": "node -e \"const {execSync} = require('child_process'); try { execSync('chromium --version', {stdio: 'ignore'}); console.log('Chromium already installed'); } catch { console.log('Installing Puppeteer...'); }\""
+    "postinstall": "node scripts/install-puppeteer-deps.js || echo 'Puppeteer deps script completed'"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",
