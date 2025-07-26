@@ -17,8 +17,10 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",
     "cors": "^2.8.5",
+    "dompurify": "^3.2.6",
     "express": "^4.21.2",
     "express-rate-limit": "^8.0.1",
+    "jsdom": "^26.1.0",
     "lucide-react": "^0.525.0",
     "node-fetch": "^3.3.2",
     "puppeteer": "^24.15.0",
