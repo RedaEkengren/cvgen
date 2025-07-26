@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, User, Eye } from 'lucide-react'
+import { FileText, User, Eye, BarChart3 } from 'lucide-react'
 import { useCV } from '../context/CVContext'
 // import PremiumModal from './PremiumModal' // Temporarily disabled
 
@@ -57,6 +57,18 @@ export default function Header() {
               >
                 <Eye className="h-4 w-4" />
                 <span>Förhandsgranska</span>
+              </Link>
+
+              <Link
+                to="/analytics"
+                className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/analytics') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>Analytics</span>
               </Link>
 
               {/* Premium features temporarily disabled - ready for future activation

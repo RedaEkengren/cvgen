@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useCV } from '../context/CVContext'
 import { Download } from 'lucide-react'
 import ModernTemplate from './templates/ModernTemplate'
@@ -13,6 +13,33 @@ export default function Preview() {
   const { state } = useCV()
   const cvRef = useRef()
   const [selectedTemplate, setSelectedTemplate] = useState(state.selectedTemplate || 'sleek')
+  const [sessionId] = useState(() => 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9))
+
+  // Track template view when component mounts or template changes
+  useEffect(() => {
+    trackTemplateView(selectedTemplate)
+  }, [selectedTemplate])
+
+  const trackTemplateView = async (templateName) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL 
+        ? `${import.meta.env.VITE_API_URL}/api/analytics/track-view`
+        : `${window.location.origin}/api/analytics/track-view`
+      
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateName: templateName.toLowerCase(),
+          sessionId
+        })
+      })
+    } catch (error) {
+      console.error('Analytics tracking failed:', error)
+    }
+  }
 
   const exportToPDF = async () => {
     const element = cvRef.current
@@ -33,7 +60,9 @@ export default function Preview() {
         },
         body: JSON.stringify({
           htmlContent,
-          filename
+          filename,
+          templateName: selectedTemplate.toLowerCase(),
+          sessionId
         })
       })
       
