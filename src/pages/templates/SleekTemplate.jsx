@@ -1,7 +1,7 @@
-import React from 'react';
-import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
+import React from 'react'
+import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react'
 
-const SleekTemplate = ({ 
+const SleekTemplate = ({
   name,
   title,
   email,
@@ -15,10 +15,9 @@ const SleekTemplate = ({
   skills = { languages: [], tools: [] }
 }) => {
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        
-        {/* Header */}
+    <div className="bg-white p-8 text-sm leading-relaxed max-w-3xl mx-auto">
+      <div className="bg-white overflow-hidden">
+        {/* Header with gradient */}
         <header className="bg-gradient-to-r from-slate-800 to-slate-700 text-white p-8">
           <h1 className="text-4xl font-bold mb-2">{name}</h1>
           <h2 className="text-xl text-slate-200 mb-6">{title}</h2>
@@ -42,13 +41,13 @@ const SleekTemplate = ({
               </div>
             )}
             {linkedin && (
-              <a href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors">
+              <a href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`} className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
                 <Linkedin className="w-4 h-4" />
                 <span className="sr-only">LinkedIn</span>
               </a>
             )}
             {github && (
-              <a href={github.startsWith('http') ? github : `https://${github}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors">
+              <a href={github.startsWith('http') ? github : `https://${github}`} className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
                 <Github className="w-4 h-4" />
                 <span className="sr-only">GitHub</span>
               </a>
@@ -89,7 +88,7 @@ const SleekTemplate = ({
                       {job.points?.map((point, i) => (
                         <li key={i} className="flex items-start">
                           <span className="text-indigo-500 mr-2 mt-1.5 text-xs">▸</span>
-                          <span className="leading-relaxed">{point}</span>
+                          <span>{point}</span>
                         </li>
                       ))}
                     </ul>
@@ -116,9 +115,7 @@ const SleekTemplate = ({
                       </div>
                       <span className="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{edu.year}</span>
                     </div>
-                    {edu.description && (
-                      <p className="text-sm text-slate-600">{edu.description}</p>
-                    )}
+                    {edu.description && <p className="text-sm text-slate-600">{edu.description}</p>}
                   </div>
                 ))}
               </div>
@@ -137,10 +134,8 @@ const SleekTemplate = ({
                   <div>
                     <h4 className="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wide">Språk & Tekniker</h4>
                     <div className="flex flex-wrap gap-2">
-                      {skills.languages.map((skill, index) => (
-                        <span key={index} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-md text-sm">
-                          {skill}
-                        </span>
+                      {skills.languages.map((skill, i) => (
+                        <span key={i} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-md text-sm">{skill}</span>
                       ))}
                     </div>
                   </div>
@@ -149,10 +144,8 @@ const SleekTemplate = ({
                   <div>
                     <h4 className="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wide">Verktyg & Ramverk</h4>
                     <div className="flex flex-wrap gap-2">
-                      {skills.tools.map((tool, index) => (
-                        <span key={index} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-md text-sm">
-                          {tool}
-                        </span>
+                      {skills.tools.map((tool, i) => (
+                        <span key={i} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-md text-sm">{tool}</span>
                       ))}
                     </div>
                   </div>
@@ -163,7 +156,7 @@ const SleekTemplate = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SleekTemplate;
+export default SleekTemplate
