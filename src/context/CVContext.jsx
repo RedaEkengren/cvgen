@@ -15,8 +15,28 @@ const initialState = {
     summary: '',
     photoUrl: ''
   },
-  education: [],
-  experience: [],
+  education: [
+    {
+      id: 1,
+      school: '',
+      degree: '',
+      field: '',
+      startDate: '',
+      endDate: '',
+      description: ''
+    }
+  ],
+  experience: [
+    {
+      id: 1,
+      company: '',
+      position: '',
+      startDate: '',
+      endDate: '',
+      current: false,
+      description: ''
+    }
+  ],
   projects: [],
   skills: [],
   githubProjects: [],
