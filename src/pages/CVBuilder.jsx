@@ -68,6 +68,16 @@ export default function CVBuilder() {
     })
   }
 
+  const addSkill = () => {
+    dispatch({
+      type: 'ADD_SKILL',
+      payload: {
+        name: '',
+        category: 'languages' // Default category
+      }
+    })
+  }
+
   const fetchGithubProjects = async () => {
     if (!githubUsername.trim()) return
     
@@ -561,105 +571,55 @@ export default function CVBuilder() {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium text-gray-900">Färdigheter</h3>
+              <button
+                onClick={addSkill}
+                className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Lägg till
+              </button>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="text-md font-medium text-gray-900 mb-3">Programmeringsspråk</h4>
-                <div className="space-y-2">
-                  {(state.skills.programmingLanguages || []).map((skill, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+            {state.skills.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">Inga färdigheter tillagda än. Klicka på "Lägg till" för att börja.</p>
+            ) : (
+              state.skills.map((skill, index) => (
+                <div key={index} className="p-6 border border-gray-200 rounded-lg space-y-4">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-lg font-medium text-gray-900">Färdighet {index + 1}</h4>
+                    <button
+                      onClick={() => dispatch({ type: 'REMOVE_SKILL', index })}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Färdighet</label>
                       <input
-                        id={`skill-lang-${index}`}
-                        name={`skill-lang-${index}`}
                         type="text"
-                        value={skill}
-                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', payload: { category: 'programmingLanguages', index, value: e.target.value } })}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="ex. JavaScript, Python"
+                        value={skill.name}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index, field: 'name', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="ex. JavaScript, React, Git"
                       />
-                      <button
-                        onClick={() => dispatch({ type: 'REMOVE_SKILL', payload: { category: 'programmingLanguages', index } })}
-                        className="text-red-500 hover:text-red-700 p-1"
-                        title="Ta bort"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </div>
-                  ))}
-                  <button
-                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { category: 'programmingLanguages' } })}
-                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
-                  >
-                    <Plus className="h-3 w-3 mr-1" />Lägg till språk
-                  </button>
-                </div>
-              </div>
-              
-              <div>
-                <h4 className="text-md font-medium text-gray-900 mb-3">Ramverk & Bibliotek</h4>
-                <div className="space-y-2">
-                  {(state.skills.frameworksLibraries || []).map((skill, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <input
-                        id={`skill-framework-${index}`}
-                        name={`skill-framework-${index}`}
-                        type="text"
-                        value={skill}
-                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', payload: { category: 'frameworksLibraries', index, value: e.target.value } })}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="ex. React, Django"
-                      />
-                      <button
-                        onClick={() => dispatch({ type: 'REMOVE_SKILL', payload: { category: 'frameworksLibraries', index } })}
-                        className="text-red-500 hover:text-red-700 p-1"
-                        title="Ta bort"
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                      <select
+                        value={skill.category}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index, field: 'category', value: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                        <option value="languages">Programmeringsspråk</option>
+                        <option value="frameworks">Ramverk & Bibliotek</option>
+                        <option value="tools">Verktyg & Övriga</option>
+                      </select>
                     </div>
-                  ))}
-                  <button
-                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { category: 'frameworksLibraries' } })}
-                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
-                  >
-                    <Plus className="h-3 w-3 mr-1" />Lägg till ramverk
-                  </button>
+                  </div>
                 </div>
-              </div>
-              
-              <div>
-                <h4 className="text-md font-medium text-gray-900 mb-3">Verktyg & Övriga</h4>
-                <div className="space-y-2">
-                  {(state.skills.toolsOther || []).map((skill, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <input
-                        id={`skill-tool-${index}`}
-                        name={`skill-tool-${index}`}
-                        type="text"
-                        value={skill}
-                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', payload: { category: 'toolsOther', index, value: e.target.value } })}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="ex. Git, Docker, AWS"
-                      />
-                      <button
-                        onClick={() => dispatch({ type: 'REMOVE_SKILL', payload: { category: 'toolsOther', index } })}
-                        className="text-red-500 hover:text-red-700 p-1"
-                        title="Ta bort"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { category: 'toolsOther' } })}
-                    className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
-                  >
-                    <Plus className="h-3 w-3 mr-1" />Lägg till verktyg
-                  </button>
-                </div>
-              </div>
-            </div>
+              ))
+            )}
           </div>
         )
       default:

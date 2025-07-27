@@ -38,11 +38,7 @@ const initialState = {
     }
   ],
   projects: [],
-  skills: {
-    programmingLanguages: [''],
-    frameworksLibraries: [''],
-    toolsOther: ['']
-  },
+  skills: [],
   githubProjects: [],
   isPremium: false,
   selectedTemplate: 'modern'
@@ -86,35 +82,16 @@ function cvReducer(state, action) {
     case 'REMOVE_PROJECT':
       return { ...state, projects: state.projects.filter((_, index) => index !== action.index) }
     case 'ADD_SKILL':
-      const { category } = action.payload
-      console.log('ADD_SKILL reducer called:', { category, currentSkills: state.skills });
-      const newState = { 
-        ...state, 
-        skills: {
-          ...state.skills,
-          [category]: [...(state.skills[category] || []), '']
-        }
-      };
-      console.log('ADD_SKILL new state:', newState.skills);
-      return newState;
+      return { ...state, skills: [...state.skills, action.payload] }
     case 'UPDATE_SKILL':
       return { 
         ...state, 
-        skills: {
-          ...state.skills,
-          [action.payload.category]: state.skills[action.payload.category].map((skill, index) => 
-            index === action.payload.index ? action.payload.value : skill
-          )
-        }
+        skills: state.skills.map((item, index) => 
+          index === action.index ? { ...item, [action.field]: action.value } : item
+        )
       }
     case 'REMOVE_SKILL':
-      return { 
-        ...state, 
-        skills: {
-          ...state.skills,
-          [action.payload.category]: state.skills[action.payload.category].filter((_, index) => index !== action.payload.index)
-        }
-      }
+      return { ...state, skills: state.skills.filter((_, index) => index !== action.index) }
     case 'UPDATE_SKILLS':
       return { ...state, skills: action.payload }
     case 'SET_GITHUB_PROJECTS':
