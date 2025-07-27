@@ -98,11 +98,14 @@ const LandingPage = () => {
   const addSkill = (category) => {
     dispatch({
       type: 'ADD_SKILL',
-      payload: {
-        id: Date.now(),
-        category,
-        skill: ''
-      }
+      payload: { category }
+    });
+  };
+
+  const removeSkill = (category, index) => {
+    dispatch({
+      type: 'REMOVE_SKILL',
+      payload: { category, index }
     });
   };
 
@@ -1041,7 +1044,16 @@ const LandingPage = () => {
             <div className="form-group" style={{gridColumn: '1 / -1'}}>
               <label className="form-label">Programmeringsspråk</label>
               {state.skills.programmingLanguages?.map((skill, index) => (
-                <div key={index} style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+                <div key={index} className="removable-item" style={{marginBottom: '12px', padding: '16px'}}>
+                  <button 
+                    type="button" 
+                    className="remove-button" 
+                    onClick={() => removeSkill('programmingLanguages', index)}
+                  >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
                   <input
                     type="text"
                     className="form-input"
@@ -1067,7 +1079,16 @@ const LandingPage = () => {
             <div className="form-group" style={{gridColumn: '1 / -1'}}>
               <label className="form-label">Ramverk & Verktyg</label>
               {state.skills.frameworksLibraries?.map((skill, index) => (
-                <div key={index} style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+                <div key={index} className="removable-item" style={{marginBottom: '12px', padding: '16px'}}>
+                  <button 
+                    type="button" 
+                    className="remove-button" 
+                    onClick={() => removeSkill('frameworksLibraries', index)}
+                  >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
                   <input
                     type="text"
                     className="form-input"
@@ -1093,7 +1114,16 @@ const LandingPage = () => {
             <div className="form-group" style={{gridColumn: '1 / -1'}}>
               <label className="form-label">Övriga verktyg</label>
               {state.skills.toolsOther?.map((skill, index) => (
-                <div key={index} style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+                <div key={index} className="removable-item" style={{marginBottom: '12px', padding: '16px'}}>
+                  <button 
+                    type="button" 
+                    className="remove-button" 
+                    onClick={() => removeSkill('toolsOther', index)}
+                  >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
                   <input
                     type="text"
                     className="form-input"
