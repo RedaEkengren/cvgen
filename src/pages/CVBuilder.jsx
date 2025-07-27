@@ -561,38 +561,34 @@ export default function CVBuilder() {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium text-gray-900">Färdigheter</h3>
-              <button
-                onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'languages' } })}
-                className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Lägg till färdighet
-              </button>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <h4 className="text-md font-medium text-gray-900 mb-3">Programmeringsspråk</h4>
                 <div className="space-y-2">
-                  {state.skills.filter(skill => skill.category === 'languages').map((skill, index) => (
+                  {(state.skills.programmingLanguages || []).map((skill, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <input
+                        id={`skill-lang-${index}`}
+                        name={`skill-lang-${index}`}
                         type="text"
-                        value={skill.name}
-                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index: state.skills.findIndex(s => s === skill), field: 'name', value: e.target.value })}
+                        value={skill}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', payload: { category: 'programmingLanguages', index, value: e.target.value } })}
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         placeholder="ex. JavaScript, Python"
                       />
                       <button
-                        onClick={() => dispatch({ type: 'REMOVE_SKILL', index: state.skills.findIndex(s => s === skill) })}
-                        className="text-red-500 hover:text-red-700"
+                        onClick={() => dispatch({ type: 'REMOVE_SKILL', payload: { category: 'programmingLanguages', index } })}
+                        className="text-red-500 hover:text-red-700 p-1"
+                        title="Ta bort"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   ))}
                   <button
-                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'languages' } })}
+                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { category: 'programmingLanguages' } })}
                     className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
                   >
                     <Plus className="h-3 w-3 mr-1" />Lägg till språk
@@ -603,25 +599,28 @@ export default function CVBuilder() {
               <div>
                 <h4 className="text-md font-medium text-gray-900 mb-3">Ramverk & Bibliotek</h4>
                 <div className="space-y-2">
-                  {state.skills.filter(skill => skill.category === 'frameworks').map((skill, index) => (
+                  {(state.skills.frameworksLibraries || []).map((skill, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <input
+                        id={`skill-framework-${index}`}
+                        name={`skill-framework-${index}`}
                         type="text"
-                        value={skill.name}
-                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index: state.skills.findIndex(s => s === skill), field: 'name', value: e.target.value })}
+                        value={skill}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', payload: { category: 'frameworksLibraries', index, value: e.target.value } })}
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         placeholder="ex. React, Django"
                       />
                       <button
-                        onClick={() => dispatch({ type: 'REMOVE_SKILL', index: state.skills.findIndex(s => s === skill) })}
-                        className="text-red-500 hover:text-red-700"
+                        onClick={() => dispatch({ type: 'REMOVE_SKILL', payload: { category: 'frameworksLibraries', index } })}
+                        className="text-red-500 hover:text-red-700 p-1"
+                        title="Ta bort"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   ))}
                   <button
-                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'frameworks' } })}
+                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { category: 'frameworksLibraries' } })}
                     className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
                   >
                     <Plus className="h-3 w-3 mr-1" />Lägg till ramverk
@@ -632,25 +631,28 @@ export default function CVBuilder() {
               <div>
                 <h4 className="text-md font-medium text-gray-900 mb-3">Verktyg & Övriga</h4>
                 <div className="space-y-2">
-                  {state.skills.filter(skill => skill.category === 'tools').map((skill, index) => (
+                  {(state.skills.toolsOther || []).map((skill, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <input
+                        id={`skill-tool-${index}`}
+                        name={`skill-tool-${index}`}
                         type="text"
-                        value={skill.name}
-                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', index: state.skills.findIndex(s => s === skill), field: 'name', value: e.target.value })}
+                        value={skill}
+                        onChange={(e) => dispatch({ type: 'UPDATE_SKILL', payload: { category: 'toolsOther', index, value: e.target.value } })}
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         placeholder="ex. Git, Docker, AWS"
                       />
                       <button
-                        onClick={() => dispatch({ type: 'REMOVE_SKILL', index: state.skills.findIndex(s => s === skill) })}
-                        className="text-red-500 hover:text-red-700"
+                        onClick={() => dispatch({ type: 'REMOVE_SKILL', payload: { category: 'toolsOther', index } })}
+                        className="text-red-500 hover:text-red-700 p-1"
+                        title="Ta bort"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   ))}
                   <button
-                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { name: '', category: 'tools' } })}
+                    onClick={() => dispatch({ type: 'ADD_SKILL', payload: { category: 'toolsOther' } })}
                     className="text-primary-600 hover:text-primary-700 text-sm flex items-center"
                   >
                     <Plus className="h-3 w-3 mr-1" />Lägg till verktyg

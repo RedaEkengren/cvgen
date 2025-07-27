@@ -1576,7 +1576,61 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
 
 ---
 
+## 🤖 Phase 20: Model Transition Note (2025-07-27)
+
+### **Current Development Status:**
+- **Model:** Claude Sonnet 4 (claude-sonnet-4-20250514)
+- **User Request:** Transition to Claude Opus for enhanced problem-solving
+- **Reason:** Doubts about current model's capabilities for complex debugging
+
+### **🔧 Pending Technical Issues:**
+1. **Skills Section JavaScript Broken (HIGH PRIORITY)**
+   - Add/remove buttons not responding in färdigheter (steg 4)
+   - JavaScript event handlers not firing on production
+   - Debug deployment unsuccessful - test buttons not appearing
+   - Console logs not showing despite successful builds
+
+2. **Projects Section Remove Buttons (MEDIUM)**
+   - Need to add remove buttons to Projects section
+   - Currently only Education/Experience have working remove functionality
+
+3. **Split-Screen CV Preview (COMPLETED)**
+   - ✅ Live CV preview with template selector implemented
+   - ✅ Real-time template switching functional
+   - ✅ Mobile responsive design completed
+
+### **🚨 Current Technical Challenges:**
+**Skills Section Debug Analysis:**
+- ✅ Code structure verified correct in repository
+- ✅ Functions properly defined (addSkill, removeSkill)  
+- ✅ CVContext reducer implemented correctly
+- ❌ JavaScript events not firing on production server
+- ❌ Debug logs not appearing in browser console
+- ❌ Test button deployment failed to appear
+
+**Deployment Status:**
+- Frontend: Built and deployed to /var/www/cv-generator/
+- Backend: PM2 running healthy (health check OK)
+- Nginx: Serving static files correctly
+- Issue: JavaScript functionality broken despite successful builds
+
+### **💡 Recommended Next Steps for Claude Opus:**
+1. **Immediate:** Debug Skills section JavaScript execution failure
+2. **Code Review:** Investigate event handler binding issues
+3. **Deployment:** Verify JavaScript bundle integrity on production
+4. **Complete:** Add remove buttons to Projects section
+5. **Polish:** Final user experience optimization
+
+### **🎯 Business Impact:**
+- Users can complete steps 1-3 and 5-6 successfully
+- Step 4 (Skills) blocks user flow completion
+- Split-screen preview working perfectly
+- PDF generation functional with all templates
+
+---
+
 **Utvecklad av Claude (Anthropic) för svenska IT-studenter 🇸🇪**  
 **Med stolthet deployad på DigitalOcean Droplet 🌊**  
 **🔒 Säkrat med Enterprise-Grade Security 2025-07-27**  
-**🎨 Uppgraderad med Modern Single-Page Experience 2025-07-27**
+**🎨 Uppgraderad med Modern Single-Page Experience 2025-07-27**  
+**🤖 Awaiting Claude Opus Transition for Advanced Debugging 2025-07-27**

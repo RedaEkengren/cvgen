@@ -27,7 +27,8 @@
       "Bash(nslookup:*)",
       "Bash(nmap:*)",
       "Bash(grep:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git restore:*)"
     ],
     "deny": []
   }
