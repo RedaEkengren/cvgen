@@ -1,17 +1,25 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Github, Briefcase, GraduationCap, Palette, Award } from 'lucide-react';
 
-const GradientTemplateInline = ({ 
-  name = "Anna Andersson",
-  title = "Senior Frontend Developer",
-  email = "anna.andersson@email.com",
-  phone = "+46 70 123 45 67",
-  location = "Stockholm, Sverige",
-  linkedin = "linkedin.com/in/anna-andersson",
-  github = "github.com/anna-andersson",
-  photoUrl = null,
-  profile = "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.",
-  experience = [
+const GradientTemplateInline = ({ cvData }) => {
+  // Extract data from cvData prop
+  const name = cvData?.personalInfo ? `${cvData.personalInfo.firstName} ${cvData.personalInfo.lastName}` : "Anna Andersson";
+  const title = "IT-Student & Utvecklare";
+  const email = cvData?.personalInfo?.email || "anna.andersson@email.com";
+  const phone = cvData?.personalInfo?.phone || "+46 70 123 45 67";
+  const location = cvData?.personalInfo?.city || "Stockholm, Sverige";
+  const linkedin = cvData?.personalInfo?.linkedIn || "linkedin.com/in/anna-andersson";
+  const github = cvData?.personalInfo?.github || "github.com/anna-andersson";
+  const photoUrl = cvData?.personalInfo?.photoUrl || null;
+  const profile = cvData?.personalInfo?.summary || "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.";
+  
+  // Map experience data to the format expected by the template
+  const experience = cvData?.experience?.map(job => ({
+    title: job.position,
+    company: job.company,
+    date: job.current ? `${job.startDate} - Nuvarande` : `${job.startDate} - ${job.endDate}`,
+    points: job.description ? job.description.split('\n').filter(Boolean) : []
+  })) || [
     {
       title: "Senior Frontend Developer",
       company: "Tech Solutions AB",
@@ -21,31 +29,49 @@ const GradientTemplateInline = ({
         "Implementerade en komponentbibliotek som minskade utvecklingstiden med 40%",
         "Mentorskap för juniora utvecklare och code reviews"
       ]
-    },
-    {
-      title: "Frontend Developer",
-      company: "Digital Agency",
-      date: "2019 - 2022",
-      points: [
-        "Utvecklade responsiva webbapplikationer för 20+ kunder",
-        "Optimerade prestanda vilket resulterade i 60% snabbare laddningstider",
-        "Arbetade agilt i tvärfunktionella team"
-      ]
     }
-  ],
-  education = [
+  ];
+  
+  // Map education data to the format expected by the template
+  const education = cvData?.education?.map(edu => ({
+    school: edu.school,
+    program: edu.degree,
+    year: `${edu.startDate} - ${edu.endDate}`,
+    description: edu.description || edu.field
+  })) || [
     {
       school: "KTH Kungliga Tekniska Högskolan",
       program: "Civilingenjör Datateknik",
       year: "2014 - 2019",
       description: "Inriktning mot mjukvaruutveckling och människa-datorinteraktion"
     }
-  ],
-  skills = {
-    languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
-    tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
+  ];
+  
+  // Handle skills - support both old format (object) and new format (array)
+  let skills = { languages: [], tools: [] };
+  if (cvData?.skills) {
+    if (Array.isArray(cvData.skills)) {
+      // New format - array of skill objects
+      skills.languages = cvData.skills
+        .filter(s => s.category === 'languages')
+        .map(s => s.name)
+        .filter(Boolean);
+      skills.tools = cvData.skills
+        .filter(s => s.category === 'frameworks' || s.category === 'tools')
+        .map(s => s.name)
+        .filter(Boolean);
+    } else {
+      // Old format - keep as is
+      skills = cvData.skills;
+    }
   }
-}) => {
+  if (!skills.languages.length && !skills.tools.length) {
+    // Default values if no skills
+    skills = {
+      languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
+      tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
+    };
+  }
   const styles = {
     container: {
       backgroundColor: '#faf5ff',
