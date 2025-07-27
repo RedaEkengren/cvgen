@@ -28,7 +28,8 @@
       "Bash(nmap:*)",
       "Bash(grep:*)",
       "Bash(git commit:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(tar:*)"
     ],
     "deny": []
   }

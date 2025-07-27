@@ -1285,12 +1285,17 @@ const LandingPage = () => {
           
           {/* Right Side: Live CV Preview */}
           <div className="split-screen-right">
-            <div className="cv-preview-wrapper">
+            <div className="cv-preview-wrapper" style={{
+              height: '420px', // Fixed height to prevent jumping
+              overflow: 'hidden',
+              position: 'relative'
+            }}>
               <div className="cv-preview-container" id="cv-preview" style={{
                 height: '297mm', // A4 height
                 overflow: 'hidden',
                 position: 'relative',
-                transform: `translateY(-${(currentPage - 1) * 297}mm)`
+                transform: `translateY(-${(currentPage - 1) * 297}mm)`,
+                transition: 'transform 0.3s ease' // Smooth transition when changing pages
               }}>
                 {renderTemplate()}
               </div>

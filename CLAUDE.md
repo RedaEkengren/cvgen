@@ -1698,6 +1698,110 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
 
 **Nu fungerar allt som det ska! 🎉**
 
+## 🔧 Phase 24: Critical Production Issues Fixed by Claude Opus (✅ Completed - 2025-07-27)
+- **Task:** Lösa flera kritiska produktionsproblem efter modellbyte från Sonnet till Opus
+- **Model:** Claude Opus 4 (claude-opus-4-20250514)
+
+### **24.1 Skills Section Fix - Cache Problem Solved:**
+  **Problem:** Skills add/remove buttons fungerade inte på production trots korrekta källfiler
+  **Orsak:** Vite build cache innehöll gammal kod från tidigare versioner
+  **Lösning:**
+  ```bash
+  rm -rf node_modules/.cache  # Rensa Vite cache
+  rm -rf dist                 # Ta bort gammal build
+  npm run build              # Bygg på nytt
+  ```
+  **Resultat:** Skills section fungerar perfekt med array-baserad struktur
+
+### **24.2 Education/Experience Input Problem:**
+  **Problem:** "det går inte att skriva in information i utbildning eller arbetslivserfarenhet"
+  **Orsak:** CVContext förväntade sig `action.index` men UI skickade `action.payload.index`
+  **Lösning:** Uppdaterade UPDATE_EDUCATION och UPDATE_EXPERIENCE i CVContext.jsx:
+  ```javascript
+  case 'UPDATE_EDUCATION':
+    return { 
+      ...state, 
+      education: state.education.map((item, index) => 
+        index === action.payload.index ? 
+          { ...item, [action.payload.field]: action.payload.value } : 
+          item
+      )
+    }
+  ```
+  **Resultat:** Alla formulärfält accepterar nu input korrekt
+
+### **24.3 PDF Template Data Problem:**
+  **Problem:** "när man laddar ner cv får man rätt cv mall men bara generiska värdena anna andersson"
+  **Orsak:** Alla templates förutom Creative använde gamla prop-baserade parametrar
+  **Lösning:** Uppdaterade alla 7 templates att använda cvData:
+  - ModernTemplate.jsx
+  - SleekTemplate.jsx (Executive)
+  - Gradient.jsx
+  - Minimal.jsx
+  - Neon.jsx
+  - Retro.jsx
+  **Resultat:** Alla PDF:er visar nu verklig användardata
+
+### **24.4 Date Picker Implementation:**
+  **Problem:** "datum valet borde vara lättare nu får man skriva in siffror själv"
+  **Lösning:** Ändrade från `<input type="text">` till `<input type="month">`
+  ```javascript
+  <input
+    type="month"
+    value={item.startDate}
+    onChange={(e) => handleEducationChange(index, 'startDate', e.target.value)}
+  />
+  ```
+  **Resultat:** Native månadväljare som är mycket enklare att använda
+
+### **24.5 Ongoing Employment Feature:**
+  **Problem:** "på arbetslivserfarenhet kan man välja start och slut men tänk om det är en pågående anställning"
+  **Lösning:** Lade till checkbox för "Pågående anställning":
+  ```javascript
+  <label>
+    <input
+      type="checkbox"
+      checked={item.current || false}
+      onChange={(e) => handleExperienceChange(index, 'current', e.target.checked)}
+    />
+    <span>Pågående anställning</span>
+  </label>
+  ```
+  **Resultat:** Slutdatum inaktiveras automatiskt när checkbox är markerad
+
+### **24.6 Server Memory Problem During Deployment:**
+  **Problem:** Build process dödades på servern (OOM - Out of Memory)
+  **Lösning:** Byggde lokalt och deployade färdiga filer:
+  ```bash
+  # Lokalt
+  npm run build
+  tar -czf dist.tar.gz dist/*
+  scp dist.tar.gz claude@178.128.143.51:/tmp/
+  
+  # På servern
+  ssh claude@178.128.143.51 'cd /tmp && tar -xzf dist.tar.gz && \
+    sudo cp -r dist/* /var/www/cv-generator/dist/'
+  ```
+  **Resultat:** Deployment lyckades utan minnesproblem
+
+## 🏆 Problem-Lösning Sammanfattning:
+
+| Problem | Orsak | Lösning | Status |
+|---------|-------|---------|---------|
+| Skills buttons fungerar inte | Vite cache med gammal kod | Rensa cache och rebuild | ✅ Löst |
+| Kan inte skriva i Education/Experience | Payload struktur mismatch | Uppdatera CVContext reducers | ✅ Löst |
+| PDF visar "Anna Andersson" | Templates använde inte cvData | Konvertera alla templates | ✅ Löst |
+| Datum svårt att mata in | Text input för datum | Byt till month picker | ✅ Löst |
+| Ingen "pågående anställning" | Saknades i design | Lägg till checkbox | ✅ Löst |
+| Build killed på server | Minnesbrist (2GB RAM) | Bygg lokalt, deploy dist | ✅ Löst |
+
+## 💡 Lärdomar:
+1. **Build Cache:** Alltid rensa cache vid konstiga deployment-problem
+2. **Data Consistency:** Säkerställ att UI och state management använder samma struktur
+3. **Memory Management:** Små servrar kräver alternativa deployment-strategier
+4. **User Experience:** Små förbättringar (date picker, checkbox) gör stor skillnad
+5. **Template Architecture:** Centraliserad data (cvData) är bättre än prop drilling
+
 ---
 
 **Utvecklad av Claude (Anthropic) för svenska IT-studenter 🇸🇪**  

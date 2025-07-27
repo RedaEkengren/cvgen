@@ -107,6 +107,8 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  height: 420px; /* Fixed height to prevent jumping */
+  overflow: hidden;
 }
 
 .cv-preview-container {
@@ -116,7 +118,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transform: scale(0.8);
   transform-origin: top center;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease; /* Smooth transitions for template changes */
 }
 
 .cv-page-navigation {
@@ -221,6 +223,10 @@
     order: -1;
   }
   
+  .cv-preview-wrapper {
+    height: 350px; /* Slightly smaller on tablets */
+  }
+  
   .cv-preview-container {
     transform: scale(0.7);
   }
@@ -233,6 +239,10 @@
 @media (max-width: 768px) {
   .template-grid-compact {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cv-preview-wrapper {
+    height: 300px; /* Even smaller on mobile */
   }
   
   .cv-preview-container {
