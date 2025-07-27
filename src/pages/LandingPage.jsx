@@ -10,8 +10,10 @@ import Neon from './templates/Neon';
 import Retro from './templates/Retro';
 
 const LandingPage = () => {
+  console.log('LandingPage component loaded');
   const navigate = useNavigate();
   const { state, dispatch } = useCV();
+  console.log('CV state:', state);
   const [progress, setProgress] = useState(0);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
 
@@ -128,10 +130,16 @@ const LandingPage = () => {
 
   const addSkill = (category) => {
     console.log('addSkill called with category:', category);
+    alert('addSkill clicked for: ' + category);
     dispatch({
       type: 'ADD_SKILL',
       payload: { category }
     });
+  };
+
+  const testFunction = () => {
+    alert('Test button works!');
+    console.log('Test button clicked');
   };
 
   const removeSkill = (category, index) => {
@@ -1072,6 +1080,11 @@ const LandingPage = () => {
           </div>
           
           <div className="form-grid">
+            {/* TEST BUTTON */}
+            <button onClick={testFunction} style={{background: 'red', color: 'white', padding: '10px', margin: '10px'}}>
+              TEST KNAPP - FUNGERAR JAVASCRIPT?
+            </button>
+            
             {/* Programming Languages */}
             <div className="form-group" style={{gridColumn: '1 / -1'}}>
               <label className="form-label">Programmeringsspråk</label>
