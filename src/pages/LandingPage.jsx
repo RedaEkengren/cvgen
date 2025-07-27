@@ -129,7 +129,7 @@ const LandingPage = () => {
 
   const downloadPDF = async () => {
     try {
-      // Get the CV data and selected template
+      // Generate PDF directly without leaving landing page
       const cvData = {
         personalInfo: state.personalInfo,
         education: state.education,
@@ -139,9 +139,47 @@ const LandingPage = () => {
         selectedTemplate
       };
 
-      // For now, navigate to preview page with the template selection
-      // In future versions, this could generate PDF directly from landing page
-      navigate('/preview', { state: { selectedTemplate, fromLanding: true } });
+      // Create a temporary div with CV content for PDF generation
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = `
+        <div style="padding: 40px; font-family: Inter, sans-serif; max-width: 800px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 32px; margin-bottom: 5px;">${state.personalInfo.firstName} ${state.personalInfo.lastName}</h1>
+            <p style="color: #666; font-size: 18px;">IT-Student & Utvecklare</p>
+            <p style="font-size: 14px; color: #888;">${state.personalInfo.email} • ${state.personalInfo.phone} • ${state.personalInfo.city}</p>
+          </div>
+          ${state.personalInfo.summary ? `<div style="margin-bottom: 25px;"><h2>Profil</h2><p>${state.personalInfo.summary}</p></div>` : ''}
+          ${state.education.length > 0 ? `<div style="margin-bottom: 25px;"><h2>Utbildning</h2>${state.education.map(edu => `<div style="margin-bottom: 15px;"><strong>${edu.school}</strong> - ${edu.degree}<br><small>${edu.startDate} - ${edu.endDate}</small>${edu.description ? `<br><p style="margin-top: 5px;">${edu.description}</p>` : ''}</div>`).join('')}</div>` : ''}
+          ${state.experience.length > 0 ? `<div style="margin-bottom: 25px;"><h2>Erfarenhet</h2>${state.experience.map(exp => `<div style="margin-bottom: 15px;"><strong>${exp.position}</strong> - ${exp.company}<br><small>${exp.startDate} - ${exp.current ? 'Nuvarande' : exp.endDate}</small>${exp.description ? `<br><p style="margin-top: 5px;">${exp.description}</p>` : ''}</div>`).join('')}</div>` : ''}
+          ${state.projects.length > 0 ? `<div style="margin-bottom: 25px;"><h2>Projekt</h2>${state.projects.map(proj => `<div style="margin-bottom: 15px;"><strong>${proj.name}</strong>${proj.technologies ? `<br><small>Teknologier: ${proj.technologies}</small>` : ''}${proj.description ? `<br><p style="margin-top: 5px;">${proj.description}</p>` : ''}</div>`).join('')}</div>` : ''}
+        </div>
+      `;
+
+      // Send to backend for PDF generation
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          htmlContent: tempDiv.innerHTML,
+          templateName: selectedTemplate
+        })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${state.personalInfo.firstName}_${state.personalInfo.lastName}_CV.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('PDF generation failed');
+      }
     } catch (error) {
       console.error('Error downloading PDF:', error);
     }
@@ -492,6 +530,12 @@ const LandingPage = () => {
           justify-content: center;
           transition: all 0.2s ease;
           z-index: 10;
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
+          outline: none;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .remove-button:hover {
@@ -844,6 +888,11 @@ const LandingPage = () => {
           </div>
           
           <div className="education-container">
+            {state.education.length === 0 && (
+              <p style={{textAlign: 'center', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '24px'}}>
+                Inga utbildningar tillagda ännu. Klicka på knappen nedan för att lägga till din första utbildning.
+              </p>
+            )}
             {state.education.map((edu, index) => (
               <div key={edu.id || index} className="removable-item">
                 <button 
@@ -941,6 +990,11 @@ const LandingPage = () => {
           </div>
           
           <div className="experience-container">
+            {state.experience.length === 0 && (
+              <p style={{textAlign: 'center', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '24px'}}>
+                Inga erfarenheter tillagda ännu. Klicka på knappen nedan för att lägga till din första erfarenhet.
+              </p>
+            )}
             {state.experience.map((exp, index) => (
               <div key={exp.id || index} className="removable-item">
                 <button 
