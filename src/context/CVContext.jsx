@@ -101,7 +101,13 @@ function cvReducer(state, action) {
     case 'SET_TEMPLATE':
       return { ...state, selectedTemplate: action.payload }
     case 'LOAD_STATE':
-      return { ...state, ...action.payload }
+      // Migrate old skills format to new format
+      const loadedState = action.payload;
+      if (loadedState.skills && !Array.isArray(loadedState.skills)) {
+        console.log('Migrating old skills format to new array format');
+        loadedState.skills = [];
+      }
+      return { ...state, ...loadedState }
     default:
       return state
   }
