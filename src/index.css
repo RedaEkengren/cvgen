@@ -101,13 +101,13 @@
   background: rgba(255, 255, 255, 0.02);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  min-width: 700px; /* Ensure minimum width for preview area */
+  min-width: 900px; /* Increased to accommodate wider preview */
   overflow-x: auto; /* Allow horizontal scroll on small screens if needed */
 }
 
 .cv-preview-wrapper {
   position: relative;
-  width: 600px; /* Fixed width to prevent horizontal jumping */
+  width: 800px; /* Increased width to show full CV */
   max-width: 100%;
   margin: 0 auto;
   height: auto; /* Allow height to adjust to content */
@@ -119,7 +119,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transform: scale(0.6); /* Smaller scale to fit more content */
+  transform: scale(0.65); /* Adjusted scale to show full width */
   transform-origin: top center;
   transition: all 0.3s ease; /* Smooth transitions for template changes */
   margin: 0 auto; /* Center the container */
