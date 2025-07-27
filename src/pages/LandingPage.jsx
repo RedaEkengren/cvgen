@@ -106,6 +106,27 @@ const LandingPage = () => {
     });
   };
 
+  const removeEducation = (index) => {
+    dispatch({
+      type: 'REMOVE_EDUCATION',
+      index
+    });
+  };
+
+  const removeExperience = (index) => {
+    dispatch({
+      type: 'REMOVE_EXPERIENCE',
+      index
+    });
+  };
+
+  const removeProject = (index) => {
+    dispatch({
+      type: 'REMOVE_PROJECT',
+      index
+    });
+  };
+
   const downloadPDF = async () => {
     try {
       // Get the CV data and selected template
@@ -438,6 +459,57 @@ const LandingPage = () => {
         .form-textarea {
           min-height: 120px;
           resize: vertical;
+        }
+
+        .removable-item {
+          position: relative;
+          background: var(--bg-card);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 24px;
+          margin-bottom: 24px;
+          transition: all 0.3s ease;
+        }
+
+        .removable-item:hover {
+          border-color: rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .remove-button {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          width: 32px;
+          height: 32px;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: 8px;
+          color: var(--accent-red);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          z-index: 10;
+        }
+
+        .remove-button:hover {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: var(--accent-red);
+          transform: scale(1.05);
+        }
+
+        .remove-button:active {
+          transform: scale(0.95);
+        }
+
+        .remove-button svg {
+          width: 16px;
+          height: 16px;
+          stroke-width: 2.5;
+          pointer-events: none;
+          display: block;
         }
 
         .template-grid {
@@ -773,13 +845,16 @@ const LandingPage = () => {
           
           <div className="education-container">
             {state.education.map((edu, index) => (
-              <div key={edu.id || index} className="education-item" style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '16px',
-                padding: '32px',
-                marginBottom: '24px'
-              }}>
+              <div key={edu.id || index} className="removable-item">
+                <button 
+                  type="button" 
+                  className="remove-button" 
+                  onClick={() => removeEducation(index)}
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Skola/Universitet</label>
@@ -867,13 +942,16 @@ const LandingPage = () => {
           
           <div className="experience-container">
             {state.experience.map((exp, index) => (
-              <div key={exp.id || index} className="experience-item" style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                padding: '32px',
-                marginBottom: '24px'
-              }}>
+              <div key={exp.id || index} className="removable-item">
+                <button 
+                  type="button" 
+                  className="remove-button" 
+                  onClick={() => removeExperience(index)}
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Företag</label>
@@ -1053,7 +1131,16 @@ const LandingPage = () => {
           
           <div className="form-grid">
             {state.projects.map((project, index) => (
-              <div key={project.id || index} className="removable-item" style={{gridColumn: '1 / -1', marginBottom: '24px'}}>
+              <div key={project.id || index} className="removable-item" style={{gridColumn: '1 / -1'}}>
+                <button 
+                  type="button" 
+                  className="remove-button" 
+                  onClick={() => removeProject(index)}
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Projektnamn</label>
