@@ -1096,9 +1096,7 @@ const LandingPage = () => {
                       value={skill.name}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_SKILL',
-                        index,
-                        field: 'name',
-                        value: e.target.value
+                        payload: { index, field: 'name', value: e.target.value }
                       })}
                     />
                   </div>
@@ -1109,9 +1107,7 @@ const LandingPage = () => {
                       value={skill.category}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_SKILL',
-                        index,
-                        field: 'category',
-                        value: e.target.value
+                        payload: { index, field: 'category', value: e.target.value }
                       })}
                     >
                       <option value="languages">Programmeringsspråk</option>

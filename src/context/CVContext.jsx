@@ -76,7 +76,7 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         projects: state.projects.map((item, index) => 
-          index === action.index ? { ...item, [action.field]: action.value } : item
+          index === action.payload.index ? { ...item, [action.payload.field]: action.payload.value } : item
         )
       }
     case 'REMOVE_PROJECT':
@@ -87,7 +87,7 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         skills: state.skills.map((item, index) => 
-          index === action.index ? { ...item, [action.field]: action.value } : item
+          index === action.payload.index ? { ...item, [action.payload.field]: action.payload.value } : item
         )
       }
     case 'REMOVE_SKILL':
