@@ -1,12 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCV } from '../context/CVContext';
+import ModernTemplate from './templates/ModernTemplate';
+import SleekTemplate from './templates/SleekTemplate';
+import Creative from './templates/Creative';
+import Gradient from './templates/Gradient';
+import Minimal from './templates/Minimal';
+import Neon from './templates/Neon';
+import Retro from './templates/Retro';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { state, dispatch } = useCV();
   const [progress, setProgress] = useState(0);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
+
+  // Render the selected CV template
+  const renderTemplate = () => {
+    const templateProps = { cvData: state };
+    
+    switch (selectedTemplate) {
+      case 'modern':
+        return <ModernTemplate {...templateProps} />;
+      case 'executive':
+        return <SleekTemplate {...templateProps} />;
+      case 'creative':
+        return <Creative {...templateProps} />;
+      case 'gradient':
+        return <Gradient {...templateProps} />;
+      case 'minimal':
+        return <Minimal {...templateProps} />;
+      case 'neon':
+        return <Neon {...templateProps} />;
+      case 'retro':
+        return <Retro {...templateProps} />;
+      default:
+        return <ModernTemplate {...templateProps} />;
+    }
+  };
 
   // Update progress bar on scroll
   useEffect(() => {
@@ -1245,59 +1276,60 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Templates Section */}
-      <section className="form-section" id="templates" style={{background: 'var(--bg-secondary)'}}>
-        <div className="section-content" style={{maxWidth: '1000px'}}>
-          <div className="section-header">
-            <div className="section-number">6</div>
-            <h2 className="section-title">Välj din design</h2>
-            <p className="section-subtitle">Välj en mall som passar din stil</p>
-          </div>
-          
-          <div className="template-grid">
-            {[
-              {name: 'Modern', desc: 'Clean & Professional'},
-              {name: 'Creative', desc: 'Färgglad & Unik'},
-              {name: 'Minimal', desc: 'Enkel & Elegant'},
-              {name: 'Executive', desc: 'Professionell & Seriös'},
-              {name: 'Gradient', desc: 'Modern & Trendig'},
-              {name: 'Neon', desc: 'Cyberpunk & Cool'},
-              {name: 'Retro', desc: '80-tals inspirerad'}
-            ].map((template, index) => (
-              <div 
-                key={template.name}
-                className={`template-card ${selectedTemplate === template.name.toLowerCase() ? 'selected' : ''}`}
-                onClick={() => setSelectedTemplate(template.name.toLowerCase())}
-              >
-                <div className="template-preview">
-                  <div className="cv-mini">
-                    <div className="cv-mini-header"></div>
-                    <div className="cv-mini-line"></div>
-                    <div className="cv-mini-line"></div>
-                    <div className="cv-mini-line"></div>
-                    <div className="cv-mini-line"></div>
+      {/* Split-Screen: Template Selector & Live Preview */}
+      <section className="form-section" id="templates" style={{background: 'var(--bg-secondary)', minHeight: '100vh'}}>
+        <div className="split-screen-container">
+          {/* Left Side: Template Selection & Download */}
+          <div className="split-screen-left">
+            <div className="section-header">
+              <div className="section-number">6</div>
+              <h2 className="section-title">Ditt CV är klart!</h2>
+              <p className="section-subtitle">Här är en förhandsgranskning av ditt CV. Du kan ladda ner det som PDF eller gå tillbaka och redigera.</p>
+            </div>
+            
+            <div className="template-selector-compact">
+              <h3 style={{color: 'var(--text-primary)', marginBottom: '16px', fontSize: '18px'}}>Välj din design</h3>
+              <div className="template-grid-compact">
+                {[
+                  {name: 'Modern', desc: 'Clean & Professional'},
+                  {name: 'Creative', desc: 'Färgglad & Unik'},
+                  {name: 'Minimal', desc: 'Enkel & Elegant'},
+                  {name: 'Executive', desc: 'Professionell & Seriös'},
+                  {name: 'Gradient', desc: 'Modern & Trendig'},
+                  {name: 'Neon', desc: 'Cyberpunk & Cool'},
+                  {name: 'Retro', desc: '80-tals inspirerad'}
+                ].map((template, index) => (
+                  <div 
+                    key={template.name}
+                    className={`template-card-compact ${selectedTemplate === template.name.toLowerCase() ? 'selected' : ''}`}
+                    onClick={() => setSelectedTemplate(template.name.toLowerCase())}
+                  >
+                    <div className="template-preview-mini">
+                      <div className="cv-mini-compact">
+                        <div className="cv-mini-header-compact"></div>
+                        <div className="cv-mini-line-compact"></div>
+                        <div className="cv-mini-line-compact"></div>
+                      </div>
+                    </div>
+                    <span className="template-name-compact">{template.name}</span>
                   </div>
-                </div>
-                <h3 className="template-name">{template.name}</h3>
-                <p className="template-description">{template.desc}</p>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Preview & Download Section */}
-      <section className="form-section" id="preview" style={{minHeight: '50vh'}}>
-        <div className="section-content" style={{textAlign: 'center'}}>
-          <div className="section-header">
-            <div className="section-number">7</div>
-            <h2 className="section-title">Ladda ner ditt CV</h2>
-            <p className="section-subtitle">Grattis! Nu är ditt CV klart att ladda ner som PDF</p>
+            </div>
+            
+            <div className="download-section">
+              <button className="cta-button" onClick={downloadPDF} style={{width: '100%', marginTop: '32px', padding: '16px'}}>
+                📥 Ladda ner PDF ({selectedTemplate} mall)
+              </button>
+            </div>
           </div>
           
-          <button className="cta-button" onClick={downloadPDF}>
-            Ladda ner PDF ({selectedTemplate} mall)
-          </button>
+          {/* Right Side: Live CV Preview */}
+          <div className="split-screen-right">
+            <div className="cv-preview-container" id="cv-preview">
+              {renderTemplate()}
+            </div>
+          </div>
         </div>
       </section>
     </div>
