@@ -127,6 +127,7 @@ const LandingPage = () => {
   };
 
   const addSkill = (category) => {
+    console.log('addSkill called with category:', category);
     dispatch({
       type: 'ADD_SKILL',
       payload: { category }

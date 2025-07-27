@@ -87,13 +87,16 @@ function cvReducer(state, action) {
       return { ...state, projects: state.projects.filter((_, index) => index !== action.index) }
     case 'ADD_SKILL':
       const { category } = action.payload
-      return { 
+      console.log('ADD_SKILL reducer called:', { category, currentSkills: state.skills });
+      const newState = { 
         ...state, 
         skills: {
           ...state.skills,
           [category]: [...(state.skills[category] || []), '']
         }
-      }
+      };
+      console.log('ADD_SKILL new state:', newState.skills);
+      return newState;
     case 'UPDATE_SKILL':
       return { 
         ...state, 
