@@ -29,7 +29,7 @@ const LandingPage = () => {
   };
 
   const updateNavDots = () => {
-    const sections = ['hero', 'personal', 'education', 'experience', 'templates', 'preview'];
+    const sections = ['hero', 'personal', 'education', 'experience', 'skills', 'projects', 'templates', 'preview'];
     const dots = document.querySelectorAll('.nav-dot');
     
     sections.forEach((section, index) => {
@@ -81,9 +81,49 @@ const LandingPage = () => {
     });
   };
 
-  const downloadPDF = () => {
-    // Navigate to existing preview page for PDF generation
-    navigate('/preview');
+  const addProject = () => {
+    dispatch({
+      type: 'ADD_PROJECT',
+      payload: {
+        id: Date.now(),
+        name: '',
+        description: '',
+        technologies: '',
+        link: '',
+        github: ''
+      }
+    });
+  };
+
+  const addSkill = (category) => {
+    dispatch({
+      type: 'ADD_SKILL',
+      payload: {
+        id: Date.now(),
+        category,
+        skill: ''
+      }
+    });
+  };
+
+  const downloadPDF = async () => {
+    try {
+      // Get the CV data and selected template
+      const cvData = {
+        personalInfo: state.personalInfo,
+        education: state.education,
+        experience: state.experience,
+        projects: state.projects,
+        skills: state.skills,
+        selectedTemplate
+      };
+
+      // For now, navigate to preview page with the template selection
+      // In future versions, this could generate PDF directly from landing page
+      navigate('/preview', { state: { selectedTemplate, fromLanding: true } });
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
   };
 
   return (
@@ -428,6 +468,8 @@ const LandingPage = () => {
             <div className="nav-dot" onClick={() => scrollToSection('personal')}></div>
             <div className="nav-dot" onClick={() => scrollToSection('education')}></div>
             <div className="nav-dot" onClick={() => scrollToSection('experience')}></div>
+            <div className="nav-dot" onClick={() => scrollToSection('skills')}></div>
+            <div className="nav-dot" onClick={() => scrollToSection('projects')}></div>
             <div className="nav-dot" onClick={() => scrollToSection('templates')}></div>
             <div className="nav-dot" onClick={() => scrollToSection('preview')}></div>
           </div>
@@ -535,17 +577,424 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Quick Navigation to existing builder for advanced features */}
+      {/* Education Section */}
+      <section className="form-section" id="education">
+        <div className="section-content">
+          <div className="section-header">
+            <div className="section-number">2</div>
+            <h2 className="section-title">Utbildning</h2>
+            <p className="section-subtitle">Din akademiska bakgrund</p>
+          </div>
+          
+          <div className="form-grid">
+            {state.education.map((edu, index) => (
+              <div key={edu.id || index} className="removable-item" style={{gridColumn: '1 / -1', marginBottom: '24px'}}>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Skola/Universitet</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="KTH"
+                      value={edu.school}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EDUCATION',
+                        payload: { index, field: 'school', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Program</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Datateknik"
+                      value={edu.degree}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EDUCATION',
+                        payload: { index, field: 'degree', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Startdatum</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={edu.startDate}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EDUCATION',
+                        payload: { index, field: 'startDate', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Slutdatum</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={edu.endDate}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EDUCATION',
+                        payload: { index, field: 'endDate', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group" style={{gridColumn: '1 / -1'}}>
+                    <label className="form-label">Beskrivning</label>
+                    <textarea
+                      className="form-input form-textarea"
+                      placeholder="Relevanta kurser, projekt..."
+                      value={edu.description}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EDUCATION',
+                        payload: { index, field: 'description', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <button className="cta-button" onClick={addEducation} style={{width: 'auto', marginTop: '24px'}}>
+              + Lägg till utbildning
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section className="form-section" id="experience">
+        <div className="section-content">
+          <div className="section-header">
+            <div className="section-number">3</div>
+            <h2 className="section-title">Arbetslivserfarenhet</h2>
+            <p className="section-subtitle">Dina tidigare jobb och praktik</p>
+          </div>
+          
+          <div className="form-grid">
+            {state.experience.map((exp, index) => (
+              <div key={exp.id || index} className="removable-item" style={{gridColumn: '1 / -1', marginBottom: '24px'}}>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Företag</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Tech AB"
+                      value={exp.company}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EXPERIENCE',
+                        payload: { index, field: 'company', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Position</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Frontend Developer"
+                      value={exp.position}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EXPERIENCE',
+                        payload: { index, field: 'position', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Startdatum</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={exp.startDate}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EXPERIENCE',
+                        payload: { index, field: 'startDate', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Slutdatum</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={exp.endDate}
+                      disabled={exp.current}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EXPERIENCE',
+                        payload: { index, field: 'endDate', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group" style={{gridColumn: '1 / -1'}}>
+                    <label className="form-label">
+                      <input
+                        type="checkbox"
+                        checked={exp.current}
+                        onChange={(e) => dispatch({
+                          type: 'UPDATE_EXPERIENCE',
+                          payload: { index, field: 'current', value: e.target.checked }
+                        })}
+                        style={{marginRight: '8px'}}
+                      />
+                      Arbetar fortfarande här
+                    </label>
+                  </div>
+                  <div className="form-group" style={{gridColumn: '1 / -1'}}>
+                    <label className="form-label">Arbetsuppgifter</label>
+                    <textarea
+                      className="form-input form-textarea"
+                      placeholder="Vad gjorde du på jobbet?"
+                      value={exp.description}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_EXPERIENCE',
+                        payload: { index, field: 'description', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <button className="cta-button" onClick={addExperience} style={{width: 'auto', marginTop: '24px'}}>
+              + Lägg till erfarenhet
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section className="form-section" id="skills">
+        <div className="section-content">
+          <div className="section-header">
+            <div className="section-number">4</div>
+            <h2 className="section-title">Färdigheter</h2>
+            <p className="section-subtitle">Dina tekniska kunskaper</p>
+          </div>
+          
+          <div className="form-grid">
+            {/* Programming Languages */}
+            <div className="form-group" style={{gridColumn: '1 / -1'}}>
+              <label className="form-label">Programmeringsspråk</label>
+              {state.skills.programmingLanguages?.map((skill, index) => (
+                <div key={index} style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="JavaScript"
+                    value={skill}
+                    onChange={(e) => dispatch({
+                      type: 'UPDATE_SKILL',
+                      payload: { category: 'programmingLanguages', index, value: e.target.value }
+                    })}
+                  />
+                </div>
+              ))}
+              <button 
+                className="cta-button" 
+                onClick={() => addSkill('programmingLanguages')}
+                style={{width: 'auto', padding: '8px 16px', fontSize: '14px', marginTop: '8px'}}
+              >
+                + Lägg till språk
+              </button>
+            </div>
+
+            {/* Frameworks & Tools */}
+            <div className="form-group" style={{gridColumn: '1 / -1'}}>
+              <label className="form-label">Ramverk & Verktyg</label>
+              {state.skills.frameworksLibraries?.map((skill, index) => (
+                <div key={index} style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="React"
+                    value={skill}
+                    onChange={(e) => dispatch({
+                      type: 'UPDATE_SKILL',
+                      payload: { category: 'frameworksLibraries', index, value: e.target.value }
+                    })}
+                  />
+                </div>
+              ))}
+              <button 
+                className="cta-button" 
+                onClick={() => addSkill('frameworksLibraries')}
+                style={{width: 'auto', padding: '8px 16px', fontSize: '14px', marginTop: '8px'}}
+              >
+                + Lägg till verktyg
+              </button>
+            </div>
+
+            {/* Tools & Other */}
+            <div className="form-group" style={{gridColumn: '1 / -1'}}>
+              <label className="form-label">Övriga verktyg</label>
+              {state.skills.toolsOther?.map((skill, index) => (
+                <div key={index} style={{display: 'flex', gap: '8px', marginBottom: '8px'}}>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Git"
+                    value={skill}
+                    onChange={(e) => dispatch({
+                      type: 'UPDATE_SKILL',
+                      payload: { category: 'toolsOther', index, value: e.target.value }
+                    })}
+                  />
+                </div>
+              ))}
+              <button 
+                className="cta-button" 
+                onClick={() => addSkill('toolsOther')}
+                style={{width: 'auto', padding: '8px 16px', fontSize: '14px', marginTop: '8px'}}
+              >
+                + Lägg till verktyg
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section className="form-section" id="projects">
+        <div className="section-content">
+          <div className="section-header">
+            <div className="section-number">5</div>
+            <h2 className="section-title">Projekt</h2>
+            <p className="section-subtitle">Dina kodprojekt och portfolioarbeten</p>
+          </div>
+          
+          <div className="form-grid">
+            {state.projects.map((project, index) => (
+              <div key={project.id || index} className="removable-item" style={{gridColumn: '1 / -1', marginBottom: '24px'}}>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Projektnamn</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="CV Generator"
+                      value={project.name}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_PROJECT',
+                        payload: { index, field: 'name', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Teknologier</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="React, Node.js, MongoDB"
+                      value={project.technologies}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_PROJECT',
+                        payload: { index, field: 'technologies', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Länk till projekt</label>
+                    <input
+                      type="url"
+                      className="form-input"
+                      placeholder="https://..."
+                      value={project.link}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_PROJECT',
+                        payload: { index, field: 'link', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">GitHub</label>
+                    <input
+                      type="url"
+                      className="form-input"
+                      placeholder="https://github.com/..."
+                      value={project.github}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_PROJECT',
+                        payload: { index, field: 'github', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div className="form-group" style={{gridColumn: '1 / -1'}}>
+                    <label className="form-label">Beskrivning</label>
+                    <textarea
+                      className="form-input form-textarea"
+                      placeholder="Vad gör projektet? Vilka problem löser det?"
+                      value={project.description}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_PROJECT',
+                        payload: { index, field: 'description', value: e.target.value }
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <button className="cta-button" onClick={addProject} style={{width: 'auto', marginTop: '24px'}}>
+              + Lägg till projekt
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Templates Section */}
+      <section className="form-section" id="templates">
+        <div className="section-content">
+          <div className="section-header">
+            <div className="section-number">6</div>
+            <h2 className="section-title">Välj design</h2>
+            <p className="section-subtitle">Välj en mall som passar din stil</p>
+          </div>
+          
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '48px'}}>
+            {['Modern', 'Executive', 'Creative', 'Gradient', 'Minimal', 'Neon', 'Retro'].map((template) => (
+              <div 
+                key={template}
+                onClick={() => setSelectedTemplate(template.toLowerCase())}
+                style={{
+                  background: selectedTemplate === template.toLowerCase() ? 'var(--gradient-primary)' : 'var(--bg-card)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  color: selectedTemplate === template.toLowerCase() ? 'white' : 'var(--text-primary)'
+                }}
+              >
+                <div style={{fontWeight: '600', marginBottom: '8px'}}>{template}</div>
+                <div style={{fontSize: '14px', opacity: '0.7'}}>
+                  {template === 'Modern' && 'Lila accenter med tvåkolumns layout'}
+                  {template === 'Executive' && 'Elegant centrerad design'}
+                  {template === 'Creative' && 'Färgglad design med lekfulla element'}
+                  {template === 'Gradient' && 'Modern design med gradienter'}
+                  {template === 'Minimal' && 'Ultra-minimalistisk design'}
+                  {template === 'Neon' && 'Cyberpunk-inspirerad design'}
+                  {template === 'Retro' && '80-tals inspirerad design'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Preview & Download Section */}
       <section className="form-section" id="preview" style={{minHeight: '50vh'}}>
         <div className="section-content" style={{textAlign: 'center'}}>
           <div className="section-header">
-            <div className="section-number">2</div>
-            <h2 className="section-title">Fortsätt till CV Builder</h2>
-            <p className="section-subtitle">Komplettera ditt CV med utbildning, erfarenhet och ladda ner som PDF</p>
+            <div className="section-number">7</div>
+            <h2 className="section-title">Ladda ner ditt CV</h2>
+            <p className="section-subtitle">Grattis! Nu är ditt CV klart att ladda ner som PDF</p>
           </div>
           
-          <button className="cta-button" onClick={() => navigate('/builder')}>
-            Gå till CV Builder
+          <button className="cta-button" onClick={downloadPDF}>
+            Ladda ner PDF ({selectedTemplate} mall)
           </button>
         </div>
       </section>
