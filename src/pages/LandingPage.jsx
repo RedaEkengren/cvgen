@@ -129,13 +129,20 @@ const LandingPage = () => {
   };
 
   const addSkill = () => {
+    console.log('addSkill button clicked!');
+    console.log('Current skills state:', state.skills);
+    console.log('Is skills an array?', Array.isArray(state.skills));
+    
     dispatch({
       type: 'ADD_SKILL',
       payload: {
+        id: Date.now(),
         name: '',
         category: 'languages'
       }
     });
+    
+    console.log('Dispatched ADD_SKILL action');
   };
 
   const removeEducation = (index) => {
