@@ -128,24 +128,13 @@ const LandingPage = () => {
     });
   };
 
-  const addSkill = (category) => {
-    console.log('addSkill called with category:', category);
-    alert('addSkill clicked for: ' + category);
+  const addSkill = () => {
     dispatch({
       type: 'ADD_SKILL',
-      payload: { category }
-    });
-  };
-
-  const testFunction = () => {
-    alert('Test button works!');
-    console.log('Test button clicked');
-  };
-
-  const removeSkill = (category, index) => {
-    dispatch({
-      type: 'REMOVE_SKILL',
-      payload: { category, index }
+      payload: {
+        name: '',
+        category: 'languages'
+      }
     });
   };
 
@@ -1080,115 +1069,67 @@ const LandingPage = () => {
           </div>
           
           <div className="form-grid">
-            {/* TEST BUTTON */}
-            <button onClick={testFunction} style={{background: 'red', color: 'white', padding: '10px', margin: '10px'}}>
-              TEST KNAPP - FUNGERAR JAVASCRIPT?
-            </button>
+            {state.skills.length === 0 && (
+              <p style={{textAlign: 'center', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '24px', gridColumn: '1 / -1'}}>
+                Inga färdigheter tillagda ännu. Klicka på knappen nedan för att lägga till din första färdighet.
+              </p>
+            )}
             
-            {/* Programming Languages */}
-            <div className="form-group" style={{gridColumn: '1 / -1'}}>
-              <label className="form-label">Programmeringsspråk</label>
-              {state.skills.programmingLanguages?.map((skill, index) => (
-                <div key={index} className="removable-item" style={{marginBottom: '12px', padding: '16px'}}>
-                  <button 
-                    type="button" 
-                    className="remove-button" 
-                    onClick={() => removeSkill('programmingLanguages', index)}
-                  >
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    className="form-input"
-                    placeholder="JavaScript"
-                    value={skill}
-                    onChange={(e) => dispatch({
-                      type: 'UPDATE_SKILL',
-                      payload: { category: 'programmingLanguages', index, value: e.target.value }
-                    })}
-                  />
+            {state.skills.map((skill, index) => (
+              <div key={index} className="removable-item" style={{gridColumn: '1 / -1'}}>
+                <button 
+                  type="button" 
+                  className="remove-button" 
+                  onClick={() => dispatch({ type: 'REMOVE_SKILL', index })}
+                >
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">Färdighet</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="ex. JavaScript, React, Git"
+                      value={skill.name}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_SKILL',
+                        index,
+                        field: 'name',
+                        value: e.target.value
+                      })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Kategori</label>
+                    <select
+                      className="form-input"
+                      value={skill.category}
+                      onChange={(e) => dispatch({
+                        type: 'UPDATE_SKILL',
+                        index,
+                        field: 'category',
+                        value: e.target.value
+                      })}
+                    >
+                      <option value="languages">Programmeringsspråk</option>
+                      <option value="frameworks">Ramverk & Bibliotek</option>
+                      <option value="tools">Verktyg & Övriga</option>
+                    </select>
+                  </div>
                 </div>
-              ))}
-              <button 
-                className="cta-button" 
-                onClick={() => addSkill('programmingLanguages')}
-                style={{width: 'auto', padding: '8px 16px', fontSize: '14px', marginTop: '8px'}}
-              >
-                + Lägg till språk
-              </button>
-            </div>
-
-            {/* Frameworks & Tools */}
-            <div className="form-group" style={{gridColumn: '1 / -1'}}>
-              <label className="form-label">Ramverk & Verktyg</label>
-              {state.skills.frameworksLibraries?.map((skill, index) => (
-                <div key={index} className="removable-item" style={{marginBottom: '12px', padding: '16px'}}>
-                  <button 
-                    type="button" 
-                    className="remove-button" 
-                    onClick={() => removeSkill('frameworksLibraries', index)}
-                  >
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    className="form-input"
-                    placeholder="React"
-                    value={skill}
-                    onChange={(e) => dispatch({
-                      type: 'UPDATE_SKILL',
-                      payload: { category: 'frameworksLibraries', index, value: e.target.value }
-                    })}
-                  />
-                </div>
-              ))}
-              <button 
-                className="cta-button" 
-                onClick={() => addSkill('frameworksLibraries')}
-                style={{width: 'auto', padding: '8px 16px', fontSize: '14px', marginTop: '8px'}}
-              >
-                + Lägg till verktyg
-              </button>
-            </div>
-
-            {/* Tools & Other */}
-            <div className="form-group" style={{gridColumn: '1 / -1'}}>
-              <label className="form-label">Övriga verktyg</label>
-              {state.skills.toolsOther?.map((skill, index) => (
-                <div key={index} className="removable-item" style={{marginBottom: '12px', padding: '16px'}}>
-                  <button 
-                    type="button" 
-                    className="remove-button" 
-                    onClick={() => removeSkill('toolsOther', index)}
-                  >
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    className="form-input"
-                    placeholder="Git"
-                    value={skill}
-                    onChange={(e) => dispatch({
-                      type: 'UPDATE_SKILL',
-                      payload: { category: 'toolsOther', index, value: e.target.value }
-                    })}
-                  />
-                </div>
-              ))}
-              <button 
-                className="cta-button" 
-                onClick={() => addSkill('toolsOther')}
-                style={{width: 'auto', padding: '8px 16px', fontSize: '14px', marginTop: '8px'}}
-              >
-                + Lägg till verktyg
-              </button>
-            </div>
+              </div>
+            ))}
+            
+            <button 
+              className="cta-button" 
+              onClick={addSkill}
+              style={{width: 'auto', marginTop: '24px'}}
+            >
+              + Lägg till färdighet
+            </button>
           </div>
         </div>
       </section>
