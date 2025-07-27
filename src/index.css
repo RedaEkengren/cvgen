@@ -102,15 +102,28 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.cv-preview-container {
+.cv-preview-wrapper {
+  position: relative;
   width: 100%;
   max-width: 600px;
+  margin: 0 auto;
+}
+
+.cv-preview-container {
+  width: 100%;
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
   transform: scale(0.8);
   transform-origin: top center;
+  transition: transform 0.3s ease;
+}
+
+.cv-page-navigation {
+  transform: scale(0.8);
+  transform-origin: top center;
+  width: 125%; /* Compensate for scale */
+  margin-left: -12.5%; /* Center it */
 }
 
 .template-grid-compact {

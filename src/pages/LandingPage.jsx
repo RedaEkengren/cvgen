@@ -16,6 +16,7 @@ const LandingPage = () => {
   console.log('CV state:', state);
   const [progress, setProgress] = useState(0);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Render the selected CV template
   const renderTemplate = () => {
@@ -1263,7 +1264,10 @@ const LandingPage = () => {
                   <div 
                     key={template.name}
                     className={`template-card-compact ${selectedTemplate === template.name.toLowerCase() ? 'selected' : ''}`}
-                    onClick={() => setSelectedTemplate(template.name.toLowerCase())}
+                    onClick={() => {
+                      setSelectedTemplate(template.name.toLowerCase());
+                      setCurrentPage(1); // Reset to first page when changing template
+                    }}
                   >
                     <div className="template-preview-mini">
                       <div className="cv-mini-compact">
@@ -1287,8 +1291,61 @@ const LandingPage = () => {
           
           {/* Right Side: Live CV Preview */}
           <div className="split-screen-right">
-            <div className="cv-preview-container" id="cv-preview">
-              {renderTemplate()}
+            <div className="cv-preview-wrapper">
+              <div className="cv-preview-container" id="cv-preview" style={{
+                height: '297mm', // A4 height
+                overflow: 'hidden',
+                position: 'relative',
+                transform: `translateY(-${(currentPage - 1) * 297}mm)`
+              }}>
+                {renderTemplate()}
+              </div>
+              
+              {/* Page Navigation */}
+              <div className="cv-page-navigation" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '20px',
+                marginTop: '20px',
+                padding: '10px',
+                backgroundColor: 'var(--bg-card)',
+                borderRadius: '8px'
+              }}>
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  style={{
+                    padding: '8px 16px',
+                    background: currentPage === 1 ? 'var(--bg-secondary)' : 'var(--accent-purple)',
+                    border: 'none',
+                    borderRadius: '4px',
+                    color: 'var(--text-primary)',
+                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                    opacity: currentPage === 1 ? 0.5 : 1
+                  }}
+                >
+                  ← Föregående
+                </button>
+                
+                <span style={{color: 'var(--text-primary)', fontSize: '14px'}}>
+                  Sida {currentPage}
+                </span>
+                
+                <button 
+                  onClick={() => setCurrentPage(prev => prev + 1)}
+                  style={{
+                    padding: '8px 16px',
+                    background: 'var(--accent-purple)',
+                    border: 'none',
+                    borderRadius: '4px',
+                    color: 'var(--text-primary)',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Nästa →
+                </button>
+              </div>
             </div>
           </div>
         </div>
