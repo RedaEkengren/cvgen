@@ -440,12 +440,197 @@ const LandingPage = () => {
           resize: vertical;
         }
 
+        .template-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+          max-width: 1000px;
+          width: 100%;
+        }
+
+        .template-card {
+          background: var(--bg-card);
+          border: 2px solid var(--border-color);
+          border-radius: 12px;
+          padding: 24px;
+          cursor: pointer;
+          transition: all 0.3s;
+          text-align: center;
+        }
+
+        .template-card:hover {
+          transform: translateY(-4px);
+          border-color: var(--accent-purple);
+        }
+
+        .template-card.selected {
+          border-color: var(--accent-purple);
+          transform: translateY(-2px);
+        }
+
+        .template-preview {
+          width: 100%;
+          height: 200px;
+          background: #1a1a1f;
+          border-radius: 8px;
+          margin-bottom: 16px;
+          display: flex;
+          flex-direction: column;
+          padding: 20px;
+          font-size: 10px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        /* Modern Template Preview */
+        .template-card:nth-child(1) .template-preview {
+          background: linear-gradient(135deg, #1a1a1f 0%, #2d1b69 100%);
+        }
+        .template-card:nth-child(1) .template-preview::after {
+          content: '';
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          right: 10px;
+          height: 30px;
+          background: rgba(139, 92, 246, 0.2);
+          border-radius: 4px;
+        }
+
+        /* Creative Template Preview */
+        .template-card:nth-child(2) .template-preview {
+          background: #1a1a1f;
+          border: 2px solid #ec4899;
+        }
+        .template-card:nth-child(2) .template-preview::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 60px;
+          height: 60px;
+          background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+          border-radius: 50%;
+        }
+
+        /* Minimal Template Preview */
+        .template-card:nth-child(3) .template-preview {
+          background: #0a0a0f;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .template-card:nth-child(3) .template-preview::after {
+          content: '';
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          right: 20px;
+          bottom: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 4px;
+        }
+
+        /* Executive Template Preview */
+        .template-card:nth-child(4) .template-preview {
+          background: linear-gradient(180deg, #1a1a1f 0%, #2a2a3f 100%);
+        }
+        .template-card:nth-child(4) .template-preview::before {
+          content: '';
+          position: absolute;
+          top: 15px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 4px;
+          background: #8b5cf6;
+          border-radius: 2px;
+        }
+
+        /* Gradient Template Preview */
+        .template-card:nth-child(5) .template-preview {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 100%);
+          opacity: 0.8;
+        }
+
+        /* Neon Template Preview */
+        .template-card:nth-child(6) .template-preview {
+          background: #0a0a0f;
+          box-shadow: inset 0 0 50px rgba(0, 255, 255, 0.1);
+        }
+        .template-card:nth-child(6) .template-preview::after {
+          content: '';
+          position: absolute;
+          inset: 10px;
+          border: 2px solid #00ffff;
+          border-radius: 4px;
+          filter: drop-shadow(0 0 10px #00ffff);
+        }
+
+        /* Retro Template Preview */
+        .template-card:nth-child(7) .template-preview {
+          background: repeating-linear-gradient(
+            0deg,
+            #ff006e,
+            #ff006e 2px,
+            #8338ec 2px,
+            #8338ec 4px
+          );
+          position: relative;
+        }
+        .template-card:nth-child(7) .template-preview::after {
+          content: '';
+          position: absolute;
+          inset: 10px;
+          background: #0a0a0f;
+          border-radius: 4px;
+        }
+
+        /* Mini CV layout inside previews */
+        .cv-mini {
+          position: absolute;
+          inset: 15px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          z-index: 1;
+        }
+
+        .cv-mini-header {
+          height: 25px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+        }
+
+        .cv-mini-line {
+          height: 3px;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 1px;
+        }
+
+        .cv-mini-line:nth-child(2) { width: 80%; }
+        .cv-mini-line:nth-child(3) { width: 60%; }
+        .cv-mini-line:nth-child(4) { width: 70%; }
+        .cv-mini-line:nth-child(5) { width: 50%; }
+
+        .template-name {
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .template-description {
+          font-size: 14px;
+          color: var(--text-secondary);
+        }
+
         @media (max-width: 768px) {
           .hero h1 {
             font-size: 48px;
           }
           .form-grid {
             grid-template-columns: 1fr;
+          }
+          .template-grid {
+            grid-template-columns: repeat(2, 1fr);
           }
         }
       `}</style>
@@ -586,9 +771,15 @@ const LandingPage = () => {
             <p className="section-subtitle">Din akademiska bakgrund</p>
           </div>
           
-          <div className="form-grid">
+          <div className="education-container">
             {state.education.map((edu, index) => (
-              <div key={edu.id || index} className="removable-item" style={{gridColumn: '1 / -1', marginBottom: '24px'}}>
+              <div key={edu.id || index} className="education-item" style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '16px',
+                padding: '32px',
+                marginBottom: '24px'
+              }}>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Skola/Universitet</label>
@@ -619,8 +810,9 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Startdatum</label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-input"
+                      placeholder="mm/dd/yyyy"
                       value={edu.startDate}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EDUCATION',
@@ -631,8 +823,9 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Slutdatum</label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-input"
+                      placeholder="mm/dd/yyyy"
                       value={edu.endDate}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EDUCATION',
@@ -672,9 +865,15 @@ const LandingPage = () => {
             <p className="section-subtitle">Dina tidigare jobb och praktik</p>
           </div>
           
-          <div className="form-grid">
+          <div className="experience-container">
             {state.experience.map((exp, index) => (
-              <div key={exp.id || index} className="removable-item" style={{gridColumn: '1 / -1', marginBottom: '24px'}}>
+              <div key={exp.id || index} className="experience-item" style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '16px',
+                padding: '32px',
+                marginBottom: '24px'
+              }}>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">Företag</label>
@@ -705,8 +904,9 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Startdatum</label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-input"
+                      placeholder="mm/dd/yyyy"
                       value={exp.startDate}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EXPERIENCE',
@@ -717,8 +917,9 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Slutdatum</label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-input"
+                      placeholder="mm/dd/yyyy"
                       value={exp.endDate}
                       disabled={exp.current}
                       onChange={(e) => dispatch({
@@ -726,20 +927,6 @@ const LandingPage = () => {
                         payload: { index, field: 'endDate', value: e.target.value }
                       })}
                     />
-                  </div>
-                  <div className="form-group" style={{gridColumn: '1 / -1'}}>
-                    <label className="form-label">
-                      <input
-                        type="checkbox"
-                        checked={exp.current}
-                        onChange={(e) => dispatch({
-                          type: 'UPDATE_EXPERIENCE',
-                          payload: { index, field: 'current', value: e.target.checked }
-                        })}
-                        style={{marginRight: '8px'}}
-                      />
-                      Arbetar fortfarande här
-                    </label>
                   </div>
                   <div className="form-group" style={{gridColumn: '1 / -1'}}>
                     <label className="form-label">Arbetsuppgifter</label>
@@ -944,40 +1131,40 @@ const LandingPage = () => {
       </section>
 
       {/* Templates Section */}
-      <section className="form-section" id="templates">
-        <div className="section-content">
+      <section className="form-section" id="templates" style={{background: 'var(--bg-secondary)'}}>
+        <div className="section-content" style={{maxWidth: '1000px'}}>
           <div className="section-header">
             <div className="section-number">6</div>
-            <h2 className="section-title">Välj design</h2>
+            <h2 className="section-title">Välj din design</h2>
             <p className="section-subtitle">Välj en mall som passar din stil</p>
           </div>
           
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginBottom: '48px'}}>
-            {['Modern', 'Executive', 'Creative', 'Gradient', 'Minimal', 'Neon', 'Retro'].map((template) => (
+          <div className="template-grid">
+            {[
+              {name: 'Modern', desc: 'Clean & Professional'},
+              {name: 'Creative', desc: 'Färgglad & Unik'},
+              {name: 'Minimal', desc: 'Enkel & Elegant'},
+              {name: 'Executive', desc: 'Professionell & Seriös'},
+              {name: 'Gradient', desc: 'Modern & Trendig'},
+              {name: 'Neon', desc: 'Cyberpunk & Cool'},
+              {name: 'Retro', desc: '80-tals inspirerad'}
+            ].map((template, index) => (
               <div 
-                key={template}
-                onClick={() => setSelectedTemplate(template.toLowerCase())}
-                style={{
-                  background: selectedTemplate === template.toLowerCase() ? 'var(--gradient-primary)' : 'var(--bg-card)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '12px',
-                  padding: '24px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s',
-                  color: selectedTemplate === template.toLowerCase() ? 'white' : 'var(--text-primary)'
-                }}
+                key={template.name}
+                className={`template-card ${selectedTemplate === template.name.toLowerCase() ? 'selected' : ''}`}
+                onClick={() => setSelectedTemplate(template.name.toLowerCase())}
               >
-                <div style={{fontWeight: '600', marginBottom: '8px'}}>{template}</div>
-                <div style={{fontSize: '14px', opacity: '0.7'}}>
-                  {template === 'Modern' && 'Lila accenter med tvåkolumns layout'}
-                  {template === 'Executive' && 'Elegant centrerad design'}
-                  {template === 'Creative' && 'Färgglad design med lekfulla element'}
-                  {template === 'Gradient' && 'Modern design med gradienter'}
-                  {template === 'Minimal' && 'Ultra-minimalistisk design'}
-                  {template === 'Neon' && 'Cyberpunk-inspirerad design'}
-                  {template === 'Retro' && '80-tals inspirerad design'}
+                <div className="template-preview">
+                  <div className="cv-mini">
+                    <div className="cv-mini-header"></div>
+                    <div className="cv-mini-line"></div>
+                    <div className="cv-mini-line"></div>
+                    <div className="cv-mini-line"></div>
+                    <div className="cv-mini-line"></div>
+                  </div>
                 </div>
+                <h3 className="template-name">{template.name}</h3>
+                <p className="template-description">{template.desc}</p>
               </div>
             ))}
           </div>
