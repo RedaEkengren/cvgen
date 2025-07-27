@@ -103,6 +103,8 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   min-width: 900px; /* Increased to accommodate wider preview */
   overflow-x: auto; /* Allow horizontal scroll on small screens if needed */
+  position: relative;
+  z-index: 1;
 }
 
 .cv-preview-wrapper {
@@ -112,12 +114,13 @@
   margin: 0 auto;
   height: auto; /* Allow height to adjust to content */
   min-height: 600px; /* Minimum height for consistency */
+  background-color: #ffffff; /* Solid white backdrop */
+  border-radius: 12px;
+  padding: 20px; /* Space around CV */
 }
 
 .cv-preview-container {
   width: 210mm; /* A4 width */
-  background: white !important; /* Force white background */
-  background-color: white !important;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transform: scale(0.65); /* Adjusted scale to show full width */
@@ -125,9 +128,25 @@
   transition: all 0.3s ease; /* Smooth transitions for template changes */
   margin: 0 auto; /* Center the container */
   min-height: 297mm; /* A4 height */
-  isolation: isolate; /* Prevent background bleed */
   position: relative;
-  z-index: 1; /* Ensure it's above any background */
+  background-color: transparent; /* Let templates control their own backgrounds */
+  overflow: visible; /* Allow content to render properly */
+}
+
+/* Remove any pseudo-element overlays */
+.cv-preview-container::before,
+.cv-preview-container::after {
+  display: none !important;
+}
+
+.cv-preview-wrapper::before,
+.cv-preview-wrapper::after {
+  display: none !important;
+}
+
+/* Ensure split-screen-right doesn't affect CV colors */
+.split-screen-right {
+  isolation: isolate;
 }
 
 .cv-page-navigation {

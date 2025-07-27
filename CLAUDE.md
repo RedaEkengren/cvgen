@@ -1818,16 +1818,31 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
   - Möjlig CSS variable `--bg-secondary` som är för mörk
   - Kan vara relaterat till dark theme styling från LandingPage
 
-### **25.3 Nästa Steg (för att undvika Sonnet):**
-  1. Undersök CSS variabler för bakgrundsfärger
-  2. Kontrollera om preview-wrapper har opacity/overlay
-  3. Fixa genomskinlighet så CV-mallar visas korrekt
-  4. Testa alla 7 mallar för att säkerställa fix
+### **25.3 Försök att Lösa:**
+  1. **CSS Force White Background:** Lade till `background: white !important` - fungerade inte
+  2. **Isolation:** Lade till `isolation: isolate` och `z-index: 1` - fungerade inte
+  3. **Clean Rebuild:** Rensade gamla filer och gjorde ny build - fungerade inte
+  4. **Senior Programmer Fix:** Implementerade omfattande CSS-ändringar - skapade nya problem
+  5. **White Wrapper Background:** Gav wrapper solid vit bakgrund med padding - delvis löst
+  6. **Status:** ENDAST RETRO-MALLEN fungerar korrekt, andra mallar har fortfarande problem
 
 ### **25.4 Viktigt att Notera:**
   - **OPUS USAGE LIMIT:** Närmar sig gräns, byt till annan modell om möjligt
   - **Undvik Sonnet:** Tidigare problem med Sonnet's kodkvalitet
   - **Kritisk Fix:** CV preview är central för användarupplevelsen
+  - **Backup Skapad:** `cv-generator-backup-20250727-205028.tar.gz` innan ändringar
+  - **Användaren planerar annan lösning:** Kommer berätta senare
+
+### **25.5 Git Synk Status:**
+  - **Lokal:** Senaste commit 33a41d2 "Fix dark overlay on CV preview"
+  - **GitHub:** I synk med lokal
+  - **Server:** Senaste ändringar deployade men problem kvarstår
+
+### **25.6 Identifierat Rotproblem:**
+  - Retro-mallen fungerar eftersom den har explicit backgroundColor på alla element
+  - Andra mallar använder vita/transparenta bakgrunder som påverkas av dark theme
+  - Split-screen-right har nästan transparent bakgrund (rgba(255,255,255,0.02))
+  - Dark theme från LandingPage blöder igenom till CV preview
 
 ---
 

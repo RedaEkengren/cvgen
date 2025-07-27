@@ -29,7 +29,9 @@
       "Bash(grep:*)",
       "Bash(git commit:*)",
       "Bash(git restore:*)",
-      "Bash(tar:*)"
+      "Bash(tar:*)",
+      "Bash(ls:*)",
+      "Bash(git fetch:*)"
     ],
     "deny": []
   }
