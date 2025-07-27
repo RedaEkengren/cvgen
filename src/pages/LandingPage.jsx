@@ -499,62 +499,6 @@ const LandingPage = () => {
           resize: vertical;
         }
 
-        .removable-item {
-          position: relative;
-          background: var(--bg-card);
-          border: 1px solid var(--border-color);
-          border-radius: 12px;
-          padding: 24px;
-          margin-bottom: 24px;
-          transition: all 0.3s ease;
-        }
-
-        .removable-item:hover {
-          border-color: rgba(255, 255, 255, 0.12);
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        .remove-button {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          width: 32px;
-          height: 32px;
-          background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.2);
-          border-radius: 8px;
-          color: var(--accent-red);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s ease;
-          z-index: 10;
-          padding: 0;
-          margin: 0;
-          box-sizing: border-box;
-          outline: none;
-          user-select: none;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .remove-button:hover {
-          background: rgba(239, 68, 68, 0.2);
-          border-color: var(--accent-red);
-          transform: scale(1.05);
-        }
-
-        .remove-button:active {
-          transform: scale(0.95);
-        }
-
-        .remove-button svg {
-          width: 16px;
-          height: 16px;
-          stroke-width: 2.5;
-          pointer-events: none;
-          display: block;
-        }
 
         .template-grid {
           display: grid;
