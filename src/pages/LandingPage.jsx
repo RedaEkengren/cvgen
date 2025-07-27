@@ -1287,7 +1287,9 @@ const LandingPage = () => {
           <div className="split-screen-right">
             <div className="cv-preview-wrapper">
               <div className="cv-preview-container" id="cv-preview" style={{
-                transform: `translateY(-${(currentPage - 1) * 297}mm)`
+                transform: `translateY(-${(currentPage - 1) * 297}mm)`,
+                backgroundColor: 'white',
+                isolation: 'isolate' // Prevent parent background bleed-through
               }}>
                 {renderTemplate()}
               </div>

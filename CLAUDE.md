@@ -1802,6 +1802,33 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
 4. **User Experience:** Små förbättringar (date picker, checkbox) gör stor skillnad
 5. **Template Architecture:** Centraliserad data (cvData) är bättre än prop drilling
 
+## 🔧 Phase 25: CV Preview Display Issues (🚧 In Progress - 2025-07-27)
+- **Task:** Fixa svart genomskinlig overlay som täcker CV-mallarna i preview
+- **Model:** Claude Opus 4 (claude-opus-4-20250514) - APPROACHING USAGE LIMIT
+- **Status:** Pausad för att undvika att nå Opus usage limit
+
+### **25.1 Problem Identifierat:**
+  **Problem:** Svart/mörk genomskinlig färg ligger över alla CV-mallar i preview
+  **Symptom:** CV-innehållet syns men är mörkare/dämpat av overlay
+  **Påverkar:** Alla 7 CV-mallar (olika grader av synlighet)
+  **Screenshot:** svartfärg.png visar problemet tydligt
+
+### **25.2 Trolig Orsak:**
+  - Preview-container eller parent element har mörk bakgrund
+  - Möjlig CSS variable `--bg-secondary` som är för mörk
+  - Kan vara relaterat till dark theme styling från LandingPage
+
+### **25.3 Nästa Steg (för att undvika Sonnet):**
+  1. Undersök CSS variabler för bakgrundsfärger
+  2. Kontrollera om preview-wrapper har opacity/overlay
+  3. Fixa genomskinlighet så CV-mallar visas korrekt
+  4. Testa alla 7 mallar för att säkerställa fix
+
+### **25.4 Viktigt att Notera:**
+  - **OPUS USAGE LIMIT:** Närmar sig gräns, byt till annan modell om möjligt
+  - **Undvik Sonnet:** Tidigare problem med Sonnet's kodkvalitet
+  - **Kritisk Fix:** CV preview är central för användarupplevelsen
+
 ---
 
 **Utvecklad av Claude (Anthropic) för svenska IT-studenter 🇸🇪**  
@@ -1809,3 +1836,4 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
 **🔒 Säkrat med Enterprise-Grade Security 2025-07-27**  
 **🎨 Uppgraderad med Modern Single-Page Experience 2025-07-27**  
 **🤖 Complex Debugging Successfully Resolved by Claude Opus 4 - 2025-07-27**
+**⚠️ OPUS USAGE LIMIT APPROACHING - Phase 25 Paused**

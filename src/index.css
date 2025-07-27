@@ -116,7 +116,8 @@
 
 .cv-preview-container {
   width: 210mm; /* A4 width */
-  background: white;
+  background: white !important; /* Force white background */
+  background-color: white !important;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transform: scale(0.65); /* Adjusted scale to show full width */
@@ -124,6 +125,9 @@
   transition: all 0.3s ease; /* Smooth transitions for template changes */
   margin: 0 auto; /* Center the container */
   min-height: 297mm; /* A4 height */
+  isolation: isolate; /* Prevent background bleed */
+  position: relative;
+  z-index: 1; /* Ensure it's above any background */
 }
 
 .cv-page-navigation {
