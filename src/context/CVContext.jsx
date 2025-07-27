@@ -54,7 +54,7 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         education: state.education.map((item, index) => 
-          index === action.index ? { ...item, [action.field]: action.value } : item
+          index === action.payload.index ? { ...item, [action.payload.field]: action.payload.value } : item
         )
       }
     case 'REMOVE_EDUCATION':
@@ -65,7 +65,7 @@ function cvReducer(state, action) {
       return { 
         ...state, 
         experience: state.experience.map((item, index) => 
-          index === action.index ? { ...item, [action.field]: action.value } : item
+          index === action.payload.index ? { ...item, [action.payload.field]: action.payload.value } : item
         )
       }
     case 'REMOVE_EXPERIENCE':

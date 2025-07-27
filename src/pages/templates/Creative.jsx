@@ -1,17 +1,19 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Github, Zap, Rocket, Target, Sparkles } from 'lucide-react';
 
-const CreativeTemplateInline = ({ 
-  name = "Anna Andersson",
-  title = "Senior Frontend Developer",
-  email = "anna.andersson@email.com",
-  phone = "+46 70 123 45 67",
-  location = "Stockholm, Sverige",
-  linkedin = "linkedin.com/in/anna-andersson",
-  github = "github.com/anna-andersson",
-  photoUrl = null,
-  profile = "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.",
-  experience = [
+const CreativeTemplateInline = ({ cvData }) => {
+  // Extract data from cvData prop
+  const name = cvData?.personalInfo ? `${cvData.personalInfo.firstName} ${cvData.personalInfo.lastName}` : "Anna Andersson";
+  const title = "IT-Student & Utvecklare";
+  const email = cvData?.personalInfo?.email || "anna.andersson@email.com";
+  const phone = cvData?.personalInfo?.phone || "+46 70 123 45 67";
+  const location = cvData?.personalInfo?.city || "Stockholm, Sverige";
+  const linkedin = cvData?.personalInfo?.linkedIn || "linkedin.com/in/anna-andersson";
+  const github = cvData?.personalInfo?.github || "github.com/anna-andersson";
+  const photoUrl = cvData?.personalInfo?.photoUrl || null;
+  const profile = cvData?.personalInfo?.summary || "Passionerad frontendutvecklare med 5 års erfarenhet av att bygga användarvänliga webbapplikationer. Specialiserad på React och modern JavaScript med fokus på prestanda och tillgänglighet.";
+  
+  const experience = cvData?.experience || [
     {
       title: "Senior Frontend Developer",
       company: "Tech Solutions AB",
@@ -21,31 +23,43 @@ const CreativeTemplateInline = ({
         "Implementerade en komponentbibliotek som minskade utvecklingstiden med 40%",
         "Mentorskap för juniora utvecklare och code reviews"
       ]
-    },
-    {
-      title: "Frontend Developer",
-      company: "Digital Agency",
-      date: "2019 - 2022",
-      points: [
-        "Utvecklade responsiva webbapplikationer för 20+ kunder",
-        "Optimerade prestanda vilket resulterade i 60% snabbare laddningstider",
-        "Arbetade agilt i tvärfunktionella team"
-      ]
     }
-  ],
-  education = [
+  ];
+  
+  const education = cvData?.education || [
     {
       school: "KTH Kungliga Tekniska Högskolan",
       program: "Civilingenjör Datateknik",
       year: "2014 - 2019",
       description: "Inriktning mot mjukvaruutveckling och människa-datorinteraktion"
     }
-  ],
-  skills = {
-    languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
-    tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
+  ];
+  
+  // Handle skills - support both old format (object) and new format (array)
+  let skills = { languages: [], tools: [] };
+  if (cvData?.skills) {
+    if (Array.isArray(cvData.skills)) {
+      // New format - array of skill objects
+      skills.languages = cvData.skills
+        .filter(s => s.category === 'languages')
+        .map(s => s.name)
+        .filter(Boolean);
+      skills.tools = cvData.skills
+        .filter(s => s.category === 'frameworks' || s.category === 'tools')
+        .map(s => s.name)
+        .filter(Boolean);
+    } else {
+      // Old format - keep as is
+      skills = cvData.skills;
+    }
   }
-}) => {
+  if (!skills.languages.length && !skills.tools.length) {
+    // Default values if no skills
+    skills = {
+      languages: ["JavaScript", "TypeScript", "HTML/CSS", "Python"],
+      tools: ["React", "Next.js", "Node.js", "Git", "Figma", "Jest"]
+    };
+  }
   const styles = {
     container: {
       backgroundColor: 'white',
@@ -284,6 +298,16 @@ const CreativeTemplateInline = ({
       fontSize: '14px',
       color: '#6b7280'
     },
+    educationField: {
+      fontSize: '14px',
+      color: '#6b7280',
+      fontStyle: 'italic'
+    },
+    educationDescription: {
+      fontSize: '14px',
+      color: '#4b5563',
+      marginTop: '8px'
+    },
     skillsSection: {
       marginBottom: '16px'
     },
@@ -422,17 +446,21 @@ const CreativeTemplateInline = ({
               <div style={styles.numberBadge}>{index + 1}</div>
               
               <div style={styles.experienceContent}>
-                <h4 style={styles.experienceTitle}>{job.title}</h4>
+                <h4 style={styles.experienceTitle}>{job.position || job.title}</h4>
                 <p style={styles.experienceCompany}>{job.company}</p>
-                <p style={styles.experienceDate}>{job.date}</p>
+                <p style={styles.experienceDate}>
+                  {job.startDate} - {job.current ? 'Nuvarande' : job.endDate || job.date}
+                </p>
                 
                 <ul style={styles.bulletList}>
-                  {job.points.map((point, i) => (
+                  {job.description ? (
+                    <li>{job.description}</li>
+                  ) : job.points ? job.points.map((point, i) => (
                     <li key={i} style={styles.bulletItem}>
                       <Zap style={styles.zapIcon} />
                       <span>{point}</span>
                     </li>
-                  ))}
+                  )) : null}
                 </ul>
               </div>
             </div>
@@ -452,8 +480,12 @@ const CreativeTemplateInline = ({
             {education.map((edu, index) => (
               <div key={index} style={styles.educationBox}>
                 <h4 style={styles.educationSchool}>{edu.school}</h4>
-                <p style={styles.educationProgram}>{edu.program}</p>
-                <p style={styles.educationYear}>{edu.year}</p>
+                <p style={styles.educationProgram}>{edu.degree || edu.program}</p>
+                <p style={styles.educationYear}>
+                  {edu.startDate && edu.endDate ? `${edu.startDate} - ${edu.endDate}` : edu.year}
+                </p>
+                {edu.field && <p style={styles.educationField}>{edu.field}</p>}
+                {edu.description && <p style={styles.educationDescription}>{edu.description}</p>}
               </div>
             ))}
           </div>
