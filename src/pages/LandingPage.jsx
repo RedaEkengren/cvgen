@@ -130,10 +130,6 @@ const LandingPage = () => {
   };
 
   const addSkill = () => {
-    console.log('addSkill button clicked!');
-    console.log('Current skills state:', state.skills);
-    console.log('Is skills an array?', Array.isArray(state.skills));
-    
     dispatch({
       type: 'ADD_SKILL',
       payload: {
@@ -142,8 +138,6 @@ const LandingPage = () => {
         category: 'languages'
       }
     });
-    
-    console.log('Dispatched ADD_SKILL action');
   };
 
   const removeEducation = (index) => {
@@ -1124,18 +1118,6 @@ const LandingPage = () => {
               style={{width: 'auto', marginTop: '24px'}}
             >
               + Lägg till färdighet
-            </button>
-            
-            <button 
-              className="cta-button" 
-              onClick={() => {
-                console.log('Current skills state:', state.skills);
-                console.log('Is array?', Array.isArray(state.skills));
-                alert('Check console for skills state');
-              }}
-              style={{width: 'auto', marginTop: '10px', background: 'orange'}}
-            >
-              DEBUG: Check Skills State
             </button>
           </div>
         </div>
