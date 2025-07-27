@@ -903,9 +903,8 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Startdatum</label>
                     <input
-                      type="text"
+                      type="month"
                       className="form-input"
-                      placeholder="mm/dd/yyyy"
                       value={edu.startDate}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EDUCATION',
@@ -916,10 +915,10 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Slutdatum</label>
                     <input
-                      type="text"
+                      type="month"
                       className="form-input"
-                      placeholder="mm/dd/yyyy"
                       value={edu.endDate}
+                      placeholder="Pågående"
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EDUCATION',
                         payload: { index, field: 'endDate', value: e.target.value }
@@ -1005,9 +1004,8 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Startdatum</label>
                     <input
-                      type="text"
+                      type="month"
                       className="form-input"
-                      placeholder="mm/dd/yyyy"
                       value={exp.startDate}
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EXPERIENCE',
@@ -1018,16 +1016,30 @@ const LandingPage = () => {
                   <div className="form-group">
                     <label className="form-label">Slutdatum</label>
                     <input
-                      type="text"
+                      type="month"
                       className="form-input"
-                      placeholder="mm/dd/yyyy"
                       value={exp.endDate}
                       disabled={exp.current}
+                      placeholder="Pågående"
                       onChange={(e) => dispatch({
                         type: 'UPDATE_EXPERIENCE',
                         payload: { index, field: 'endDate', value: e.target.value }
                       })}
                     />
+                  </div>
+                  <div className="form-group" style={{gridColumn: '1 / -1'}}>
+                    <label className="checkbox-label" style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '14px'}}>
+                      <input
+                        type="checkbox"
+                        checked={exp.current || false}
+                        onChange={(e) => dispatch({
+                          type: 'UPDATE_EXPERIENCE',
+                          payload: { index, field: 'current', value: e.target.checked }
+                        })}
+                        style={{cursor: 'pointer'}}
+                      />
+                      Pågående anställning
+                    </label>
                   </div>
                   <div className="form-group" style={{gridColumn: '1 / -1'}}>
                     <label className="form-label">Arbetsuppgifter</label>
