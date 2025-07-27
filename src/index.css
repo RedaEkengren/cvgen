@@ -81,7 +81,8 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px;
-  min-height: 80vh;
+  min-height: auto; /* Let content determine height */
+  align-items: flex-start; /* Align items to top */
 }
 
 .split-screen-left {
@@ -109,8 +110,8 @@
   width: 600px; /* Fixed width to prevent horizontal jumping */
   max-width: 100%;
   margin: 0 auto;
-  height: 420px; /* Fixed height to prevent jumping */
-  overflow: hidden;
+  height: auto; /* Allow height to adjust to content */
+  min-height: 600px; /* Minimum height for consistency */
 }
 
 .cv-preview-container {
@@ -118,10 +119,11 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transform: scale(0.8);
+  transform: scale(0.6); /* Smaller scale to fit more content */
   transform-origin: top center;
   transition: all 0.3s ease; /* Smooth transitions for template changes */
   margin: 0 auto; /* Center the container */
+  min-height: 297mm; /* A4 height */
 }
 
 .cv-page-navigation {
@@ -227,11 +229,11 @@
   }
   
   .cv-preview-wrapper {
-    height: 350px; /* Slightly smaller on tablets */
+    min-height: 500px; /* Adjust minimum height for tablets */
   }
   
   .cv-preview-container {
-    transform: scale(0.7);
+    transform: scale(0.5); /* Smaller scale on tablets */
   }
   
   .template-grid-compact {
@@ -245,11 +247,11 @@
   }
   
   .cv-preview-wrapper {
-    height: 300px; /* Even smaller on mobile */
+    min-height: 400px; /* Adjust minimum height for mobile */
   }
   
   .cv-preview-container {
-    transform: scale(0.6);
+    transform: scale(0.4); /* Even smaller scale on mobile */
   }
 }
 
