@@ -1,0 +1,290 @@
+{
+  "2025-07-20": {
+    "templates": {
+      "modern": {
+        "views": 23,
+        "downloads": 10,
+        "errors": 1
+      },
+      "executive": {
+        "views": 7,
+        "downloads": 2,
+        "errors": 0
+      },
+      "creative": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 1
+      },
+      "gradient": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 1
+      },
+      "minimal": {
+        "views": 5,
+        "downloads": 2,
+        "errors": 0
+      },
+      "bold": {
+        "views": 4,
+        "downloads": 1,
+        "errors": 1
+      },
+      "neon": {
+        "views": 3,
+        "downloads": 0,
+        "errors": 0
+      },
+      "retro": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 0
+      }
+    },
+    "totalViews": 44,
+    "totalDownloads": 15,
+    "uniqueSessions": 21,
+    "errors": 4
+  },
+  "2025-07-21": {
+    "templates": {
+      "modern": {
+        "views": 13,
+        "downloads": 5,
+        "errors": 1
+      },
+      "executive": {
+        "views": 11,
+        "downloads": 4,
+        "errors": 1
+      },
+      "creative": {
+        "views": 7,
+        "downloads": 2,
+        "errors": 0
+      },
+      "gradient": {
+        "views": 2,
+        "downloads": 0,
+        "errors": 1
+      },
+      "minimal": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 1
+      },
+      "bold": {
+        "views": 4,
+        "downloads": 1,
+        "errors": 0
+      },
+      "neon": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 0
+      },
+      "retro": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 0
+      }
+    },
+    "totalViews": 40,
+    "totalDownloads": 12,
+    "uniqueSessions": 21,
+    "errors": 3
+  },
+  "2025-07-22": {
+    "templates": {
+      "modern": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 1
+      },
+      "executive": {
+        "views": 19,
+        "downloads": 7,
+        "errors": 1
+      },
+      "creative": {
+        "views": 5,
+        "downloads": 1,
+        "errors": 0
+      },
+      "gradient": {
+        "views": 6,
+        "downloads": 1,
+        "errors": 1
+      },
+      "minimal": {
+        "views": 7,
+        "downloads": 3,
+        "errors": 0
+      },
+      "bold": {
+        "views": 2,
+        "downloads": 0,
+        "errors": 0
+      },
+      "neon": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 1
+      },
+      "retro": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 1
+      }
+    },
+    "totalViews": 39,
+    "totalDownloads": 12,
+    "uniqueSessions": 19,
+    "errors": 3
+  },
+  "2025-07-23": {
+    "templates": {
+      "modern": {
+        "views": 22,
+        "downloads": 9,
+        "errors": 0
+      },
+      "executive": {
+        "views": 16,
+        "downloads": 6,
+        "errors": 0
+      },
+      "creative": {
+        "views": 9,
+        "downloads": 3,
+        "errors": 1
+      },
+      "gradient": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 0
+      },
+      "minimal": {
+        "views": 3,
+        "downloads": 1,
+        "errors": 0
+      },
+      "bold": {
+        "views": 2,
+        "downloads": 0,
+        "errors": 0
+      },
+      "neon": {
+        "views": 3,
+        "downloads": 0,
+        "errors": 0
+      },
+      "retro": {
+        "views": 1,
+        "downloads": 0,
+        "errors": 1
+      }
+    },
+    "totalViews": 57,
+    "totalDownloads": 19,
+    "uniqueSessions": 21,
+    "errors": 2
+  },
+  "2025-07-24": {
+    "templates": {
+      "modern": {
+        "views": 13,
+        "downloads": 5,
+        "errors": 0
+      },
+      "executive": {
+        "views": 2,
+        "downloads": 0,
+        "errors": 0
+      },
+      "creative": {
+        "views": 11,
+        "downloads": 3,
+        "errors": 1
+      },
+      "gradient": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 0
+      },
+      "minimal": {
+        "views": 2,
+        "downloads": 1,
+        "errors": 1
+      },
+      "bold": {
+        "views": 3,
+        "downloads": 0,
+        "errors": 0
+      },
+      "neon": {
+        "views": 2,
+        "downloads": 0,
+        "errors": 1
+      },
+      "retro": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 1
+      }
+    },
+    "totalViews": 33,
+    "totalDownloads": 9,
+    "uniqueSessions": 17,
+    "errors": 0
+  },
+  "2025-07-25": {
+    "templates": {
+      "modern": {
+        "views": 25,
+        "downloads": 11,
+        "errors": 1
+      },
+      "executive": {
+        "views": 9,
+        "downloads": 3,
+        "errors": 1
+      },
+      "creative": {
+        "views": 7,
+        "downloads": 2,
+        "errors": 0
+      },
+      "gradient": {
+        "views": 9,
+        "downloads": 2,
+        "errors": 1
+      },
+      "minimal": {
+        "views": 4,
+        "downloads": 2,
+        "errors": 0
+      },
+      "bold": {
+        "views": 2,
+        "downloads": 0,
+        "errors": 0
+      },
+      "neon": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 0
+      },
+      "retro": {
+        "views": 0,
+        "downloads": 0,
+        "errors": 1
+      }
+    },
+    "totalViews": 56,
+    "totalDownloads": 20,
+    "uniqueSessions": 29,
+    "errors": 1
+  }
+}

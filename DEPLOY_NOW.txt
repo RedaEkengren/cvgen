@@ -1,0 +1,34 @@
+KOPPLA UPP TILL SERVERN OCH KÖR DESSA KOMMANDON:
+
+1. Öppna en terminal/command prompt
+
+2. Anslut till servern:
+ssh claude@178.128.143.51
+(Lösenord: 919191eeia)
+
+3. Kopiera och klistra in ALLT detta på en gång:
+
+cd /var/www/cv-generator && \
+git pull origin main && \
+npm install && \
+ANALYTICS_API_KEY=$(openssl rand -hex 32) && \
+echo "SPARA DENNA API NYCKEL: $ANALYTICS_API_KEY" && \
+cat > .env << EOF
+NODE_ENV=production
+PORT=3000
+ANALYTICS_API_KEY=$ANALYTICS_API_KEY
+CORS_ORIGIN=http://178.128.143.51,https://learningwithreda.com
+API_ONLY=false
+PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+EOF
+chmod 600 .env && \
+chmod 600 analytics-data.json 2>/dev/null || true && \
+chmod 600 daily-analytics.json 2>/dev/null || true && \
+pm2 restart cv-generator && \
+pm2 status && \
+echo "✅ DEPLOYMENT KLAR! Din API nyckel: $ANALYTICS_API_KEY"
+
+4. VIKTIGT: Spara API-nyckeln som visas!
+
+5. Testa att allt fungerar:
+curl http://localhost:3000/api/health

@@ -1,0 +1,44 @@
+# Kör dessa kommandon efter att du loggat in på droplet:
+
+# 1. Update system
+sudo apt update && sudo apt upgrade -y
+
+# 2. Install Node.js 18
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 3. Install Chromium
+sudo apt-get install -y chromium-browser
+
+# 4. Install PM2
+sudo npm install -g pm2
+
+# 5. Install git
+sudo apt-get install -y git
+
+# 6. Create app directory
+sudo mkdir -p /var/www
+sudo chown claude:claude /var/www
+
+# 7. Clone and setup
+cd /var/www
+git clone https://github.com/redapple1990/cv-generator.git
+cd cv-generator
+npm install
+
+# 8. Create .env
+cat > .env << EOF
+NODE_ENV=production
+PORT=3000
+API_ONLY=true
+CORS_ORIGIN=https://cvgenerator-app-mtnmz.ondigitalocean.app
+PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+EOF
+
+# 9. Start with PM2
+pm2 start server.js --name cv-backend
+pm2 save
+sudo pm2 startup systemd -u claude --hp /home/claude
+
+# 10. Test
+curl http://localhost:3000/api/health

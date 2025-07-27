@@ -11,7 +11,23 @@
       "Bash(npm run dev:*)",
       "Bash(npm start)",
       "Bash(mkdir:*)",
-      "Bash(ssh:*)"
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm outdated)",
+      "Bash(taskkill:*)",
+      "Bash(cat:*)",
+      "Bash(start /B npm run dev:server)",
+      "Bash(timeout 30 ssh -v claude@178.128.143.51)",
+      "Bash(ping:*)",
+      "Bash(telnet:*)",
+      "Bash(timeout:*)",
+      "Bash(nslookup:*)",
+      "Bash(nmap:*)",
+      "Bash(grep:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

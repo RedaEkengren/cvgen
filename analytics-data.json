@@ -1,0 +1,36 @@
+{
+  "templates": {
+    "modern": { "views": 85, "downloads": 42, "lastUsed": "2025-07-26T14:30:22.123Z" },
+    "executive": { "views": 65, "downloads": 28, "lastUsed": "2025-07-26T14:25:15.456Z" },
+    "creative": { "views": 38, "downloads": 13, "lastUsed": "2025-07-26T14:20:08.789Z" },
+    "gradient": { "views": 27, "downloads": 8, "lastUsed": "2025-07-26T14:15:12.345Z" },
+    "minimal": { "views": 20, "downloads": 10, "lastUsed": "2025-07-26T14:10:33.678Z" },
+    "bold": { "views": 13, "downloads": 3, "lastUsed": "2025-07-26T14:05:44.901Z" },
+    "neon": { "views": 11, "downloads": 2, "lastUsed": "2025-07-26T14:00:55.234Z" },
+    "retro": { "views": 8, "downloads": 2, "lastUsed": "2025-07-26T13:55:16.567Z" }
+  },
+  "summary": {
+    "totalViews": 267,
+    "totalDownloads": 108,
+    "startDate": "2025-07-20T00:00:00.000Z",
+    "lastUpdate": "2025-07-26T14:30:22.123Z"
+  },
+  "userSessions": [
+    {
+      "id": "session_1732635022123_abc123",
+      "startTime": "2025-07-26T14:30:22.123Z",
+      "lastActivity": "2025-07-26T14:30:22.123Z",
+      "templatesViewed": ["modern", "executive"],
+      "pdfsGenerated": [
+        {
+          "template": "modern",
+          "timestamp": "2025-07-26T14:30:22.123Z"
+        }
+      ]
+    }
+  ],
+  "errorTracking": {
+    "pdfGenerationFailures": 12,
+    "templateLoadErrors": 2
+  }
+}

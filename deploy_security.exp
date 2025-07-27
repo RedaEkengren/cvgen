@@ -1,0 +1,73 @@
+#\!/usr/bin/expect -f
+set timeout 60
+spawn ssh claude@178.128.143.51
+expect {
+    "password:" {
+        send "919191eeia\r"
+        expect "$ "
+    }
+    timeout {
+        puts "Connection timeout"
+        exit 1
+    }
+}
+
+# Navigate to project
+send "cd /var/www/cv-generator\r"
+expect "$ "
+
+# Check current status
+send "pwd && git status\r"
+expect "$ "
+
+# Pull latest changes
+send "git pull origin main\r"
+expect "$ "
+
+# Install dependencies
+send "npm install\r"
+expect "$ "
+
+# Generate API key and create .env
+send "ANALYTICS_API_KEY=\5541f2c7e69fa97223eb354ba6648495fe464ca3509eea9acc7e23c950a06e85\r"
+expect "$ "
+send "echo \"Generated API Key: \\"\r"
+expect "$ "
+
+# Create .env file
+send "cat > .env << 'EOF'\r"
+send "NODE_ENV=production\r"
+send "PORT=3000\r"
+send "ANALYTICS_API_KEY=\\r"
+send "CORS_ORIGIN=http://178.128.143.51,https://learningwithreda.com\r"
+send "API_ONLY=false\r"
+send "PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable\r"
+send "EOF\r"
+expect "$ "
+
+# Set permissions
+send "chmod 600 .env\r"
+expect "$ "
+send "chmod 600 analytics-data.json 2>/dev/null || true\r"
+expect "$ "
+send "chmod 600 daily-analytics.json 2>/dev/null || true\r"
+expect "$ "
+
+# Restart PM2
+send "pm2 restart cv-generator\r"
+expect "$ "
+
+# Check status
+send "pm2 status\r"
+expect "$ "
+
+# Test health endpoint
+send "curl -s http://localhost:3000/api/health | jq .\r"
+expect "$ "
+
+# Show the API key again
+send "echo \"IMPORTANT - Save this API key: \\"\r"
+expect "$ "
+
+send "exit\r"
+expect eof

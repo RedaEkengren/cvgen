@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
 import DOMPurify from 'dompurify';
 import rateLimit from 'express-rate-limit';
+import CVAnalytics from './analytics.js';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +15,16 @@ const __dirname = path.dirname(__filename);
 // Setup DOMPurify for server-side HTML sanitization
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
+
+// Initialize Analytics
+const analytics = new CVAnalytics();
+
+// Valid template names
+const VALID_TEMPLATES = ['modern', 'executive', 'creative', 'gradient', 'minimal', 'neon', 'retro'];
+
+// Report cache
+const reportCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 // Rate limiting configuration
 const pdfGenerationLimiter = rateLimit({
@@ -36,6 +48,60 @@ const generalLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+// Analytics-specific rate limiters
+const analyticsWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // Limit analytics writes to prevent manipulation
+  message: {
+    error: 'Too many analytics write requests, please try again later.',
+    retryAfter: 15 * 60
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const analyticsReadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // Limit analytics reads
+  message: {
+    error: 'Too many analytics read requests, please try again later.',
+    retryAfter: 15 * 60
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Analytics authentication middleware
+const analyticsAuth = (req, res, next) => {
+  const apiKey = req.headers['x-analytics-api-key'];
+  const validApiKey = process.env.ANALYTICS_API_KEY || 'dev-analytics-key-2025';
+  
+  // For development, allow access without key
+  if (process.env.NODE_ENV !== 'production' && !process.env.ANALYTICS_API_KEY) {
+    return next();
+  }
+  
+  if (!apiKey || apiKey !== validApiKey) {
+    // Log unauthorized access attempt
+    console.warn(`Unauthorized analytics access attempt from IP: ${req.ip}`);
+    return res.status(401).json({ error: 'Unauthorized - Invalid API key' });
+  }
+  
+  next();
+};
+
+// Analytics access logging
+const logAnalyticsAccess = (action, endpoint) => {
+  return (req, res, next) => {
+    const timestamp = new Date().toISOString();
+    const ip = req.ip || req.connection.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+    
+    console.log(`[Analytics Access] ${timestamp} | ${action} | ${endpoint} | IP: ${ip} | UA: ${userAgent}`);
+    next();
+  };
+};
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -63,7 +129,7 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
   let browser = null;
   
   try {
-    const { htmlContent, filename = 'CV.pdf' } = req.body;
+    const { htmlContent, filename = 'CV.pdf', templateName = 'unknown', sessionId = null } = req.body;
     
     if (!htmlContent) {
       console.error('No HTML content provided');
@@ -259,16 +325,24 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       displayHeaderFooter: false
     });
 
+    // Track successful PDF generation
+    await analytics.trackPDFGeneration(templateName, sessionId, true);
+
     // Set response headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Length', pdfBuffer.length);
     
-    // Send PDF
-    res.send(pdfBuffer);
+    // Send PDF as binary - CRITICAL: Must use res.end with binary encoding
+    res.end(pdfBuffer, 'binary');
 
   } catch (error) {
     console.error('PDF generation error:', error);
+    
+    // Track failed PDF generation
+    const { templateName = 'unknown', sessionId = null } = req.body;
+    await analytics.trackPDFGeneration(templateName, sessionId, false);
+    
     res.status(500).json({ 
       error: 'Failed to generate PDF',
       details: error.message 
@@ -310,6 +384,125 @@ app.get('/api/health', async (req, res) => {
     puppeteerPath: process.env.PUPPETEER_EXECUTABLE_PATH || 'default',
     chromiumFound: chromiumPaths
   });
+});
+
+// Analytics endpoints with security enhancements
+app.post('/api/analytics/track-view', analyticsWriteLimiter, logAnalyticsAccess('WRITE', 'track-view'), async (req, res) => {
+  try {
+    const { templateName, sessionId } = req.body;
+    
+    // Validate template name
+    if (!templateName || !VALID_TEMPLATES.includes(templateName)) {
+      return res.status(400).json({ error: 'Invalid template name' });
+    }
+    
+    // Validate and sanitize session ID
+    if (sessionId) {
+      // Session ID should be alphanumeric with hyphens, max 50 chars
+      const sessionIdRegex = /^[a-zA-Z0-9-]{1,50}$/;
+      if (!sessionIdRegex.test(sessionId)) {
+        return res.status(400).json({ error: 'Invalid session ID format' });
+      }
+    }
+    
+    await analytics.trackTemplateView(templateName, sessionId);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Analytics tracking error:', error);
+    res.status(500).json({ error: 'Failed to track view' });
+  }
+});
+
+app.get('/api/analytics/popularity', analyticsAuth, analyticsReadLimiter, logAnalyticsAccess('READ', 'popularity'), async (req, res) => {
+  try {
+    const ranking = await analytics.getPopularityRanking();
+    res.json(ranking);
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to get popularity data' });
+  }
+});
+
+app.get('/api/analytics/report', analyticsAuth, analyticsReadLimiter, logAnalyticsAccess('READ', 'report'), async (req, res) => {
+  try {
+    // Check cache first
+    const cacheKey = 'analytics-report';
+    const cached = reportCache.get(cacheKey);
+    
+    if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+      res.json(cached.data);
+      return;
+    }
+    
+    // Generate new report
+    const report = await analytics.generateReport();
+    
+    // Cache the report
+    reportCache.set(cacheKey, {
+      data: report,
+      timestamp: Date.now()
+    });
+    
+    res.json(report);
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to generate report' });
+  }
+});
+
+app.get('/api/analytics/daily/:date?', analyticsAuth, analyticsReadLimiter, logAnalyticsAccess('READ', 'daily'), async (req, res) => {
+  try {
+    const { date } = req.params;
+    
+    // Validate date format to prevent path traversal
+    if (date) {
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!dateRegex.test(date)) {
+        return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
+      }
+      
+      // Additional validation: ensure date is not in the future
+      const requestedDate = new Date(date);
+      const today = new Date();
+      today.setHours(23, 59, 59, 999);
+      
+      if (requestedDate > today) {
+        return res.status(400).json({ error: 'Date cannot be in the future' });
+      }
+    }
+    
+    const report = await analytics.getDailyReport(date);
+    res.json(report);
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to get daily report' });
+  }
+});
+
+app.get('/api/analytics/trends', analyticsAuth, analyticsReadLimiter, logAnalyticsAccess('READ', 'trends'), async (req, res) => {
+  try {
+    // Check cache
+    const cacheKey = 'analytics-trends';
+    const cached = reportCache.get(cacheKey);
+    
+    if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+      res.json(cached.data);
+      return;
+    }
+    
+    const trends = await analytics.getWeeklyTrends();
+    
+    // Cache the trends
+    reportCache.set(cacheKey, {
+      data: trends,
+      timestamp: Date.now()
+    });
+    
+    res.json(trends);
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to get trends' });
+  }
 });
 
 // Serve React app for all other routes (only if not in API-only mode)
