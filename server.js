@@ -423,6 +423,14 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Length', pdfBuffer.length);
     
+    // Save to cache before sending (1 hour TTL)
+    pdfCache.set(cacheKey, pdfBuffer);
+    console.log('💾 PDF cached, key:', cacheKey);
+    setTimeout(() => {
+      pdfCache.delete(cacheKey);
+      console.log('🗑️ PDF cache expired, key:', cacheKey);
+    }, 3600000); // 1 hour
+    
     // Send PDF as binary - CRITICAL: Must use res.end with binary encoding
     res.end(pdfBuffer, 'binary');
 
