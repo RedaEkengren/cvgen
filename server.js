@@ -19,6 +19,13 @@ const purify = DOMPurify(window);
 // Initialize Analytics
 const analytics = new CVAnalytics();
 
+// Simple PDF Cache
+const pdfCache = new Map();
+
+function generateCacheKey(templateName, htmlContent) {
+  return crypto.createHash('md5').update(templateName + htmlContent).digest('hex');
+}
+
 // Valid template names
 const VALID_TEMPLATES = ['modern', 'executive', 'creative', 'gradient', 'minimal', 'neon', 'retro'];
 
@@ -185,6 +192,15 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'iframe', 'frame', 'frameset'],
       FORBID_ATTR: ['onclick', 'onload', 'onerror', 'onmouseover', 'onfocus', 'onblur', 'onchange', 'onsubmit']
     });
+
+    // Check cache first
+    const cacheKey = generateCacheKey(templateName, sanitizedHtml);
+    if (pdfCache.has(cacheKey)) {
+      console.log('🧠 Using cached PDF');
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="cv.pdf"');
+      return res.end(pdfCache.get(cacheKey), 'binary');
+    }
     
     console.log('HTML sanitized, original length:', htmlContent.length, 'sanitized length:', sanitizedHtml.length);
 
@@ -344,61 +360,25 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
           }
         }
         
-        /* Enhanced page break control */
+        /* Prevent page breaks in important sections */
         .section {
           break-inside: avoid;
           page-break-inside: avoid;
-          -webkit-column-break-inside: avoid;
-          margin-bottom: 1.5rem;
         }
         
-        /* Keep sections together */
-        .experience-item,
-        .education-item,
-        .project-item,
-        .skills-section {
-          break-inside: avoid;
-          page-break-inside: avoid;
-          -webkit-column-break-inside: avoid;
-          margin-bottom: 1rem;
-        }
-        
-        /* Ensure headers stay with content */
-        h1, h2, h3, h4, h5, h6 {
+        /* Ensure proper spacing */
+        h1, h2, h3, h4 {
           break-after: avoid;
           page-break-after: avoid;
-          margin-bottom: 0.5rem;
         }
         
-        /* Keep first 3 lines of paragraphs together */
-        p {
-          orphans: 3;
-          widows: 3;
-        }
-        
-        /* List formatting with better break control */
+        /* List formatting */
         ul, ol {
           margin: 0.5rem 0;
-          break-inside: avoid;
-          page-break-inside: avoid;
         }
         
         li {
           margin-bottom: 0.25rem;
-          break-inside: avoid;
-          page-break-inside: avoid;
-        }
-        
-        /* Ensure contact info stays together */
-        .contact-info {
-          break-inside: avoid;
-          page-break-inside: avoid;
-        }
-        
-        /* Profile/summary section */
-        .profile-section {
-          break-inside: avoid;
-          page-break-inside: avoid;
         }
       </style>
     </head>
@@ -414,20 +394,23 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       waitUntil: ['networkidle0', 'domcontentloaded']
     });
 
-    // Generate PDF with high-quality settings and better page break handling
+    // Generate PDF with high-quality settings
     const pdfBuffer = await page.pdf({
       format: 'A4',
       margin: {
-        top: '20mm',
+        top: '15mm',
         right: '15mm', 
-        bottom: '20mm',
+        bottom: '15mm',
         left: '15mm'
       },
       printBackground: true,
-      preferCSSPageSize: true,  // Changed to true for better CSS page break support
-      displayHeaderFooter: false,
-      scale: 0.95  // Slightly reduce scale to prevent content overflow
+      preferCSSPageSize: false,
+      displayHeaderFooter: false
     });
+
+    // Cache the generated PDF
+    pdfCache.set(cacheKey, pdfBuffer);
+    console.log('💾 PDF cached, key:', cacheKey);
     
     // Step 7: Close page immediately to free memory
     await page.close();

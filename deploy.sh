@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "Deploying CV Generator updates to production..."
+echo "Please run this command manually:"
+echo ""
+echo "ssh claude@178.128.143.51 'cd /var/www/cv-generator && git pull && pm2 restart cv-backend'"
+echo ""
+echo "Password: 919191eeia"
+echo ""
+echo "Changes deployed:"
+echo "- Enhanced PDF page break CSS rules"
+echo "- Updated Puppeteer settings for better page handling"
+echo "- Added CSS classes to ModernTemplate"
