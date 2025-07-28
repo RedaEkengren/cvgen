@@ -8,6 +8,7 @@ import DOMPurify from 'dompurify';
 import rateLimit from 'express-rate-limit';
 import CVAnalytics from './analytics.js';
 import crypto from 'crypto';
+import Bull from 'bull';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,31 @@ const purify = DOMPurify(window);
 
 // Initialize Analytics
 const analytics = new CVAnalytics();
+
+// PDF Queue System (optional - will work without Redis)
+let pdfQueue = null;
+try {
+  pdfQueue = new Bull('pdf generation', {
+    redis: {
+      port: 6379,
+      host: '127.0.0.1'
+    }
+  });
+  console.log('✅ Bull queue initialized with Redis');
+} catch (error) {
+  console.warn('⚠️ Bull queue failed to initialize (Redis not running?). PDF generation will work without queue.');
+}
+
+// Queue event listeners
+if (pdfQueue) {
+  pdfQueue.on('completed', (job, result) => {
+    console.log(`✅ PDF job ${job.id} completed`);
+  });
+
+  pdfQueue.on('failed', (job, err) => {
+    console.error(`❌ PDF job ${job.id} failed:`, err.message);
+  });
+}
 
 // Simple PDF Cache
 const pdfCache = new Map();
@@ -36,7 +62,7 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 // Rate limiting configuration - ENHANCED for 2GB server protection
 const pdfGenerationLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // REDUCED from 30 to 10 - protects 2GB server from overload
+  max: 15, // Increased from 10 to 15 - allows more realistic usage with cache
   message: {
     error: 'För många PDF-förfrågningar. Vänligen vänta 15 minuter innan du försöker igen.',
     retryAfter: 15 * 60 // 15 minutes in seconds
@@ -152,7 +178,6 @@ if (!process.env.API_ONLY) {
 // PDF generation endpoint with specific rate limiting
 app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
   console.log('PDF generation requested');
-  let browser = null;
   
   try {
     const { htmlContent, filename = 'CV.pdf', templateName = 'unknown', sessionId = null } = req.body;
@@ -203,7 +228,59 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
     }
     
     console.log('HTML sanitized, original length:', htmlContent.length, 'sanitized length:', sanitizedHtml.length);
+    
+    // If queue is available, use it. Otherwise, generate directly
+    if (pdfQueue) {
+      // Add job to queue
+      const job = await pdfQueue.add({
+        sanitizedHtml,
+        templateName,
+        sessionId,
+        cacheKey
+      });
+      
+      console.log(`📋 PDF job ${job.id} added to queue`);
+      
+      // Wait for job completion
+      const result = await job.finished();
+      
+      // Send the PDF
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-Length', result.pdfBuffer.length);
+      res.end(result.pdfBuffer, 'binary');
+    } else {
+      // Direct generation without queue (fallback)
+      console.log('⚠️ Generating PDF without queue (Redis not available)');
+      res.status(503).json({ 
+        error: 'PDF generation temporarily unavailable',
+        message: 'Queue system not initialized'
+      });
+    }
+    
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    
+    // Track failed PDF generation
+    const { templateName = 'unknown', sessionId = null } = req.body;
+    await analytics.trackPDFGeneration(templateName, sessionId, false);
+    
+    res.status(500).json({ 
+      error: 'Failed to generate PDF',
+      message: error.message 
+    });
+  }
+});
 
+// PDF Queue Processor
+if (pdfQueue) {
+  pdfQueue.process(2, async (job) => {
+  const { sanitizedHtml, templateName, sessionId, cacheKey } = job.data;
+  let browser = null;
+  
+  try {
+    console.log(`🔧 Processing PDF job ${job.id} for template: ${templateName}`);
+    
     // Launch Puppeteer with DigitalOcean-compatible options
     const isProduction = process.env.NODE_ENV === 'production';
     const puppeteerOptions = {
@@ -418,12 +495,7 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
     // Track successful PDF generation
     await analytics.trackPDFGeneration(templateName, sessionId, true);
 
-    // Set response headers for PDF download
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-Length', pdfBuffer.length);
-    
-    // Save to cache before sending (1 hour TTL)
+    // Save to cache (1 hour TTL)
     pdfCache.set(cacheKey, pdfBuffer);
     console.log('💾 PDF cached, key:', cacheKey);
     setTimeout(() => {
@@ -431,20 +503,16 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       console.log('🗑️ PDF cache expired, key:', cacheKey);
     }, 3600000); // 1 hour
     
-    // Send PDF as binary - CRITICAL: Must use res.end with binary encoding
-    res.end(pdfBuffer, 'binary');
+    // Return the PDF buffer for the queue
+    return { pdfBuffer };
 
   } catch (error) {
     console.error('PDF generation error:', error);
     
     // Track failed PDF generation
-    const { templateName = 'unknown', sessionId = null } = req.body;
     await analytics.trackPDFGeneration(templateName, sessionId, false);
     
-    res.status(500).json({ 
-      error: 'Failed to generate PDF',
-      details: error.message 
-    });
+    throw error;
   } finally {
     if (browser) {
       await browser.close();
@@ -455,7 +523,8 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       global.gc();
     }
   }
-});
+  });
+}
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
