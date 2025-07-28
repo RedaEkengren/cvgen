@@ -10,6 +10,50 @@
 **🔒 Security:** UFW Firewall + Fail2ban + Enhanced Analytics Security  
 **🔑 Analytics API Key:** `763746102b88b655d6d812ccb9453db0f429de3c78bd1fced99508fa0f5cfe6f`
 
+## 🔐 SSH ACCESS INSTRUCTIONS (CRITICAL - READ BEFORE CONNECTING)
+
+### ⚠️ IMPORTANT: Avoid IP Ban from Fail2ban
+**ALWAYS use this exact SSH command format to avoid triggering fail2ban:**
+
+```bash
+ssh claude@178.128.143.51 'your-command-here'
+```
+
+**Credentials:**
+- User: `claude`
+- Password: `919191eeia`
+- Root user: `root`
+- Root password: `89911823RKss`
+
+### ✅ CORRECT SSH Usage:
+```bash
+# Good - Single command execution
+ssh claude@178.128.143.51 'cd /var/www/cv-generator && pm2 restart cv-backend'
+
+# Good - Check PM2 status
+ssh claude@178.128.143.51 'pm2 list'
+
+# Good - View logs
+ssh claude@178.128.143.51 'cd /var/www/cv-generator && pm2 logs cv-backend --lines 50'
+```
+
+### ❌ AVOID These Mistakes:
+- Do NOT make multiple rapid SSH connection attempts
+- Do NOT use interactive SSH sessions from automated tools
+- Do NOT attempt SSH key verification multiple times
+- Do NOT change git remote URLs or pull from GitHub unless absolutely necessary
+
+### 🚨 If IP Gets Banned:
+1. Use root account to unban: `ssh root@178.128.143.51 'fail2ban-client set sshd unbanip YOUR_IP'`
+2. Wait 10 minutes before reconnecting
+3. Use single-command SSH format only
+
+### 📝 Server File Locations:
+- Application: `/var/www/cv-generator/`
+- Server file: `/var/www/cv-generator/server.js`
+- Frontend build: `/var/www/cv-generator/dist/`
+- PM2 logs: `~/.pm2/logs/`
+
 ### Deployment Summary
 - ✅ **Frontend**: React built and served via Nginx
 - ✅ **Backend**: Express + Puppeteer running with PM2
