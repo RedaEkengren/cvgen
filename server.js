@@ -196,7 +196,22 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
-        '--disable-gpu'
+        '--disable-gpu',
+        // Step 7 Memory optimizations
+        '--disable-extensions',
+        '--disable-background-networking',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-breakpad',
+        '--disable-component-extensions-with-background-pages',
+        '--disable-features=TranslateUI',
+        '--disable-ipc-flooding-protection',
+        '--disable-renderer-backgrounding',
+        '--metrics-recording-only',
+        '--no-default-browser-check',
+        '--no-pings',
+        '--memory-pressure-off',
+        '--max_old_space_size=512'  // Limit V8 memory
       ]
     };
     
@@ -262,8 +277,25 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
 
     const page = await browser.newPage();
     
-    // Set viewport for consistent rendering
-    await page.setViewport({ width: 1200, height: 1600 });
+    // Step 7: Memory optimization - reduce viewport size
+    await page.setViewport({ 
+      width: 800,  // Reduced from 1200
+      height: 1130, // A4 proportions
+      deviceScaleFactor: 1 // Reduced from default 2
+    });
+    
+    // Step 7: Disable unnecessary features
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      // Block images, fonts from external sources
+      if (req.resourceType() === 'image' || req.resourceType() === 'font') {
+        if (!req.url().includes('fonts.googleapis.com')) {
+          req.abort();
+          return;
+        }
+      }
+      req.continue();
+    });
     
     // Create complete HTML document with embedded CSS
     const fullHtml = `
@@ -312,25 +344,61 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
           }
         }
         
-        /* Prevent page breaks in important sections */
+        /* Enhanced page break control */
         .section {
+          break-inside: avoid;
+          page-break-inside: avoid;
+          -webkit-column-break-inside: avoid;
+          margin-bottom: 1.5rem;
+        }
+        
+        /* Keep sections together */
+        .experience-item,
+        .education-item,
+        .project-item,
+        .skills-section {
+          break-inside: avoid;
+          page-break-inside: avoid;
+          -webkit-column-break-inside: avoid;
+          margin-bottom: 1rem;
+        }
+        
+        /* Ensure headers stay with content */
+        h1, h2, h3, h4, h5, h6 {
+          break-after: avoid;
+          page-break-after: avoid;
+          margin-bottom: 0.5rem;
+        }
+        
+        /* Keep first 3 lines of paragraphs together */
+        p {
+          orphans: 3;
+          widows: 3;
+        }
+        
+        /* List formatting with better break control */
+        ul, ol {
+          margin: 0.5rem 0;
           break-inside: avoid;
           page-break-inside: avoid;
         }
         
-        /* Ensure proper spacing */
-        h1, h2, h3, h4 {
-          break-after: avoid;
-          page-break-after: avoid;
-        }
-        
-        /* List formatting */
-        ul, ol {
-          margin: 0.5rem 0;
-        }
-        
         li {
           margin-bottom: 0.25rem;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        
+        /* Ensure contact info stays together */
+        .contact-info {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        
+        /* Profile/summary section */
+        .profile-section {
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
       </style>
     </head>
@@ -346,19 +414,23 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       waitUntil: ['networkidle0', 'domcontentloaded']
     });
 
-    // Generate PDF with high-quality settings
+    // Generate PDF with high-quality settings and better page break handling
     const pdfBuffer = await page.pdf({
       format: 'A4',
       margin: {
-        top: '15mm',
+        top: '20mm',
         right: '15mm', 
-        bottom: '15mm',
+        bottom: '20mm',
         left: '15mm'
       },
       printBackground: true,
-      preferCSSPageSize: false,
-      displayHeaderFooter: false
+      preferCSSPageSize: true,  // Changed to true for better CSS page break support
+      displayHeaderFooter: false,
+      scale: 0.95  // Slightly reduce scale to prevent content overflow
     });
+    
+    // Step 7: Close page immediately to free memory
+    await page.close();
 
     // Track successful PDF generation
     await analytics.trackPDFGeneration(templateName, sessionId, true);
@@ -385,6 +457,11 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
   } finally {
     if (browser) {
       await browser.close();
+    }
+    
+    // Step 7: Force garbage collection if available
+    if (global.gc) {
+      global.gc();
     }
   }
 });

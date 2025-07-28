@@ -341,7 +341,7 @@ const ModernTemplate = ({ cvData }) => {
       </header>
 
       {/* Executive Summary */}
-      <section style={styles.profileSection}>
+      <section style={styles.profileSection} className="section profile-section">
         <h3 style={styles.sectionTitle}>Executive Summary</h3>
         <p style={styles.profileText}>
           {profile}
@@ -349,14 +349,14 @@ const ModernTemplate = ({ cvData }) => {
       </section>
 
       {/* Professional Experience */}
-      <section style={styles.experienceSection}>
+      <section style={styles.experienceSection} className="section experience-section">
         <h3 style={{ ...styles.sectionTitle, marginBottom: '32px' }}>
           Professional Experience
         </h3>
         
         <div>
           {experience.map((job, index) => (
-            <div key={index} style={styles.experienceItem}>
+            <div key={index} style={styles.experienceItem} className="experience-item">
               <div style={styles.experienceGrid}>
                 <div style={styles.dateColumn}>
                   <p style={styles.date}>{job.date}</p>
@@ -388,11 +388,11 @@ const ModernTemplate = ({ cvData }) => {
       {/* Education & Skills Grid */}
       <div style={styles.bottomGrid}>
         {/* Education */}
-        <section>
+        <section className="section education-section">
           <h3 style={styles.sectionTitle}>Education</h3>
           <div>
             {education.map((edu, index) => (
-              <div key={index} style={styles.educationItem}>
+              <div key={index} style={styles.educationItem} className="education-item">
                 <h4 style={styles.educationSchool}>{edu.school}</h4>
                 <p style={styles.educationProgram}>{edu.program}</p>
                 <p style={styles.educationYear}>{edu.year}</p>
@@ -405,7 +405,7 @@ const ModernTemplate = ({ cvData }) => {
         </section>
 
         {/* Skills */}
-        <section>
+        <section className="section skills-section">
           <h3 style={styles.sectionTitle}>Technical Expertise</h3>
           
           <div style={styles.skillsSection}>
