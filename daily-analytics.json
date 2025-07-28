@@ -286,5 +286,56 @@
     "totalDownloads": 20,
     "uniqueSessions": 29,
     "errors": 1
+  },
+  "2025-07-27": {
+    "templates": {
+      "creative": {
+        "views": 0,
+        "downloads": 9,
+        "errors": 0
+      },
+      "retro": {
+        "views": 0,
+        "downloads": 3,
+        "errors": 0
+      }
+    },
+    "totalViews": 0,
+    "totalDownloads": 12,
+    "uniqueSessions": 0,
+    "errors": 0
+  },
+  "2025-07-28": {
+    "templates": {
+      "gradient": {
+        "views": 0,
+        "downloads": 2,
+        "errors": 0
+      },
+      "modern": {
+        "views": 0,
+        "downloads": 1,
+        "errors": 1
+      },
+      "retro": {
+        "views": 0,
+        "downloads": 2,
+        "errors": 2
+      },
+      "neon": {
+        "views": 0,
+        "downloads": 1,
+        "errors": 2
+      },
+      "creative": {
+        "views": 0,
+        "downloads": 1,
+        "errors": 4
+      }
+    },
+    "totalViews": 0,
+    "totalDownloads": 7,
+    "uniqueSessions": 0,
+    "errors": 9
   }
 }

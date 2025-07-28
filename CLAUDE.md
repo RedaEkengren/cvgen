@@ -1923,3 +1923,40 @@ module.exports = {
 **🚀 Thumbnail Template Selector Implemented - Dark Overlay Problem SOLVED! - 2025-07-27**
 **📊 Performance Roadmap Extended to 8 Steps - Code Optimization + Stress Testing Added - 2025-07-28**
 **⚡ Step 6 Rate Limiting Deployed - Production Protected! - 2025-07-28**
+
+## 🧹 Phase 29: Server Cleanup & Critical Puppeteer Fix (✅ Completed - 2025-07-28)
+- **Task:** Städa servern från onödiga filer och fixa PDF-generering efter cleanup
+- **Actions:**
+
+  **29.1 Server Cleanup (1.7GB borttaget):**
+  - ✅ Test PDF-filer och JS-filer (1.2MB)
+  - ✅ Server.js backups (30KB)
+  - ✅ Puppeteer cache (611MB) - **DETTA ORSAKADE PROBLEM!**
+  - ✅ Assets folder (2.8MB gamla build-filer)
+  - ✅ temporaryfolderlandingpage (2.2MB screenshots)
+  - ✅ Gammal backup 2025-07-27-1521 (1.1GB)
+
+  **29.2 Critical Puppeteer Error:**
+  - **Problem:** PDF-generering slutade fungera efter att .cache/puppeteer raderats
+  - **Fel:** "Could not find Chrome (ver. 138.0.7204.168)"
+  - **Orsak:** Puppeteer letar efter Chrome i .cache trots PUPPETEER_EXECUTABLE_PATH
+  - **Lösning:** `npx puppeteer browsers install chrome`
+  - **Lärdomar:** ALDRIG radera .cache/puppeteer utan att först verifiera alternativ Chrome-path
+
+  **29.3 PM2 & IPv6 Fix:**
+  - Skapade ecosystem.config.cjs med alla environment variabler
+  - Fixade PM2 restart loop (hade 2671 restarts)
+  - IPv6 rate limiting fortfarande ett problem som behöver permanent fix
+
+  **29.4 Special Working Backup:**
+  - Skapade WORKING-BACKUP-20250728-074932-after-cleanup.tar.gz (163MB)
+  - Inkluderar allt som fungerar inklusive Chrome cache
+  - Kritisk backup efter 3 timmars felsökning
+
+**🚨 KRITISKA LÄRDOMAR:**
+1. **ALLTID verifiera före radering** - speciellt .cache/puppeteer
+2. **Testa PDF-generering direkt efter cleanup**
+3. **Ha en "golden master" backup som ALDRIG rörs**
+4. **Synka server → lokal → GitHub OMEDELBART när allt fungerar**
+
+**⏰ TIDSSPILLAN:** 3 TIMMAR FÖRLORADE på grund av dålig planering och brist på verifiering före radering!
