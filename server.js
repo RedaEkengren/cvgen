@@ -38,17 +38,18 @@ const pdfGenerationLimiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   // Additional options for better protection
   skipSuccessfulRequests: false, // Count all requests, not just failed ones
-  keyGenerator: (req, res) => {
-    // Use built-in IP detection that handles IPv6 properly
-    const ip = req.ip;
+  keyGenerator: (req) => {
+    // Get real IP address (trust proxy must be enabled)
+    // req.ip will now show real user IP, not proxy IP
+    const realIP = req.ip || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'] || 'no-ua';
     
     // Log for debugging
     if (process.env.NODE_ENV !== 'production') {
-      console.log(`Rate limit key - IP: ${ip}, UA: ${userAgent.substring(0, 50)}...`);
+      console.log(`Rate limit key - IP: ${realIP}, UA: ${userAgent.substring(0, 50)}...`);
     }
     
-    return `${ip}:${userAgent}`;
+    return realIP + ':' + userAgent;
   }
 });
 
