@@ -1802,6 +1802,105 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
 4. **User Experience:** Små förbättringar (date picker, checkbox) gör stor skillnad
 5. **Template Architecture:** Centraliserad data (cvData) är bättre än prop drilling
 
+## 🔧 Phase 25: Dark Overlay Problem & Thumbnail Solution (✅ Completed - 2025-07-27)
+- **Task:** Lösa problemet med mörk overlay som täckte CV-mallarna
+- **Problem:** Dark theme från LandingPage blödde igenom till CV preview
+- **Failed Attempts:**
+  1. CSS force white background med !important
+  2. Isolation och z-index
+  3. Senior programmer's omfattande CSS-ändringar
+  4. White wrapper background med padding
+- **Working Solution:** Implementerade thumbnail-baserad mallväljare
+  - Tog bort stor preview helt
+  - Grid med mini HTML-renderade CV-thumbnails (140x180px)
+  - Scale 0.19 med -10px top/left offset
+  - Hidden CV-container för PDF-generering
+- **Result:** Dark overlay problem helt löst, bättre UX
+
+## 🎨 Phase 26: UI Polish & Button Centering (✅ Completed - 2025-07-27)
+- **Task:** Ta bort emojis och centrera alla "Lägg till"-knappar
+- **Actions:**
+  1. **Emoji Removal:** Tog bort 📥 från PDF-nedladdningsknappen
+  2. **Button Centering:** 
+     - Problem: Skills och Projects-knappar låg inuti form-grid
+     - Lösning: Flyttade knapparna utanför form-grid div
+     - Alla knappar nu wrappade i flex container med justify-center
+- **Result:** Ren, professionell look med perfekt centrerade knappar
+
+## 💡 Phase 27: Performance Optimization Roadmap (📋 MVP Ready)
+- **User Decision:** Implementera alla optimeringar UTOM pdfkit (behåll Puppeteer för kvalitet)
+- **Server Specs:** 2GB RAM räcker för MVP (max 2 samtidiga PDFs)
+
+### **🚀 8-Step Implementation Roadmap (Extended):**
+
+**Step 1: PDF Queue System (Bull + Redis)**
+```javascript
+const Queue = require('bull');
+const pdfQueue = new Queue('pdf generation', {
+  redis: { port: 6379, host: '127.0.0.1' }
+});
+pdfQueue.process(2, async (job) => {
+  const { htmlContent, templateName } = job.data;
+  return await generatePDF(htmlContent);
+});
+```
+
+**Step 2: Puppeteer Browser Pool**
+```javascript
+const browserPool = [];
+const MAX_BROWSERS = 2;
+async function getBrowser() {
+  if (browserPool.length > 0) return browserPool.pop();
+  return await puppeteer.launch({...});
+}
+```
+
+**Step 3: Loading State & Progress**
+- Frontend visar "Genererar PDF... 45%"
+- WebSocket eller polling för real-time updates
+- Användarvänlig feedback under generering
+
+**Step 4: PDF Caching**
+- Cache baserad på template + data hash
+- 1 timmes TTL för temporär lagring
+- Minska belastning för identiska requests
+
+**Step 5: PM2 Cluster Optimization**
+```javascript
+// ecosystem.config.js
+module.exports = {
+  apps: [{
+    name: 'cv-backend',
+    instances: 2,
+    exec_mode: 'cluster',
+    max_memory_restart: '500M'
+  }]
+}
+```
+
+**Step 6: Enhanced Rate Limiting**
+- Sänk PDF limit: 30 → 10 requests/15min
+- Skyddar servern från överbelastning
+
+**Step 7: Code Optimization (NEW)**
+- HTML optimization innan Puppeteer (ta bort scripts, inline CSS)
+- Minska memory footprint (deviceScaleFactor: 1, scale: 0.9)
+- Aggressive garbage collection
+- Förväntad förbättring: 300MB → 150-200MB per PDF
+
+**Step 8: Stress Testing & Capacity Planning (NEW)**
+- Artillery load testing med gradvis ökande belastning
+- Test scenarios: 1 → 3 → 5 concurrent PDFs
+- Monitor: Memory, CPU, response times, error rates
+- Mål: Kanske 3 samtidiga PDFs istället för 2!
+
+### **📊 Server Recommendation:**
+- **MVP (Nu):** 2GB RAM fungerar bra med dessa optimeringar
+- **Tillväxt:** Uppgradera till 4GB när >100 användare/dag
+- **Skalning:** Horizontal scaling med load balancer vid >1000 användare/dag
+
+**Status:** Redo för implementation när du vill!
+
 ---
 
 **Utvecklad av Claude (Anthropic) för svenska IT-studenter 🇸🇪**  
@@ -1809,3 +1908,5 @@ Phase 21: Hybrid SPA with landing page + feature-specific routes
 **🔒 Säkrat med Enterprise-Grade Security 2025-07-27**  
 **🎨 Uppgraderad med Modern Single-Page Experience 2025-07-27**  
 **🤖 Complex Debugging Successfully Resolved by Claude Opus 4 - 2025-07-27**
+**🚀 Thumbnail Template Selector Implemented - Dark Overlay Problem SOLVED! - 2025-07-27**
+**📊 Performance Roadmap Extended to 8 Steps - Code Optimization + Stress Testing Added - 2025-07-28**

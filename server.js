@@ -26,16 +26,31 @@ const VALID_TEMPLATES = ['modern', 'executive', 'creative', 'gradient', 'minimal
 const reportCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-// Rate limiting configuration
+// Rate limiting configuration - ENHANCED for 2GB server protection
 const pdfGenerationLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 30, // Limit each IP to 30 PDF generations per windowMs
+  max: 10, // REDUCED from 30 to 10 - protects 2GB server from overload
   message: {
-    error: 'Too many PDF generation requests from this IP, please try again later.',
+    error: 'För många PDF-förfrågningar. Vänligen vänta 15 minuter innan du försöker igen.',
     retryAfter: 15 * 60 // 15 minutes in seconds
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  // Additional options for better protection
+  skipSuccessfulRequests: false, // Count all requests, not just failed ones
+  keyGenerator: (req) => {
+    // Get real IP address (trust proxy must be enabled)
+    // req.ip will now show real user IP, not proxy IP
+    const realIP = req.ip || req.connection.remoteAddress;
+    const userAgent = req.headers['user-agent'] || 'no-ua';
+    
+    // Log for debugging
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`Rate limit key - IP: ${realIP}, UA: ${userAgent.substring(0, 50)}...`);
+    }
+    
+    return realIP + ':' + userAgent;
+  }
 });
 
 const generalLimiter = rateLimit({
@@ -106,6 +121,11 @@ const logAnalyticsAccess = (action, endpoint) => {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CRITICAL: Trust proxy to get real IP addresses behind Nginx/Cloudflare
+// Without this, all requests would appear to come from Nginx (127.0.0.1)
+app.set('trust proxy', true); // Trust first proxy (Nginx)
+// For Cloudflare + Nginx, use: app.set('trust proxy', 2);
+
 // CORS configuration
 const corsOptions = {
   origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : true,
@@ -136,7 +156,23 @@ app.post('/api/generate-pdf', pdfGenerationLimiter, async (req, res) => {
       return res.status(400).json({ error: 'HTML content is required' });
     }
     
+    // Add size limit check (5MB max)
+    const MAX_HTML_SIZE = 5 * 1024 * 1024; // 5MB
+    if (htmlContent.length > MAX_HTML_SIZE) {
+      console.error(`HTML content too large: ${htmlContent.length} bytes (max ${MAX_HTML_SIZE})`);
+      return res.status(413).json({ 
+        error: 'HTML content för stort. Max 5MB tillåten.',
+        size: htmlContent.length,
+        maxSize: MAX_HTML_SIZE
+      });
+    }
+    
     console.log('HTML content received, length:', htmlContent.length);
+    
+    // Log rate limit info
+    const remaining = req.rateLimit ? req.rateLimit.remaining : 'N/A';
+    const resetTime = req.rateLimit ? new Date(req.rateLimit.resetTime).toLocaleString('sv-SE') : 'N/A';
+    console.log(`Rate limit info - Remaining: ${remaining}, Reset: ${resetTime}`);
     
     // Sanitize HTML content to prevent XSS attacks
     const sanitizedHtml = purify.sanitize(htmlContent, {
