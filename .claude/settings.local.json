@@ -31,7 +31,9 @@
       "Bash(git restore:*)",
       "Bash(tar:*)",
       "Bash(ls:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(mv:*)",
+      "Bash(ren:*)"
     ],
     "deny": []
   }
